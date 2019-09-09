@@ -1,0 +1,39 @@
+{
+  "name": "react-activation",
+  "version": "0.0.1",
+  "description": "<KeepAlive /> for React like <keep-alive /> in vue",
+  "main": "index.js",
+  "scripts": {
+    "build": "rollup --config"
+  },
+  "keywords": [
+    "React Keep Alive",
+    "Keep Alive",
+    "keep-alive",
+    "KeepAlive",
+    "activation",
+    "react cache"
+  ],
+  "author": "CJY0208",
+  "license": "ISC",
+  "homepage": "https://github.com/CJY0208/react-activation",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CJY0208/react-activation.git"
+  },
+  "peerDependencies": {
+    "create-react-context": "^0.3.0",
+    "hoist-non-react-statics": "^3.3.0",
+    "react": ">=16"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
+    "rollup": "^1.11.3",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-node-resolve": "^4.2.3",
+    "rollup-plugin-uglify": "^6.0.2"
+  }
+}
