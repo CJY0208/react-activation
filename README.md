@@ -33,6 +33,8 @@ npm install react-activation
 
 ## 使用方式
 
+https://codesandbox.io/s/affectionate-beaver-solkt
+
 `.babelrc` 中增加 `react-activation/babel` 插件
 
 该插件会于编译阶段在各 JSX 元素上增加 `_ka` 属性，帮助 KeepAlive 运行时按渲染位置生成唯一的缓存 id 标识
