@@ -39,7 +39,7 @@ npm install react-activation
 
 Add `react-activation/babel` plugins in `.babelrc`
 
-The plugin adds a `_ka` attribute to each JSX element during compilation to help the `<KeepAlive />` runtime generate a unique cache id identifier by render location.
+The plugin adds a `_ka` attribute to each JSX element during compilation to help the `<KeepAlive />` runtime generate a unique identifier by render location.
 
 ```javascript
 {
@@ -108,7 +108,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 `ClassComponent` works with `withActivation` decorator
 
-Use `componentDidActivate` and `componentWillUnactivate` to activate and cache two states
+Use `componentDidActivate` and `componentWillUnactivate` to correspond to the two states of "activate" and "unactivate" respectively.
 
 `FunctionComponent` uses the `useActivate` and `useUnactivate` hooks respectively
 
@@ -162,10 +162,21 @@ function App() {
 
 2. Get control functions using `withAliveScope` or `useAliveController`
 
-   - **drop(name)**: Unload the KeepAlive node in cache state by name. The name can be of type `String` or `RegExp`. Note that only the first layer of content that hits KeepAlive is unloaded and will not be uninstalled in KeepAlive. Nested, missed KeepAlive
-   - **dropScope(name)**: Unloads the KeepAlive node in cache state by name. The name optional type is `String` or `RegExp`, which will unload all content of KeepAlive, including all KeepAlive nested in KeepAlive.
-   - **clear()**: will clear all KeepAlive in the cache
-   - **getCachingNodes()**: Get all the nodes in the cache
+   - **drop(name)**
+   
+      Unload the `<KeepAlive />` node in cache state by name. The name can be of type `String` or `RegExp`. Note that only the first layer of content that hits KeepAlive is unloaded and will not be uninstalled in KeepAlive. Nested, missed KeepAlive
+      
+   - **dropScope(name)**
+   
+      Unloads the `<KeepAlive />` node in cache state by name. The name optional type is `String` or `RegExp`, which will unload all content of KeepAlive, including all KeepAlive nested in KeepAlive.
+      
+   - **clear()**
+   
+      will clear all `<KeepAlive />` in the cache
+      
+   - **getCachingNodes()**
+   
+      Get all the nodes in the cache
 
 ```javascript
 ...
@@ -208,7 +219,7 @@ Since `<Keeper />` will not be uninstalled, caching can be implemented.
 
 1. `KeepAlive />` needs to pass children to `<AliveScope />` , so the rendering of the real content will be **slower than the normal situation**
 
-    Will have a certain impact on the function of strictly relying on the lifecycle order, such as the value of `ref` in `componentDidMount`, as follows
+    Will have a certain impact on the function of strictly relying on the lifecycle order, such as getting the value of `ref` in `componentDidMount`, as follows
 
     ```javascript
     class Test extends Component {
@@ -240,7 +251,7 @@ Since `<Keeper />` will not be uninstalled, caching can be implemented.
 
     The above error in `ClassComponent` can be fixed by using the `withActivation` high-level component
 
-    `FunctionComponent` currently has no processing method, you can use `setTimeout` or `nextTick` delay to get ref
+    `FunctionComponent` currently has no processing method, you can use `setTimeout` or `nextTick` to delay ref getting behavior
 
     ```javascript
     @withActivation
@@ -294,8 +305,8 @@ Since `<Keeper />` will not be uninstalled, caching can be implemented.
 
     Choose a repair method
 
-    - Create Context using `createContext` exported from `react-activation`
-    - Fix the affected Context with `fixContext` exported from `react-activation`
+    - Create `Context` using `createContext` exported from `react-activation`
+    - Fix the affected `Context` with `fixContext` exported from `react-activation`
 
     ```javascript
     ...
