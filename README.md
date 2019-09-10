@@ -198,7 +198,7 @@ class App extends Component {
 
 Pass the `children` attribute of `<KeepAlive />` to `<AliveScope />` and render it with `<Keeper />`
 
-After `<Keeper />` rendering, the content is transferred to `<KeepAlive />` through DOM operation.
+After rendering `<Keeper />`, the content is transferred to `<KeepAlive />` through DOM operation.
 
 Since `<Keeper />` will not be uninstalled, caching can be implemented.
 
