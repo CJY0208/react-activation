@@ -1,32 +1,30 @@
 # React Activation
 
-[中文说明](https://github.com/CJY0208/react-activation/blob/master/README_CN.md)
-
-Implementation of the `<keep-alive />` function in Vue For React
+Vue 中 `<keep-alive />` 功能在 React 中的实现
 
 - - -
 
-Same as [react-keep-alive](https://github.com/StructureBuilder/react-keep-alive)
+定位与 [react-keep-alive](https://github.com/StructureBuilder/react-keep-alive) 相同
 
-But fixed some of the issues in https://github.com/StructureBuilder/react-keep-alive/issues/36
+但修复了 https://github.com/StructureBuilder/react-keep-alive/issues/36 中的部分问题
 
-More stable `<KeepAlive />` function with `babel` pre-compilation
+配合 babel 预编译实现更稳定的 KeepAlive 功能
 
-[Online Demo](https://codesandbox.io/s/affectionate-beaver-solkt)
+[在线 Demo](https://codesandbox.io/s/affectionate-beaver-solkt)
 
 <img src="./docs/basicReactActivation.gif">
 
 - - -
 
-## Compatibility
+## 兼容性
 
 - React v16+
 
-- Compatible with SSR
+- 兼容 SSR
 
 - - -
 
-## Install
+## 安装
 
 ```bash
 yarn add react-activation
@@ -35,11 +33,11 @@ npm install react-activation
 ```
 - - -
 
-## Usage
+## 使用方式
 
-Add `react-activation/babel` plugins in `.babelrc`
+`.babelrc` 中增加 `react-activation/babel` 插件
 
-The plugin adds a `_ka` attribute to each JSX element during compilation to help the `<KeepAlive />` runtime generate a unique cache id identifier by render location.
+该插件会于编译阶段在各 JSX 元素上增加 `_ka` 属性，帮助 KeepAlive 运行时按渲染位置生成唯一的缓存 id 标识
 
 ```javascript
 {
@@ -49,7 +47,7 @@ The plugin adds a `_ka` attribute to each JSX element during compilation to help
 }
 ```
 
-In your business code
+业务代码中
 
 ```javascript
 import React, { Component, useState } from 'react'
@@ -104,13 +102,13 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 - - -
 
-## Lifecycle
+## 生命周期
 
-`ClassComponent` works with `withActivation` decorator
+`ClassComponent` 可配合 `withActivation` 装饰器
 
-Use `componentDidActivate` and `componentWillUnactivate` to activate and cache two states
+使用 `componentDidActivate` 与 `componentWillUnactivate` 对应激活与缓存两种状态
 
-`FunctionComponent` uses the `useActivate` and `useUnactivate` hooks respectively
+`FunctionComponent` 则分别使用 `useActivate` 与 `useUnactivate` hooks 钩子
 
 ```javascript
 ...
@@ -156,16 +154,16 @@ function App() {
 
 - - -
 
-## Manually control the cache
+## 手动控制缓存
 
-1. Add the `name` attribute to the `<KeepAlive />` tag that needs to control the cache.
+1. 给需要控制缓存的 `<KeepAlive />` 标签增加 `name` 属性
 
-2. Get control functions using `withAliveScope` or `useAliveController`
+2. 使用 `withAliveScope` 或 `useAliveController` 获取控制函数
 
-   - **drop(name)**: Unload the KeepAlive node in cache state by name. The name can be of type `String` or `RegExp`. Note that only the first layer of content that hits KeepAlive is unloaded and will not be uninstalled in KeepAlive. Nested, missed KeepAlive
-   - **dropScope(name)**: Unloads the KeepAlive node in cache state by name. The name optional type is `String` or `RegExp`, which will unload all content of KeepAlive, including all KeepAlive nested in KeepAlive.
-   - **clear()**: will clear all KeepAlive in the cache
-   - **getCachingNodes()**: Get all the nodes in the cache
+  - **drop(name)**: 按 name 卸载缓存状态下的 KeepAlive 节点，name 可选类型为 `String` 或 `RegExp`，注意，仅卸载命中KeepAlive 的第一层内容，不会卸载 KeepAlive 中嵌套的、未命中的 KeepAlive
+  - **dropScope(name)**：按 name 卸载缓存状态下的 KeepAlive 节点，name 可选类型为 `String` 或 `RegExp`，将卸载命中KeepAlive 的所有内容，包括 KeepAlive 中嵌套的所有 KeepAlive
+  - **clear()**：将清空所有缓存中的 KeepAlive
+  - **getCachingNodes()**：获取所有缓存中的节点
 
 ```javascript
 ...
@@ -194,21 +192,21 @@ class App extends Component {
 
 - - -
 
-## principle
+## 原理概述
 
-Pass the `children` attribute of `<KeepAlive />` to `<AliveScope />` and render it with `<Keeper />`
+将 `<KeepAlive />` 的 `children` 属性传递到 `<AliveScope />` 中，通过 `<Keeper />` 进行渲染
 
-After `<Keeper />` rendering, the content is transferred to `<KeepAlive />` through DOM operation.
+`<Keeper />` 完成渲染后通过 DOM 操作，将内容转移到 `<KeepAlive />` 中
 
-Since `<Keeper />` will not be uninstalled, caching can be implemented.
+由于 `<Keeper />` 不会被卸载，故能实现缓存功能
 
 - - -
 
-## Breaking Change
+## Breaking Change 由实现原理引发的额外问题
 
-1. `KeepAlive />` needs to pass children to `<AliveScope />` , so the rendering of the real content will be **slower than the normal situation**
+1. `<KeepAlive />` 中需要有一个将 children 传递到 `<AliveScope />` 的动作，故真实内容的渲染会相较于正常情况**慢一拍**
 
-    Will have a certain impact on the function of strictly relying on the lifecycle order, such as the value of `ref` in `componentDidMount`, as follows
+    将会对严格依赖生命周期顺序的功能造成一定影响，例如 `componentDidMount` 中 ref 的取值，如下
 
     ```javascript
     class Test extends Component {
@@ -238,9 +236,9 @@ Since `<Keeper />` will not be uninstalled, caching can be implemented.
     }
     ```
 
-    The above error in `ClassComponent` can be fixed by using the `withActivation` high-level component
-
-    `FunctionComponent` currently has no processing method, you can use `setTimeout` or `nextTick` delay to get ref
+    `ClassComponent` 中上述错误可通过利用 `withActivation` 高阶组件修复
+    
+    `FunctionComponent` 目前暂无处理方式，可使用 setTimeout 或 nextTick 延时获取 ref
 
     ```javascript
     @withActivation
@@ -271,9 +269,9 @@ Since `<Keeper />` will not be uninstalled, caching can be implemented.
     }
     ```
 
-2. Destructive impact on `Context`, need to be manually fixed
+2. 对 Context 的破坏性影响，需手动修复
 
-    Problem reference: https://github.com/StructureBuilder/react-keep-alive/issues/36
+    问题情景参考：https://github.com/StructureBuilder/react-keep-alive/issues/36
 
     ```javascript
     (
@@ -281,7 +279,7 @@ Since `<Keeper />` will not be uninstalled, caching can be implemented.
         {show && (
           <KeepAlive>
             <Consumer>
-              {context => ( // Since the rendering level is broken, the context cannot be obtained here.
+              {context => ( // 由于渲染层级被破坏，此处无法正常获取 context
                 <Test contextValue={context} />
               )}
             </Consumer>
@@ -292,10 +290,10 @@ Since `<Keeper />` will not be uninstalled, caching can be implemented.
     )
     ```
 
-    Choose a repair method
+    修复方式任选一种
 
-    - Create Context using `createContext` exported from `react-activation`
-    - Fix the affected Context with `fixContext` exported from `react-activation`
+    - 使用从 `react-activation` 导出的 `createContext` 创建上下文
+    - 使用从 `react-activation` 导出的 `fixContext` 修复受影响的上下文
 
     ```javascript
     ...
@@ -315,9 +313,9 @@ Since `<Keeper />` will not be uninstalled, caching can be implemented.
     ...
     ```
 
-3. Affects the functionality that depends on the level of the React component, as follows
+3. 对依赖于 React 层级的功能造成影响，如下
 
-    - [x] ~~Error Boundaries (fixed)~~
-    - [ ] React.Suspense & React.lazy (to be fixed)
-    - [ ] React Synthetic Event Bubbling Failure
-    - [ ] Other undiscovered features
+    - [x] ~~Error Boundaries（已修复）~~
+    - [ ] React.Suspense & React.lazy（待修复）
+    - [ ] React 合成事件冒泡失效
+    - [ ] 其他未发现的功能
