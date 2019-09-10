@@ -4,11 +4,13 @@ Vue 中 `<keep-alive />` 功能在 React 中的实现
 
 - - -
 
-功能与 [react-keep-alive](https://github.com/StructureBuilder/react-keep-alive) 相同
+定位与 [react-keep-alive](https://github.com/StructureBuilder/react-keep-alive) 相同
 
 但修复了 https://github.com/StructureBuilder/react-keep-alive/issues/36 中的部分问题
 
 配合 babel 预编译实现更稳定的 KeepAlive 功能
+
+[在线 Demo](https://codesandbox.io/s/affectionate-beaver-solkt)
 
 <img src="./docs/ReactActivation.gif">
 
@@ -32,8 +34,6 @@ npm install react-activation
 - - -
 
 ## 使用方式
-
-https://codesandbox.io/s/affectionate-beaver-solkt
 
 `.babelrc` 中增加 `react-activation/babel` 插件
 
@@ -160,10 +160,10 @@ function App() {
 
 2. 使用 `withAliveScope` 或 `useAliveController` 获取控制函数
 
-   - **drop(name)**: 按 name 卸载缓存状态下的 KeepAlive 节点，name 可选类型为 `String` 或 `RegExp`，注意，仅卸载命中KeepAlive 的第一层内容，不会卸载 KeepAlive 中嵌套的、未命中的 KeepAlive
-   - **dropScope(name)**：按 name 卸载缓存状态下的 KeepAlive 节点，name 可选类型为 `String` 或 `RegExp`，将卸载命中KeepAlive 的所有内容，包括 KeepAlive 中嵌套的所有 KeepAlive
-   - **clear()**：将清空所有缓存中的 KeepAlive
-   - **getCachingNodes()**：获取所有缓存中的节点
+  - **drop(name)**: 按 name 卸载缓存状态下的 KeepAlive 节点，name 可选类型为 `String` 或 `RegExp`，注意，仅卸载命中KeepAlive 的第一层内容，不会卸载 KeepAlive 中嵌套的、未命中的 KeepAlive
+  - **dropScope(name)**：按 name 卸载缓存状态下的 KeepAlive 节点，name 可选类型为 `String` 或 `RegExp`，将卸载命中KeepAlive 的所有内容，包括 KeepAlive 中嵌套的所有 KeepAlive
+  - **clear()**：将清空所有缓存中的 KeepAlive
+  - **getCachingNodes()**：获取所有缓存中的节点
 
 ```javascript
 ...
