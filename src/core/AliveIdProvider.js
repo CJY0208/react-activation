@@ -1,10 +1,8 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 
 import { run } from '../helpers'
 
 import getKeyByFiberNode from './getKeyByFiberNode'
-
-// const useActivation = func => Promise.resolve().then(func)
 
 // 根据 FiberNode 所处位置来确定 KeepAlive ID
 export default class AliveIdProvider extends Component {

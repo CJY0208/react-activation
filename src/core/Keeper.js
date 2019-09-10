@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import { get, run, nextTick } from '../helpers'
 
-import { AliveNodeProvider, AliveNodeConsumer } from './context'
+import { AliveNodeProvider } from './context'
 import { ProviderBridge } from './ContextBridge'
 import { LIFECYCLE_ACTIVATE, LIFECYCLE_UNACTIVATE } from './lifecycles'
 

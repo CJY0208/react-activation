@@ -37,8 +37,8 @@ export default class AliveScope extends Component {
     })
 
   getCachingNodesByName = name =>
-    this.getCachingNodes().filter(
-      node => (isRegExp(name) ? name.test(node.name) : node.name === name)
+    this.getCachingNodes().filter(node =>
+      isRegExp(name) ? name.test(node.name) : node.name === name
     )
 
   drop = name =>

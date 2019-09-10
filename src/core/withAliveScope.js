@@ -1,7 +1,7 @@
 import React, { forwardRef, useContext } from 'react'
 import hoistStatics from 'hoist-non-react-statics'
 
-import { isFunction, isString } from '../helpers'
+import { isFunction } from '../helpers'
 
 import { ConsumerBridge } from './ContextBridge'
 import AliveIdProvider from './AliveIdProvider'
@@ -11,12 +11,7 @@ export const expandKeepAlive = KeepAlive => {
   const renderContent = ({ id, helpers, props }) => (
     <ConsumerBridge id={id}>
       {ctxValue => (
-        <KeepAlive
-          {...props}
-          id={id}
-          _helpers={helpers}
-          ctx$$={ctxValue}
-        />
+        <KeepAlive {...props} id={id} _helpers={helpers} ctx$$={ctxValue} />
       )}
     </ConsumerBridge>
   )

@@ -192,29 +192,129 @@ class App extends Component {
 
 - - -
 
-## 注意：对 Context 的破坏性影响，需手动修复
+## 原理概述
 
-问题参考：https://github.com/StructureBuilder/react-keep-alive/issues/36
+将 `<KeepAlive />` 的 `children` 属性传递到 `<AliveScope />` 中，通过 `<Keeper />` 进行渲染
 
-修复方式任选一种
+`<Keeper />` 完成渲染后通过 DOM 操作，将内容转移到 `<KeepAlive />` 中
 
-- 使用从 `react-activation` 导出的 `createContext` 创建上下文
-- 使用从 `react-activation` 导出的 `fixContext` 修复受影响的上下文
+由于 `<Keeper />` 不会被卸载，故能实现缓存功能
 
-```javascript
-...
-import { createContext } from 'react-activation'
+- - -
 
-const { Provider, Consumer } = createContext()
-...
-// or
-...
-import { createContext } from 'react'
-import { fixContext } from 'react-activation'
+## Breaking Change 由实现原理引发的额外问题
 
-const Context = createContext()
-const { Provider, Consumer } = Context
+1. `<KeepAlive />` 中需要有一个将 children 传递到 `<AliveScope />` 的动作，故真实内容的渲染会相较于正常情况**慢一拍**
 
-fixContext(Context)
-...
-```
+    将会对严格依赖生命周期顺序的功能造成一定影响，例如 `componentDidMount` 中 ref 的取值，如下
+
+    ```javascript
+    class Test extends Component {
+      componentDidMount() {
+        console.log(this.outside) // will log <div /> instance
+        console.log(this.inside) // will log undefined
+      }
+
+      render() {
+        return (
+          <div>
+            <div ref={ref => {
+              this.outside = ref
+            }}>
+              Outside KeepAlive
+            </div>
+            <KeepAlive>
+              <div ref={ref => {
+                this.inside = ref
+              }}>
+                Inside KeepAlive
+              </div>
+            </KeepAlive>
+          </div>
+        )
+      }
+    }
+    ```
+
+    `ClassComponent` 中上述错误可通过利用 `withActivation` 高阶组件修复
+    `FunctionComponent` 目前暂无处理方式
+
+    ```javascript
+    @withActivation
+    class Test extends Component {
+      componentDidMount() {
+        console.log(this.outside) // will log <div /> instance
+        console.log(this.inside) // will log <div /> instance
+      }
+
+      render() {
+        return (
+          <div>
+            <div ref={ref => {
+              this.outside = ref
+            }}>
+              Outside KeepAlive
+            </div>
+            <KeepAlive>
+              <div ref={ref => {
+                this.inside = ref
+              }}>
+                Inside KeepAlive
+              </div>
+            </KeepAlive>
+          </div>
+        )
+      }
+    }
+    ```
+
+2. 对 Context 的破坏性影响，需手动修复
+
+    问题情景参考：https://github.com/StructureBuilder/react-keep-alive/issues/36
+
+    ```javascript
+    (
+      <Provider value={1}>
+        {show && (
+          <KeepAlive>
+            <Consumer>
+              {context => ( // 由于渲染层级被破坏，此处无法正常获取 context
+                <Test contextValue={context} />
+              )}
+            </Consumer>
+          </KeepAlive>
+        )}
+        <button onClick={toggle}>toggle</button>
+      </Provider>
+    )
+    ```
+
+    修复方式任选一种
+
+    - 使用从 `react-activation` 导出的 `createContext` 创建上下文
+    - 使用从 `react-activation` 导出的 `fixContext` 修复受影响的上下文
+
+    ```javascript
+    ...
+    import { createContext } from 'react-activation'
+
+    const { Provider, Consumer } = createContext()
+    ...
+    // or
+    ...
+    import { createContext } from 'react'
+    import { fixContext } from 'react-activation'
+
+    const Context = createContext()
+    const { Provider, Consumer } = Context
+
+    fixContext(Context)
+    ...
+    ```
+
+3. 对依赖于 React 层级的功能造成影响，如下
+
+    - [x] ~~Error Boundaries（已修复）~~
+    - [ ] React.Suspense & React.lazy（待修复）
+    - [ ] React 合成事件冒泡失效
+    - [ ] 其他未发现的功能

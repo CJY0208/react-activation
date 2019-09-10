@@ -132,25 +132,27 @@ class KeepAlive extends Component {
   }
 
   cache = null
-  init = async () => {
+  init = () => {
     const { _helpers, id, children, ctx$$, name } = this.props
 
     // 将 children 渲染至 AliveScopeProvider 中
-    const cache = await _helpers.keep(id, {
-      name,
-      children,
-      ctx$$
-    })
+    _helpers
+      .keep(id, {
+        name,
+        children,
+        ctx$$
+      })
+      .then(cache => {
+        this.inject()
 
-    this.inject()
-
-    // 触发 didActivate 生命周期
-    if (cache.inited) {
-      run(this, LIFECYCLE_ACTIVATE)
-    } else {
-      cache.inited = true
-    }
-    cache.keepAliveInstance = this
+        // 触发 didActivate 生命周期
+        if (cache.inited) {
+          run(this, LIFECYCLE_ACTIVATE)
+        } else {
+          cache.inited = true
+        }
+        cache.keepAliveInstance = this
+      })
   }
 
   update = ({ _helpers, id, children, ctx$$, name }) => {
@@ -172,14 +174,12 @@ class KeepAlive extends Component {
 
   // 利用 shouldComponentUpdate 提前触发组件更新
   shouldComponentUpdate(nextProps) {
-    // console.log(nextProps)
-    // nextTick(() => this.update(nextProps))
     this.update(nextProps)
 
     return false
   }
 
-  // 组件卸载时将
+  // 组件卸载时重置 dom 状态，保证 react dom 操作正常进行，并触发 unactivate 生命周期
   componentWillUnmount() {
     const { id, _helpers } = this.props
     this.eject()
