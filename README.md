@@ -194,7 +194,7 @@ class App extends Component {
 
 - - -
 
-## principle
+## Principle
 
 Pass the `children` attribute of `<KeepAlive />` to `<AliveScope />` and render it with `<Keeper />`
 
