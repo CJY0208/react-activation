@@ -237,6 +237,7 @@ class App extends Component {
     ```
 
     `ClassComponent` 中上述错误可通过利用 `withActivation` 高阶组件修复
+    
     `FunctionComponent` 目前暂无处理方式
 
     ```javascript
