@@ -12,7 +12,7 @@ Vue 中 `<keep-alive />` 功能在 React 中的实现
 
 [在线 Demo](https://codesandbox.io/s/affectionate-beaver-solkt)
 
-<img src="./docs/ReactActivation.gif">
+<img src="./docs/basicReactActivation.gif">
 
 - - -
 
