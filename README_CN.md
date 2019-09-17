@@ -366,8 +366,9 @@ class App extends Component {
 
     修复方式任选一种
 
-    - 使用从 `react-activation` 导出的 `createContext` 创建上下文
-    - 使用从 `react-activation` 导出的 `fixContext` 修复受影响的上下文
+      - 使用从 `react-activation` 导出的 `createContext` 创建上下文
+      
+      - 使用从 `react-activation` 导出的 `fixContext` 修复受影响的上下文
 
     ```javascript
     ...

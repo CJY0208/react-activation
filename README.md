@@ -367,8 +367,9 @@ Since `<Keeper />` will not be uninstalled, caching can be implemented.
 
     Choose a repair method
 
-    - Create `Context` using `createContext` exported from `react-activation`
-    - Fix the affected `Context` with `fixContext` exported from `react-activation`
+      - Create `Context` using `createContext` exported from `react-activation`
+      
+      - Fix the affected `Context` with `fixContext` exported from `react-activation`
 
     ```javascript
     ...
