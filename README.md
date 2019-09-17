@@ -390,7 +390,7 @@ Since `<Keeper />` will not be uninstalled, caching can be implemented.
 
 3. Affects the functionality that depends on the level of the React component, as follows
 
-    - [x] ~~Error Boundaries (fixed)~~
-    - [x] ~~React.Suspense & React.lazy (fixed)~~
+    - [x] ~~Error Boundaries~~ (Fixed)
+    - [x] ~~React.Suspense & React.lazy~~ (Fixed)
     - [ ] React Synthetic Event Bubbling Failure
     - [ ] Other undiscovered features
