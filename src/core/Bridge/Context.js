@@ -6,7 +6,7 @@
 import React, { PureComponent, useContext, useRef, useEffect } from 'react'
 import createReactContext from 'create-react-context'
 
-import { run, get, nextTick, isUndefined, isFunction } from '../helpers'
+import { run, get, nextTick, isUndefined, isFunction } from '../../helpers'
 
 const fixedContext = []
 const updateListenerCache = new Map()

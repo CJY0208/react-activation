@@ -7,7 +7,14 @@ import React, {
 } from 'react'
 import hoistStatics from 'hoist-non-react-statics'
 
-import { get, run, nextTick, isObject, isFunction, isUndefined } from '../helpers'
+import {
+  get,
+  run,
+  nextTick,
+  isObject,
+  isFunction,
+  isUndefined
+} from '../helpers'
 
 import { AliveNodeConsumer, aliveNodeContext } from './context'
 

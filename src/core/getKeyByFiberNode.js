@@ -33,6 +33,7 @@ const genRenderPath = node => {
 }
 
 // 使用节点 _ka 属性或下标与其 key 作为 Y 坐标
+// FIXME: 使用 index 作为 Y 坐标是十分不可靠的行为，待想出更好的法子替代
 const getNodeId = fiberNode =>
   `${get(fiberNode, 'pendingProps._ka', fiberNode.index)}:${fiberNode.key ||
     ''}`
