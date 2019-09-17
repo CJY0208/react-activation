@@ -173,7 +173,9 @@ Add the `when` attribute to the `<KeepAlive />` tag that needs to control the ca
 
 #### When the `when` type is `Array`
 
-The first parameter indicates whether it needs to be cached at the time of uninstallation. The second parameter indicates whether to unload all cache contents of `<KeepAlive>`, including all `<KeepAlive>` nested in `<KeepAlive>`.
+The **1th** parameter indicates whether it needs to be cached at the time of uninstallation. 
+
+The **2th** parameter indicates whether to unload all cache contents of `<KeepAlive>`, including all `<KeepAlive>` nested in `<KeepAlive>`.
 
 ```javascript
 // For example: 

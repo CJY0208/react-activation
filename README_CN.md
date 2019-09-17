@@ -171,7 +171,9 @@ function App() {
 
 #### 当 `when` 类型为 `Array` 时
 
-第 1 位参数表示是否需要在卸载时缓存，第 2 位参数表示是否卸载 `<KeepAlive>` 的所有缓存内容，包括 `<KeepAlive>` 中嵌套的所有 `<KeepAlive>` 
+**第 1 位**参数表示是否需要在卸载时缓存
+
+**第 2 位**参数表示是否卸载 `<KeepAlive>` 的所有缓存内容，包括 `<KeepAlive>` 中嵌套的所有 `<KeepAlive>` 
 
 ```javascript
 // 例如：以下表示卸载时不缓存，并卸载掉嵌套的所有 `<KeepAlive>`
