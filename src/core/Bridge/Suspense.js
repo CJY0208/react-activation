@@ -1,9 +1,10 @@
 import React, { lazy, Suspense, Component, Fragment } from 'react'
 
-import { get, run, isUndefined, isFunction } from '../../helpers'
+import { run, isUndefined, isFunction } from '../../helpers'
 
+// 兼容性检测
 const isSupported = isFunction(lazy) && !isUndefined(Suspense)
-const SuspenseNotSupported = ({ children }) => run(children)
+const SusNotSupported = ({ children }) => run(children)
 
 const Lazy = isSupported ? lazy(() => new Promise(() => null)) : () => null
 
@@ -23,6 +24,7 @@ class FallbackListener extends Component {
 
 function SuspenseBridge({ children, sus$$ }) {
   return (
+    // 捕获 Keeper 内部可能存在的 lazy，并触发对应 KeepAlive 位置上的 LazyBridge
     <Suspense
       fallback={
         <FallbackListener
@@ -65,11 +67,12 @@ export const LazyBridge = isSupported
         return (
           <Fragment>
             {run(children, undefined, this.sus$$)}
+            {/* 渲染 Lazy 以触发 KeepAlive 所处位置外部可能存在的 Suspense */}
             {this.state.suspense && <Lazy />}
           </Fragment>
         )
       }
     }
-  : SuspenseNotSupported
+  : SusNotSupported
 
-export default (isSupported ? SuspenseBridge : SuspenseNotSupported)
+export default isSupported ? SuspenseBridge : SusNotSupported

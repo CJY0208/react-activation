@@ -268,9 +268,11 @@ class App extends Component {
 
 将 `<KeepAlive />` 的 `children` 属性传递到 `<AliveScope />` 中，通过 `<Keeper />` 进行渲染
 
-`<Keeper />` 完成渲染后通过 DOM 操作，将内容转移到 `<KeepAlive />` 中
+`<Keeper />` 完成渲染后通过 `DOM` 操作，将内容转移到 `<KeepAlive />` 中
 
 由于 `<Keeper />` 不会被卸载，故能实现缓存功能
+
+<img src="./docs/reactActivationPrinciple.gif">
 
 - - -
 

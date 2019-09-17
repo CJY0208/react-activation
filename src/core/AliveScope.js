@@ -9,6 +9,7 @@ export default class AliveScope extends Component {
   store = new Map()
   nodes = new Map()
 
+  // FIXME: 每次 update 均触发 forceUpdate，可能存在性能问题，待验证
   update = (id, params) =>
     new Promise(resolve => {
       const node = this.nodes.get(id) || null
@@ -40,14 +41,15 @@ export default class AliveScope extends Component {
     })
 
   getCachingNodesByName = name =>
-    this.getCachingNodes().filter(
-      node => (isRegExp(name) ? name.test(node.name) : node.name === name)
+    this.getCachingNodes().filter(node =>
+      isRegExp(name) ? name.test(node.name) : node.name === name
     )
 
   dropById = id => this.dropNodes([id])
   dropScopeByIds = ids => this.dropNodes(this.getScopeIds(ids))
 
   getScopeIds = ids => {
+    // 递归采集 scope alive nodes id
     const getCachingNodesId = id => {
       const aliveNodesId = get(this.getCache(id), 'aliveNodesId', [])
 
@@ -69,32 +71,19 @@ export default class AliveScope extends Component {
 
   dropNodes = nodesId =>
     new Promise(resolve => {
-      const willDropIds = nodesId
-        .filter(id => {
-          const cache = this.store.get(id)
-          const canDrop = get(cache, 'cached')
+      nodesId.forEach(id => {
+        const cache = this.store.get(id)
+        const canDrop = get(cache, 'cached')
 
-          if (canDrop) {
-            // 用在多层 KeepAlive 同时触发 drop 时，避免触发深层 KeepAlive 节点的缓存生命周期
-            cache.willDrop = true
-          }
-
-          return canDrop
-        })
-        .map(id => {
+        if (canDrop) {
+          // 用在多层 KeepAlive 同时触发 drop 时，避免触发深层 KeepAlive 节点的缓存生命周期
+          cache.willDrop = true
           this.nodes.delete(id)
-
-          return id
-        })
+        }
+      })
 
       this.helpers = { ...this.helpers }
-      this.forceUpdate(() => {
-        resolve()
-
-        willDropIds.map(id => {
-          this.store.delete(id)
-        })
-      })
+      this.forceUpdate(resolve)
     })
 
   clear = () => this.dropNodes(this.getCachingNodes().map(({ id }) => id))

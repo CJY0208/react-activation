@@ -14,9 +14,10 @@ export default class Keeper extends Component {
     const listeners = this.listeners
     const node = this.wrapper
 
+    // 已存在检测，防止意外现象
     if (store.has(id)) {
       return
-    }
+    }    
 
     store.set(id, {
       listeners,
@@ -28,6 +29,11 @@ export default class Keeper extends Component {
       [LIFECYCLE_ACTIVATE]: () => this[LIFECYCLE_ACTIVATE](),
       [LIFECYCLE_UNACTIVATE]: () => this[LIFECYCLE_UNACTIVATE]()
     })
+  }
+
+  componentWillUnmount() {
+    const { store, id } = this.props
+    store.delete(id)
   }
 
   [LIFECYCLE_ACTIVATE]() {

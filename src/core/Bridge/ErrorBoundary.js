@@ -1,14 +1,16 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 
 import { run } from '../../helpers'
 
 export default class ErrorBoundaryBridge extends Component {
-  // Error Boundary 透传至对应 KeepAlive 实例
-  static getDerivedStateFromError = error => null
+  // Error Boundary 透传至对应 KeepAlive 实例位置
+  static getDerivedStateFromError = () => null
   componentDidCatch(error) {
     const { error$$: throwError } = this.props
 
-    run(throwError, undefined, error)
+    run(throwError, undefined, error, () => {
+      run(throwError, undefined, null)
+    })
   }
 
   render() {
@@ -21,7 +23,7 @@ export class ErrorThrower extends Component {
     error: null
   }
 
-  throwError = error => this.setState({ error })
+  throwError = (error, cb) => this.setState({ error }, cb)
   render() {
     if (this.state.error) {
       throw this.state.error
