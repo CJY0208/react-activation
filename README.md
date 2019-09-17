@@ -156,23 +156,61 @@ function App() {
 
 - - -
 
-## Manually control the cache
+## Cache Controller
 
-1. Add the `name` attribute to the `<KeepAlive />` tag that needs to control the cache.
+### Automatic control cache
+
+Add the `when` attribute to the `<KeepAlive />` tag that needs to control the cache. The value is as follows
+
+#### When the `when` type is `Boolean`
+
+- **true**: Cache after uninstallation
+- **false**: Not cached after uninstallation
+
+```javascript
+<KeepAlive when={false}>
+```
+
+#### When the `when` type is `Array`
+
+The first parameter indicates whether it needs to be cached at the time of uninstallation. The second parameter indicates whether to unload all cache contents of `<KeepAlive>`, including all `<KeepAlive>` nested in `<KeepAlive>`.
+
+```javascript
+// For example: The following indicates that it is not cached when uninstalling, and uninstalls all nested `<KeepAlive>`
+<KeepAlive when={[false, true]}>
+  ...
+    <KeepAlive>
+      ...
+        <KeepAlive>
+          ...
+        </KeepAlive>
+      ...
+    </KeepAlive>
+  ...
+</KeepAlive>
+```
+
+#### When the `when` type is `Function`
+
+The return value is the above `Boolean` or `Array`, which takes effect as described above.
+
+### Manually control the cache
+
+1. Add the `name` attribute to the `<KeepAlive>` tag that needs to control the cache.
 
 2. Get control functions using `withAliveScope` or `useAliveController`
 
    - **drop(name)**
    
-      Unload the `<KeepAlive />` node in cache state by name. The name can be of type `String` or `RegExp`. Note that only the first layer of content that hits KeepAlive is unloaded and will not be uninstalled in KeepAlive. Nested, missed KeepAlive
+      Unload the `<KeepAlive>` node in cache state by name. The name can be of type `String` or `RegExp`. Note that only the first layer of content that hits `<KeepAlive>` is unloaded and will not be uninstalled in `<KeepAlive>`. Would not unload nested `<KeepAlive>`
       
    - **dropScope(name)**
    
-      Unloads the `<KeepAlive />` node in cache state by name. The name optional type is `String` or `RegExp`, which will unload all content of KeepAlive, including all KeepAlive nested in KeepAlive.
+      Unloads the `<KeepAlive>` node in cache state by name. The name optional type is `String` or `RegExp`, which will unload all content of `<KeepAlive>`, including all `<KeepAlive>` nested in `<KeepAlive>`.
       
    - **clear()**
    
-      will clear all `<KeepAlive />` in the cache
+      will clear all `<KeepAlive>` in the cache
       
    - **getCachingNodes()**
    
@@ -180,10 +218,32 @@ function App() {
 
 ```javascript
 ...
-import { withAliveScope, useAliveController } from 'react-activation'
+import KeepAlive, { withAliveScope, useAliveController } from 'react-activation'
+...
+<KeepAlive name="Test">
+  ...
+    <KeepAlive>
+      ...
+        <KeepAlive>
+          ...
+        </KeepAlive>
+      ...
+    </KeepAlive>
+  ...
+</KeepAlive>
 ...
 function App() {
   const { drop, dropScope, clear, getCachingNodes } = useAliveController()
+
+  useEffect(() => {
+    drop('Test')
+    // or
+    drop(/Test/)
+    // or
+    dropScope('Test')
+
+    clear()
+  })
 
   return (
     ...
@@ -329,6 +389,6 @@ Since `<Keeper />` will not be uninstalled, caching can be implemented.
 3. Affects the functionality that depends on the level of the React component, as follows
 
     - [x] ~~Error Boundaries (fixed)~~
-    - [ ] React.Suspense & React.lazy (to be fixed)
+    - [x] ~~React.Suspense & React.lazy (fixed)~~
     - [ ] React Synthetic Event Bubbling Failure
     - [ ] Other undiscovered features

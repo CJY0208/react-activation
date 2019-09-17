@@ -154,23 +154,95 @@ function App() {
 
 - - -
 
-## 手动控制缓存
+## 缓存控制
+
+### 自动控制缓存
+
+给需要控制缓存的 `<KeepAlive />` 标签增加 `when` 属性，取值如下
+
+#### 当 `when` 类型为 `Boolean` 时
+
+- **true**: 卸载时缓存
+- **false**: 卸载时不缓存
+
+```javascript
+<KeepAlive when={true}>
+```
+
+#### 当 `when` 类型为 `Array` 时
+
+第 1 位参数表示是否需要在卸载时缓存，第 2 位参数表示是否卸载 `<KeepAlive>` 的所有缓存内容，包括 `<KeepAlive>` 中嵌套的所有 `<KeepAlive>` 
+
+```javascript
+// 例如：以下表示卸载时不缓存，并卸载掉嵌套的所有 `<KeepAlive>`
+<KeepAlive when={[false, true]}>
+  ...
+    <KeepAlive>
+      ...
+        <KeepAlive>
+          ...
+        </KeepAlive>
+      ...
+    </KeepAlive>
+  ...
+</KeepAlive>
+```
+
+#### 当 `when` 类型为 `Function` 时
+
+返回值为上述 `Boolean` 或 `Array`，依照上述说明生效
+
+### 手动控制缓存
 
 1. 给需要控制缓存的 `<KeepAlive />` 标签增加 `name` 属性
 
 2. 使用 `withAliveScope` 或 `useAliveController` 获取控制函数
 
-  - **drop(name)**: 按 name 卸载缓存状态下的 KeepAlive 节点，name 可选类型为 `String` 或 `RegExp`，注意，仅卸载命中KeepAlive 的第一层内容，不会卸载 KeepAlive 中嵌套的、未命中的 KeepAlive
-  - **dropScope(name)**：按 name 卸载缓存状态下的 KeepAlive 节点，name 可选类型为 `String` 或 `RegExp`，将卸载命中KeepAlive 的所有内容，包括 KeepAlive 中嵌套的所有 KeepAlive
-  - **clear()**：将清空所有缓存中的 KeepAlive
-  - **getCachingNodes()**：获取所有缓存中的节点
+    - **drop(name)**:
+    
+      按 name 卸载缓存状态下的 `<KeepAlive>` 节点，name 可选类型为 `String` 或 `RegExp`，注意，仅卸载命中 `<KeepAlive>` 的第一层内容，不会卸载 `<KeepAlive>` 中嵌套的、未命中的 `<KeepAlive>`
+
+    - **dropScope(name)**
+    
+      按 name 卸载缓存状态下的 `<KeepAlive>` 节点，name 可选类型为 `String` 或 `RegExp`，将卸载命中 `<KeepAlive>` 的所有内容，包括 `<KeepAlive>` 中嵌套的所有 `<KeepAlive>`
+    
+    - **clear()**
+    
+      将清空所有缓存中的 KeepAlive
+
+
+    - **getCachingNodes()**
+    
+      获取所有缓存中的节点
 
 ```javascript
 ...
-import { withAliveScope, useAliveController } from 'react-activation'
+import KeepAlive, { withAliveScope, useAliveController } from 'react-activation'
+...
+<KeepAlive name="Test">
+  ...
+    <KeepAlive>
+      ...
+        <KeepAlive>
+          ...
+        </KeepAlive>
+      ...
+    </KeepAlive>
+  ...
+</KeepAlive>
 ...
 function App() {
   const { drop, dropScope, clear, getCachingNodes } = useAliveController()
+
+  useEffect(() => {
+    drop('Test')
+    // or
+    drop(/Test/)
+    // or
+    dropScope('Test')
+
+    clear()
+  })
 
   return (
     ...
@@ -238,7 +310,7 @@ class App extends Component {
 
     `ClassComponent` 中上述错误可通过利用 `withActivation` 高阶组件修复
     
-    `FunctionComponent` 目前暂无处理方式，可使用 setTimeout 或 nextTick 延时获取 ref
+    `FunctionComponent` 目前暂无处理方式，可使用 `setTimeout` 或 `nextTick` 延时获取 `ref`
 
     ```javascript
     @withActivation
@@ -316,6 +388,6 @@ class App extends Component {
 3. 对依赖于 React 层级的功能造成影响，如下
 
     - [x] ~~Error Boundaries（已修复）~~
-    - [ ] React.Suspense & React.lazy（待修复）
+    - [x] ~~React.Suspense & React.lazy（已修复）~~
     - [ ] React 合成事件冒泡失效
     - [ ] 其他未发现的功能

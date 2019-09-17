@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 
 import { get, run, nextTick } from '../helpers'
 
+import Bridge from './Bridge'
 import { AliveNodeProvider } from './context'
-import { ProviderBridge } from './ContextBridge'
 import { LIFECYCLE_ACTIVATE, LIFECYCLE_UNACTIVATE } from './lifecycles'
 
 export default class Keeper extends Component {
@@ -40,22 +40,6 @@ export default class Keeper extends Component {
     listeners
       .reverse()
       .forEach(([, listener]) => run(listener, [LIFECYCLE_UNACTIVATE]))
-  }
-
-  // Error Boundary 透传至对应 KeepAlive 实例
-  static getDerivedStateFromError = error => null
-  componentDidCatch(error) {
-    const { id, store } = this.props
-
-    const cache = store.get(id)
-    const instance = get(cache, 'keepAliveInstance')
-
-    if (instance) {
-      instance.catchError = error
-      instance.forceUpdate(() => {
-        delete instance.catchError
-      })
-    }
   }
 
   // // 原先打算更新过程中先重置 dom 节点状态，更新后恢复 dom 节点
@@ -106,7 +90,7 @@ export default class Keeper extends Component {
   }
 
   render() {
-    const { ctx$$, id, children, ...props } = this.props
+    const { id, children, bridgeProps, ...props } = this.props
 
     return (
       <div
@@ -115,11 +99,11 @@ export default class Keeper extends Component {
         }}
       >
         <div key="keeper-container">
-          <ProviderBridge id={id} value={ctx$$}>
+          <Bridge id={id} bridgeProps={bridgeProps}>
             <AliveNodeProvider value={this.contextValue}>
               {children}
             </AliveNodeProvider>
-          </ProviderBridge>
+          </Bridge>
         </div>
       </div>
     )

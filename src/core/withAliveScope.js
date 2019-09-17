@@ -3,17 +3,17 @@ import hoistStatics from 'hoist-non-react-statics'
 
 import { isFunction } from '../helpers'
 
-import { ConsumerBridge } from './ContextBridge'
+import { Acceptor } from './Bridge'
 import AliveIdProvider from './AliveIdProvider'
 import { AliveScopeConsumer, aliveScopeContext } from './context'
 
 export const expandKeepAlive = KeepAlive => {
   const renderContent = ({ id, helpers, props }) => (
-    <ConsumerBridge id={id}>
-      {ctxValue => (
-        <KeepAlive {...props} id={id} _helpers={helpers} ctx$$={ctxValue} />
+    <Acceptor id={id}>
+      {bridgeProps => (
+        <KeepAlive {...props} {...bridgeProps} id={id} _helpers={helpers} />
       )}
-    </ConsumerBridge>
+    </Acceptor>
   )
 
   function HookExpand(props) {

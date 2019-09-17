@@ -9,25 +9,28 @@ export default class AliveScope extends Component {
   store = new Map()
   nodes = new Map()
 
-  update = (id, { name, children, ctx$$ }) =>
+  update = (id, params) =>
     new Promise(resolve => {
+      const node = this.nodes.get(id) || null
+      const isNew = !node
+      const now = Date.now()
+
+      if (isNew) {
+        this.helpers = { ...this.helpers }
+      }
+
       this.nodes.set(id, {
         id,
-        name,
-        children,
-        ctx$$
+        createTime: now,
+        updateTime: now,
+        ...node,
+        ...params
       })
 
       this.forceUpdate(resolve)
     })
   keep = (id, params) =>
     new Promise(resolve => {
-      const isNew = !this.nodes.has(id)
-
-      if (isNew) {
-        this.helpers = { ...this.helpers }
-      }
-
       this.update(id, {
         id,
         ...params
@@ -37,14 +40,14 @@ export default class AliveScope extends Component {
     })
 
   getCachingNodesByName = name =>
-    this.getCachingNodes().filter(node =>
-      isRegExp(name) ? name.test(node.name) : node.name === name
+    this.getCachingNodes().filter(
+      node => (isRegExp(name) ? name.test(node.name) : node.name === name)
     )
 
-  drop = name =>
-    this.dropNodes(this.getCachingNodesByName(name).map(node => node.id))
+  dropById = id => this.dropNodes([id])
+  dropScopeByIds = ids => this.dropNodes(this.getScopeIds(ids))
 
-  dropScope = name => {
+  getScopeIds = ids => {
     const getCachingNodesId = id => {
       const aliveNodesId = get(this.getCache(id), 'aliveNodesId', [])
 
@@ -55,12 +58,14 @@ export default class AliveScope extends Component {
       return [id, ...aliveNodesId]
     }
 
-    return this.dropNodes(
-      flatten(
-        this.getCachingNodesByName(name).map(({ id }) => getCachingNodesId(id))
-      )
-    )
+    return flatten(ids.map(id => getCachingNodesId(id)))
   }
+
+  drop = name =>
+    this.dropNodes(this.getCachingNodesByName(name).map(node => node.id))
+
+  dropScope = name =>
+    this.dropScopeByIds(this.getCachingNodesByName(name).map(({ id }) => id))
 
   dropNodes = nodesId =>
     new Promise(resolve => {
@@ -95,6 +100,7 @@ export default class AliveScope extends Component {
   clear = () => this.dropNodes(this.getCachingNodes().map(({ id }) => id))
 
   getCache = id => this.store.get(id)
+  getNode = id => this.nodes.get(id)
   getCachingNodes = () => [...this.nodes.values()]
 
   // 静态化节点上下文内容，防止重复渲染
@@ -103,8 +109,12 @@ export default class AliveScope extends Component {
     update: this.update,
     drop: this.drop,
     dropScope: this.dropScope,
+    dropById: this.dropById,
+    dropScopeByIds: this.dropScopeByIds,
+    getScopeIds: this.getScopeIds,
     clear: this.clear,
     getCache: this.getCache,
+    getNode: this.getNode,
     getCachingNodes: this.getCachingNodes
   }
 
