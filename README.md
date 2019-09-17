@@ -176,7 +176,9 @@ Add the `when` attribute to the `<KeepAlive />` tag that needs to control the ca
 The first parameter indicates whether it needs to be cached at the time of uninstallation. The second parameter indicates whether to unload all cache contents of `<KeepAlive>`, including all `<KeepAlive>` nested in `<KeepAlive>`.
 
 ```javascript
-// For example: The following indicates that it is not cached when uninstalling, and uninstalls all nested `<KeepAlive>`
+// For example: 
+// The following indicates that it is not cached when uninstalling
+// And uninstalls all nested `<KeepAlive>`
 <KeepAlive when={[false, true]}>
   ...
     <KeepAlive>
