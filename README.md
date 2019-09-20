@@ -277,6 +277,8 @@ After rendering `<Keeper />`, the content is transferred to `<KeepAlive />` thro
 
 Since `<Keeper />` will not be uninstalled, caching can be implemented.
 
+[Simplest Implementation Demo](https://codesandbox.io/s/zuijian-react-keepalive-shixian-ovh90)
+
 <img src="./docs/reactActivationPrinciple.gif">
 
 - - -
@@ -399,3 +401,9 @@ Since `<Keeper />` will not be uninstalled, caching can be implemented.
     - [x] ~~React.Suspense & React.lazy~~ (Fixed)
     - [ ] React Synthetic Event Bubbling Failure
     - [ ] Other undiscovered features
+
+- - -
+
+## More complicated example
+
+- [Closable tabs with `react-router`](https://codesandbox.io/s/keguanbideyifangwenluyou-tab-shilikeanluyoucanshufenduofenhuancun-ewycx)

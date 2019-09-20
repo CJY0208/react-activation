@@ -274,6 +274,8 @@ class App extends Component {
 
 由于 `<Keeper />` 不会被卸载，故能实现缓存功能
 
+[最简实现示例](https://codesandbox.io/s/zuijian-react-keepalive-shixian-ovh90)
+
 <img src="./docs/reactActivationPrinciple.gif">
 
 - - -
@@ -396,3 +398,9 @@ class App extends Component {
     - [x] ~~React.Suspense & React.lazy~~（已修复）
     - [ ] React 合成事件冒泡失效
     - [ ] 其他未发现的功能
+
+- - -
+
+## 更多复杂示例
+
+- [可关闭的路由 tabs 示例](https://codesandbox.io/s/keguanbideyifangwenluyou-tab-shilikeanluyoucanshufenduofenhuancun-ewycx)
