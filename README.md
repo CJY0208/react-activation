@@ -1,8 +1,11 @@
-# React Activation
+# React Activation 
 
-[中文说明](https://github.com/CJY0208/react-activation/blob/master/README_CN.md)
+[![size](https://img.shields.io/bundlephobia/minzip/react-activation.svg)](https://github.com/CJY0208/react-activation)
+[![dm](https://img.shields.io/npm/dm/react-activation.svg)](https://github.com/CJY0208/react-activation)
 
-Implementation of the `<keep-alive />` function in Vue For React
+English | [中文说明](./README_CN.md)
+
+Implementation of the `<keep-alive />` function in `Vue` For `React`
 
 - - -
 

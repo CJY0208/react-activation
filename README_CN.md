@@ -1,5 +1,10 @@
 # React Activation
 
+[![size](https://img.shields.io/bundlephobia/minzip/react-activation.svg)](https://github.com/CJY0208/react-activation)
+[![dm](https://img.shields.io/npm/dm/react-activation.svg)](https://github.com/CJY0208/react-activation)
+
+[English](./README.md) | 中文说明
+
 Vue 中 `<keep-alive />` 功能在 React 中的实现
 
 - - -
