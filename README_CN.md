@@ -435,4 +435,4 @@ class App extends Component {
 ## 更多复杂示例
 
 - [可关闭的路由 tabs 示例](https://codesandbox.io/s/keguanbideyifangwenluyou-tab-shilikeanluyoucanshufenduofenhuancun-ewycx)
-- [使用路由转场动画](https://codesandbox.io/s/using-animation-y35hh)
+- [使用路由转场动画](https://codesandbox.io/s/luyouzhuanchangdonghuashili-jdhq1)
