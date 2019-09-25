@@ -75,4 +75,4 @@ export const LazyBridge = isSupported
     }
   : SusNotSupported
 
-export default isSupported ? SuspenseBridge : SusNotSupported
+export default (isSupported ? SuspenseBridge : SusNotSupported)

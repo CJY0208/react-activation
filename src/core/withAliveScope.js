@@ -7,6 +7,11 @@ import { Acceptor } from './Bridge'
 import AliveIdProvider from './AliveIdProvider'
 import { AliveScopeConsumer, aliveScopeContext } from './context'
 
+function controllerCherryPick(controller) {
+  const { drop, dropScope, clear, getCachingNodes } = controller
+  return { drop, dropScope, clear, getCachingNodes }
+}
+
 export const expandKeepAlive = KeepAlive => {
   const renderContent = ({ id, helpers, props }) => (
     <Acceptor id={id}>
@@ -16,19 +21,19 @@ export const expandKeepAlive = KeepAlive => {
     </Acceptor>
   )
 
-  function HookExpand(props) {
+  function HookExpand({ id: idPrefix, ...props }) {
     const helpers = useContext(aliveScopeContext)
 
     return (
-      <AliveIdProvider>
+      <AliveIdProvider prefix={idPrefix}>
         {id => renderContent({ id, helpers, props })}
       </AliveIdProvider>
     )
   }
 
-  function WithExpand(props) {
+  function WithExpand({ id: idPrefix, ...props }) {
     return (
-      <AliveIdProvider>
+      <AliveIdProvider prefix={idPrefix}>
         {id => (
           <AliveScopeConsumer>
             {helpers => renderContent({ id, helpers, props })}
@@ -47,11 +52,10 @@ const withAliveScope = WrappedComponent => {
   )
 
   function HookStore({ forwardedRef, ...props }) {
-    const { drop, dropScope, clear, getCachingNodes } =
-      useContext(aliveScopeContext) || {}
+    const controller = useContext(aliveScopeContext) || {}
 
     return renderContent({
-      helpers: { drop, dropScope, clear, getCachingNodes },
+      helpers: controllerCherryPick(controller),
       props,
       forwardedRef
     })
@@ -60,9 +64,9 @@ const withAliveScope = WrappedComponent => {
   function WithStore({ forwardedRef, ...props }) {
     return (
       <AliveScopeConsumer>
-        {({ drop, dropScope, clear, getCachingNodes } = {}) =>
+        {(controller = {}) =>
           renderContent({
-            helpers: { drop, dropScope, clear, getCachingNodes },
+            helpers: controllerCherryPick(controller),
             props,
             forwardedRef
           })
@@ -95,8 +99,7 @@ export const useAliveController = () => {
     return {}
   }
 
-  const { drop, dropScope, clear, getCachingNodes } = ctxValue
-  return { drop, dropScope, clear, getCachingNodes }
+  return controllerCherryPick(ctxValue)
 }
 
 export default withAliveScope

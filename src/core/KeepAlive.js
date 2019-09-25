@@ -108,7 +108,7 @@ class KeepAlive extends Component {
         run(cache.revertScrollPos)
       }
     } catch (error) {
-      console.error(error)
+      // console.error(error)
     }
   }
 
@@ -147,7 +147,7 @@ class KeepAlive extends Component {
         }
       })
     } catch (error) {
-      console.error(error)
+      // console.error(error)
     }
   }
 
@@ -218,12 +218,10 @@ class KeepAlive extends Component {
         ]
 
         needToDrop.forEach(cache => {
-          cache.cached = true
           cache.willDrop = true
         })
         nextTick(() => _helpers.dropScopeByIds([id]))
       } else {
-        cache.cached = true
         cache.willDrop = true
         nextTick(() => _helpers.dropById(id))
       }

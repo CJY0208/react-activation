@@ -6,6 +6,7 @@ import withAliveScope, { useAliveController } from './core/withAliveScope'
 
 export default KeepAlive
 export {
+  KeepAlive,
   AliveScope,
   withActivation,
   fixContext,

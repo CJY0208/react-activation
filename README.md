@@ -159,6 +159,32 @@ function App() {
 
 - - -
 
+## Multiple Cache
+
+Under the same parent node, `<KeepAlive>` in the same location will use the same cache by default.
+
+For example, with the following parameter routing scenario, the `/item` route will be rendered differently by `id`, but only the same cache can be kept.
+
+```javascript
+<Route path="/item/:id" render={props => (
+  <KeepAlive>
+    <Item {...props} />
+  </KeepAlive>
+)} />
+```
+
+Similar scenarios, you can use the `id` attribute of `<KeepAlive>` to implement multiple caches according to specific conditions.
+
+```javascript
+<Route path="/item/:id" render={props => (
+  <KeepAlive id={props.match.params.id}>
+    <Item {...props} />
+  </KeepAlive>
+)} />
+```
+
+- - -
+
 ## Cache Control
 
 ### Automatic control cache
@@ -410,3 +436,4 @@ Since `<Keeper />` will not be uninstalled, caching can be implemented.
 ## More complicated example
 
 - [Closable tabs with `react-router`](https://codesandbox.io/s/keguanbideyifangwenluyou-tab-shilikeanluyoucanshufenduofenhuancun-ewycx)
+- [Using Animation with `react-router`](https://codesandbox.io/s/using-animation-y35hh)

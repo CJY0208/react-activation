@@ -71,19 +71,26 @@ export default class AliveScope extends Component {
 
   dropNodes = nodesId =>
     new Promise(resolve => {
-      nodesId.forEach(id => {
+      const willDropNodes = nodesId.filter(id => {
         const cache = this.store.get(id)
-        const canDrop = get(cache, 'cached')
+        const canDrop = get(cache, 'cached') || get(cache, 'willDrop')
 
         if (canDrop) {
           // 用在多层 KeepAlive 同时触发 drop 时，避免触发深层 KeepAlive 节点的缓存生命周期
           cache.willDrop = true
           this.nodes.delete(id)
         }
+
+        return canDrop
       })
 
+      if (willDropNodes.length === 0) {
+        resolve(false)
+        return
+      }
+
       this.helpers = { ...this.helpers }
-      this.forceUpdate(resolve)
+      this.forceUpdate(() => resolve(true))
     })
 
   clear = () => this.dropNodes(this.getCachingNodes().map(({ id }) => id))

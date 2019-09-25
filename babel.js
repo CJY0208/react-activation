@@ -1,3 +1,3 @@
 'use strict'
 
-module.exports = require('./lib/babel/helpers.js');
+module.exports = require('./lib/babel/index.js');

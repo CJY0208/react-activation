@@ -1,4 +1,5 @@
 import resolve from 'rollup-plugin-node-resolve'
+import commonjs from 'rollup-plugin-commonjs'
 import babel from 'rollup-plugin-babel'
 import { uglify } from 'rollup-plugin-uglify'
 
@@ -36,14 +37,27 @@ export default [
     ]
   },
   {
-    input: 'src/babel/helpers.js',
+    input: 'src/babel/index.js',
     output: {
-      file: 'lib/babel/helpers.js',
+      file: 'lib/babel/index.js',
       format: 'cjs'
     },
+    external: ['jsx-ast-utils'],
     plugins: [
       resolve(),
+      commonjs(),
       babel({
+        babelrc: false,
+        presets: [
+          [
+            '@babel/env',
+            {
+              targets: {
+                node: true
+              }
+            }
+          ]
+        ],
         exclude: 'node_modules/**'
       })
     ]

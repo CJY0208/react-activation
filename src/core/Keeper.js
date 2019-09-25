@@ -17,7 +17,7 @@ export default class Keeper extends Component {
     // 已存在检测，防止意外现象
     if (store.has(id)) {
       return
-    }    
+    }
 
     store.set(id, {
       listeners,

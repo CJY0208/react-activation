@@ -10,6 +10,6 @@ module.exports = {
   ],
   plugins: [
     '@babel/plugin-proposal-class-properties',
-    './src/babel/helpers'
+    './src/babel'
   ]
 }

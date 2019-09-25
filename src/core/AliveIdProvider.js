@@ -8,7 +8,8 @@ import getKeyByFiberNode from './getKeyByFiberNode'
 export default class AliveIdProvider extends Component {
   id = null
   genId = () => {
-    this.id = getKeyByFiberNode(this._reactInternalFiber)
+    const { prefix = '' } = this.props
+    this.id = `${prefix}${getKeyByFiberNode(this._reactInternalFiber)}`
     return this.id
   }
 

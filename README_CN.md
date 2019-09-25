@@ -159,6 +159,32 @@ function App() {
 
 - - -
 
+## 多份缓存
+
+同一个父节点下，相同位置的 `<KeepAlive>` 默认会使用同一份缓存
+
+例如下述的带参数路由场景，`/item` 路由会按 `id` 来做不同呈现，但只能保留同一份缓存
+
+```javascript
+<Route path="/item/:id" render={props => (
+  <KeepAlive>
+    <Item {...props} />
+  </KeepAlive>
+)} />
+```
+
+类似场景，可以使用 `<KeepAlive>` 的 `id` 属性，来实现按特定条件分成多份缓存
+
+```javascript
+<Route path="/item/:id" render={props => (
+  <KeepAlive id={props.match.params.id}>
+    <Item {...props} />
+  </KeepAlive>
+)} />
+```
+
+- - -
+
 ## 缓存控制
 
 ### 自动控制缓存
@@ -409,3 +435,4 @@ class App extends Component {
 ## 更多复杂示例
 
 - [可关闭的路由 tabs 示例](https://codesandbox.io/s/keguanbideyifangwenluyou-tab-shilikeanluyoucanshufenduofenhuancun-ewycx)
+- [使用路由转场动画](https://codesandbox.io/s/using-animation-y35hh)
