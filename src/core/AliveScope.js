@@ -120,7 +120,7 @@ export default class AliveScope extends Component {
     return (
       <AliveScopeProvider value={this.helpers}>
         {children}
-        <div>
+        <div style={{ display: 'none' }}>
           {[...this.nodes.values()].map(({ children, ...props }) => (
             <Keeper key={props.id} {...props} store={this.store}>
               {children}

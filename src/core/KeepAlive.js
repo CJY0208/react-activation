@@ -58,6 +58,7 @@ class KeepAlive extends Component {
 
   id = null // 用作 Keeper 识别 KeepAlive
   isKeepAlive = true // 用作 Keeper 识别 KeepAlive
+  cached = false
   constructor(props) {
     super(props)
     this.id = props.id
@@ -73,12 +74,20 @@ class KeepAlive extends Component {
           node.updateTime = Date.now()
         }
 
+        const cached = lifecycleName === LIFECYCLE_UNACTIVATE
+
         // 若组件即将卸载则不再触发缓存生命周期
         if (!cache || cache.willDrop) {
+          // 若组件在父 KeepAlive 缓存期间被卸载，后续恢复后需重新触发 init
+          if (this.cached && !cached) {
+            this.init()
+          }
           return
         }
+
         run(cache, lifecycleName)
-        cache.cached = lifecycleName === LIFECYCLE_UNACTIVATE
+        cache.cached = cached
+        this.cached = cached
       }
     })
   }
@@ -170,11 +179,12 @@ class KeepAlive extends Component {
         } else {
           cache.inited = true
         }
+        this.cached = false
       })
   }
 
   update = ({ _helpers, id, name, ...rest }) => {
-    if (this.needForceStopUpdate(name)) {
+    if (this.cached || this.needForceStopUpdate(name)) {
       return
     }
 
@@ -252,6 +262,6 @@ function SSRKeepAlive({ children }) {
   )
 }
 
-export default (isFunction(get(root, 'document.getElementById'))
+export default isFunction(get(root, 'document.getElementById'))
   ? expandKeepAlive(withActivation(KeepAlive))
-  : SSRKeepAlive)
+  : SSRKeepAlive

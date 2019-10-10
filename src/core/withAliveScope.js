@@ -13,35 +13,25 @@ function controllerCherryPick(controller) {
 }
 
 export const expandKeepAlive = KeepAlive => {
-  const renderContent = ({ id, helpers, props }) => (
-    <Acceptor id={id}>
-      {bridgeProps => (
-        <KeepAlive {...props} {...bridgeProps} id={id} _helpers={helpers} />
+  const renderContent = ({ idPrefix, helpers, props }) => (
+    <AliveIdProvider prefix={idPrefix}>
+      {id => (
+        <Acceptor id={id}>
+          {bridgeProps => (
+            <KeepAlive {...props} {...bridgeProps} id={id} _helpers={helpers} />
+          )}
+        </Acceptor>
       )}
-    </Acceptor>
+    </AliveIdProvider>
   )
+  const HookExpand = ({ id: idPrefix, ...props }) =>
+    renderContent({ idPrefix, helpers: useContext(aliveScopeContext), props })
 
-  function HookExpand({ id: idPrefix, ...props }) {
-    const helpers = useContext(aliveScopeContext)
-
-    return (
-      <AliveIdProvider prefix={idPrefix}>
-        {id => renderContent({ id, helpers, props })}
-      </AliveIdProvider>
-    )
-  }
-
-  function WithExpand({ id: idPrefix, ...props }) {
-    return (
-      <AliveIdProvider prefix={idPrefix}>
-        {id => (
-          <AliveScopeConsumer>
-            {helpers => renderContent({ id, helpers, props })}
-          </AliveScopeConsumer>
-        )}
-      </AliveIdProvider>
-    )
-  }
+  const WithExpand = ({ id: idPrefix, ...props }) => (
+    <AliveScopeConsumer>
+      {helpers => renderContent({ idPrefix, helpers, props })}
+    </AliveScopeConsumer>
+  )
 
   return isFunction(useContext) ? HookExpand : WithExpand
 }
@@ -51,29 +41,24 @@ const withAliveScope = WrappedComponent => {
     <WrappedComponent {...props} {...helpers} ref={forwardedRef} />
   )
 
-  function HookStore({ forwardedRef, ...props }) {
-    const controller = useContext(aliveScopeContext) || {}
-
-    return renderContent({
-      helpers: controllerCherryPick(controller),
+  const HookStore = ({ forwardedRef, ...props }) =>
+    renderContent({
+      helpers: controllerCherryPick(useContext(aliveScopeContext) || {}),
       props,
       forwardedRef
     })
-  }
 
-  function WithStore({ forwardedRef, ...props }) {
-    return (
-      <AliveScopeConsumer>
-        {(controller = {}) =>
-          renderContent({
-            helpers: controllerCherryPick(controller),
-            props,
-            forwardedRef
-          })
-        }
-      </AliveScopeConsumer>
-    )
-  }
+  const WithStore = ({ forwardedRef, ...props }) => (
+    <AliveScopeConsumer>
+      {(controller = {}) =>
+        renderContent({
+          helpers: controllerCherryPick(controller),
+          props,
+          forwardedRef
+        })
+      }
+    </AliveScopeConsumer>
+  )
 
   const HOCWithAliveScope = isFunction(useContext) ? HookStore : WithStore
 

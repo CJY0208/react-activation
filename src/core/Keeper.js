@@ -33,6 +33,15 @@ export default class Keeper extends Component {
 
   componentWillUnmount() {
     const { store, id } = this.props
+    // 卸载前尝试归位 DOM 节点
+    try {
+      const cache = store.get(id)
+      cache.nodes.forEach(node => {
+        cache.wrapper.appendChild(node)
+      })
+    } catch (error) {
+      // console.error(error) // do nothing
+    }
     store.delete(id)
   }
 
