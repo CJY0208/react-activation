@@ -18,7 +18,7 @@ export const expandKeepAlive = KeepAlive => {
       {id => (
         <Acceptor id={id}>
           {bridgeProps => (
-            <KeepAlive {...props} {...bridgeProps} id={id} _helpers={helpers} />
+            <KeepAlive key={id} {...props} {...bridgeProps} id={id} _helpers={helpers} />
           )}
         </Acceptor>
       )}
