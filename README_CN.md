@@ -159,6 +159,18 @@ function App() {
 
 - - -
 
+## 保存滚动位置（默认行为）
+
+`<KeepAlive />` 会检测它的 `children` 属性中是否存在可滚动的元素，包括当前的 `document.body` 和 `document.documentElement`，然后在 `componentWillUnactivate` 之前自动保存滚动位置，在 `componentDidActivate` 之后恢复保存的滚动位置
+
+如果你不需要 `<KeepAlive />` 做这件事，可以将 `saveScrollPosition` 属性设置为 `false`
+
+```javascript
+<KeepAlive saveScrollPosition={false} />
+```
+
+- - -
+
 ## 多份缓存
 
 同一个父节点下，相同位置的 `<KeepAlive>` 默认会使用同一份缓存

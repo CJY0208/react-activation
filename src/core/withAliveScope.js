@@ -14,7 +14,7 @@ function controllerCherryPick(controller) {
 
 export const expandKeepAlive = KeepAlive => {
   const renderContent = ({ idPrefix, helpers, props }) => (
-    <AliveIdProvider prefix={idPrefix}>
+    <AliveIdProvider prefix={idPrefix} key={props._ka}>
       {id => (
         <Acceptor id={id}>
           {bridgeProps => (
