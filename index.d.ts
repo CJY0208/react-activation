@@ -5,7 +5,8 @@ export declare class KeepAlive extends React.Component<{
   children: ReactNode | ReactNodeArray,
   name?: string,
   id?: string,  
-  when?: boolean | Array<boolean> | (() => boolean | Array<boolean>)
+  when?: boolean | Array<boolean> | (() => boolean | Array<boolean>),
+  saveScrollPosition?: boolean
 }> {}
 export default KeepAlive
 

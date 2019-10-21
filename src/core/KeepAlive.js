@@ -34,6 +34,9 @@ const parseWhenResult = res => {
 }
 
 class KeepAlive extends Component {
+  static defaultProps = {
+    saveScrollPosition: true
+  }
   // 本段为 KeepAlive 更新隐患检测，通过检测 KeepAlive 瞬时更新次数来判断是否进入死循环，并在 update 中强制阻止更新
   updateTimes = 0
   errorTips = debounce(() => {
@@ -94,7 +97,7 @@ class KeepAlive extends Component {
 
   // DOM 操作将实际内容插入占位元素
   inject = (didActivate = true) => {
-    const { id, _helpers } = this.props
+    const { id, saveScrollPosition, _helpers } = this.props
     const cache = _helpers.getCache(id)
     // DOM 操作有风险，try catch 护体
     try {
@@ -112,7 +115,7 @@ class KeepAlive extends Component {
         this.placeholder.appendChild(node)
       })
 
-      if (didActivate) {
+      if (didActivate && saveScrollPosition) {
         // 恢复该节点下各可滚动元素的滚动位置
         run(cache.revertScrollPos)
       }
@@ -123,12 +126,12 @@ class KeepAlive extends Component {
 
   // DOM 操作将实际内容移出占位元素
   eject = (willUnactivate = true) => {
-    const { id, _helpers } = this.props
+    const { id, saveScrollPosition: needToSaveScrollPosition, _helpers } = this.props
     const cache = _helpers.getCache(id)
 
     // DOM 操作有风险，try catch 护体
     try {
-      if (willUnactivate) {
+      if (willUnactivate && needToSaveScrollPosition) {
         // 保存该节点下各可滚动元素的滚动位置
         cache.revertScrollPos = saveScrollPosition(cache.nodes)
       }

@@ -159,6 +159,18 @@ function App() {
 
 - - -
 
+## Save Scroll Position (by default)
+
+`<KeepAlive />` would try to detect scrollable nodes in its `children`, including current `document.body` and `document.documentElement`, then, save their scroll position automaticlly before `componentWillUnactivate` and restore saving position after `componentDidActivate`.
+
+If you don't want `<KeepAlive />` to do this thing, set `saveScrollPosition` prop to `false`
+
+```javascript
+<KeepAlive saveScrollPosition={false} />
+```
+
+- - -
+
 ## Multiple Cache
 
 Under the same parent node, `<KeepAlive>` in the same location will use the same cache by default.
@@ -314,7 +326,7 @@ Since `<Keeper />` will not be uninstalled, caching can be implemented.
 
 ## Breaking Change
 
-1. `KeepAlive />` needs to pass children to `<AliveScope />` , so the rendering of the real content will be **slower than the normal situation**
+1. `<KeepAlive />` needs to pass children to `<AliveScope />` , so the rendering of the real content will be **slower than the normal situation**
 
     Will have a certain impact on the function of strictly relying on the lifecycle order, such as getting the value of `ref` in `componentDidMount`, as follows
 
