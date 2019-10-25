@@ -159,14 +159,20 @@ function App() {
 
 - - -
 
-## 保存滚动位置（默认行为）
+## 保存滚动位置（默认为 `true`）
 
-`<KeepAlive />` 会检测它的 `children` 属性中是否存在可滚动的元素，包括当前的 `document.body` 和 `document.documentElement`，然后在 `componentWillUnactivate` 之前自动保存滚动位置，在 `componentDidActivate` 之后恢复保存的滚动位置
+`<KeepAlive />` 会检测它的 `children` 属性中是否存在可滚动的元素，然后在 `componentWillUnactivate` 之前自动保存滚动位置，在 `componentDidActivate` 之后恢复保存的滚动位置
 
 如果你不需要 `<KeepAlive />` 做这件事，可以将 `saveScrollPosition` 属性设置为 `false`
 
 ```javascript
 <KeepAlive saveScrollPosition={false} />
+```
+
+如果你的组件共享了屏幕滚动容器如 `document.body` 或 `document.documentElement`, 将 `saveScrollPosition` 属性设置为 `"screen"` 可以在 `componentWillUnactivate` 之前自动保存共享屏幕容器的滚动位置
+
+```javascript
+<KeepAlive saveScrollPosition="screen" />
 ```
 
 - - -

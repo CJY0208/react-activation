@@ -1,33 +1,42 @@
 import root from './base/globalThis'
-import { get } from './base/try'
-import { isArray, isFunction } from './base/is'
+import { get, run, value } from './base/try'
+import { isArray, isFunction, isExist } from './base/is'
 import { flatten } from './utils'
 
 const body = get(root, 'document.body')
 
-function isScrollableNode(node) {
+function isScrollableNode(node = {}) {
+  if (!isExist(node)) {
+    return false
+  }
+
   return (
     node.scrollWidth > node.clientWidth || node.scrollHeight > node.clientHeight
   )
 }
 
-function getScrollableNodes(from = body) {
-  if (!isFunction(get(root, 'document.getElementById'))) {
+function getScrollableNodes(from) {
+  if (!isFunction(get(root, 'document.querySelectorAll'))) {
     return []
   }
 
-  return [...from.querySelectorAll('*'), from].filter(isScrollableNode)
+  return [...value(run(from, 'querySelectorAll', '*'), []), from].filter(
+    isScrollableNode
+  )
 }
 
-export default function saveScrollPosition(from = body) {
+export default function saveScrollPosition(from, screenInclude) {
   const nodes = [
     ...new Set([
       ...flatten((!isArray(from) ? [from] : from).map(getScrollableNodes)),
-      ...[get(root, 'document.documentElement', {}), body].filter(
-        isScrollableNode
-      )
+      ...(screenInclude
+        ? [get(root, 'document.documentElement', {}), body].filter(
+            isScrollableNode
+          )
+        : [])
     ])
   ]
+
   const saver = nodes.map(node => [
     node,
     {

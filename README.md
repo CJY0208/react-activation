@@ -159,9 +159,9 @@ function App() {
 
 - - -
 
-## Save Scroll Position (by default)
+## Save Scroll Position (`true` by default)
 
-`<KeepAlive />` would try to detect scrollable nodes in its `children`, including current `document.body` and `document.documentElement`, then, save their scroll position automaticlly before `componentWillUnactivate` and restore saving position after `componentDidActivate`.
+`<KeepAlive />` would try to detect scrollable nodes in its `children`, then, save their scroll position automaticlly before `componentWillUnactivate` and restore saving position after `componentDidActivate`
 
 If you don't want `<KeepAlive />` to do this thing, set `saveScrollPosition` prop to `false`
 
@@ -169,6 +169,11 @@ If you don't want `<KeepAlive />` to do this thing, set `saveScrollPosition` pro
 <KeepAlive saveScrollPosition={false} />
 ```
 
+If your components share screen scroll container, `document.body` or `document.documentElement`, set `saveScrollPosition` prop to `"screen"` can save sharing screen container's scroll position before `componentWillUnactivate`
+
+```javascript
+<KeepAlive saveScrollPosition="screen" />
+```
 - - -
 
 ## Multiple Cache

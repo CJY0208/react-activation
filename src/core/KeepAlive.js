@@ -126,14 +126,21 @@ class KeepAlive extends Component {
 
   // DOM 操作将实际内容移出占位元素
   eject = (willUnactivate = true) => {
-    const { id, saveScrollPosition: needToSaveScrollPosition, _helpers } = this.props
+    const {
+      id,
+      saveScrollPosition: needToSaveScrollPosition,
+      _helpers
+    } = this.props
     const cache = _helpers.getCache(id)
 
     // DOM 操作有风险，try catch 护体
     try {
       if (willUnactivate && needToSaveScrollPosition) {
         // 保存该节点下各可滚动元素的滚动位置
-        cache.revertScrollPos = saveScrollPosition(cache.nodes)
+        cache.revertScrollPos = saveScrollPosition(
+          cache.nodes,
+          needToSaveScrollPosition === 'screen'
+        )
       }
 
       //
