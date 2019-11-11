@@ -33,16 +33,17 @@ Vue 中 `<keep-alive />` 功能在 React 中的实现
 
 ```bash
 yarn add react-activation
-# or
+# 或者
 npm install react-activation
 ```
+
 - - -
 
 ## 使用方式
 
-`.babelrc` 中增加 `react-activation/babel` 插件
+#### 1. babel 配置文件 `.babelrc` 中增加 `react-activation/babel` 插件
 
-该插件会于编译阶段在各 JSX 元素上增加 `_ka` 属性，帮助 KeepAlive 运行时按渲染位置生成唯一的缓存 id 标识
+该插件会于编译阶段在各 JSX 元素上增加 `_ka` 属性，帮助 `react-activation` 在运行时**按渲染位置生成唯一的缓存 id 标识**
 
 ```javascript
 {
@@ -52,57 +53,64 @@ npm install react-activation
 }
 ```
 
-业务代码中
+#### 2. 业务代码中，在不会被销毁的位置放置 `<AliveScope>` 外层，一般为应用入口处
+
+注意：与 `react-router` 或 `react-redux` 配合使用时，需要将 `<AliveScope>` 放置在 `<Router>` 或 `<Provider>` 内部
 
 ```javascript
-import React, { Component, useState } from 'react'
+// entry.js
+
+import React from 'react'
 import ReactDOM from 'react-dom'
-import KeepAlive, { AliveScope, withActivation } from 'react-activation'
+import { AliveScope } from 'react-activation'
 
-@withActivation
-class Test extends Component {
-  state = {
-    count: 0
-  }
+import Test from './Test'
 
-  setCount = count => this.setState({ count })
+ReactDOM.render(
+  <AliveScope>
+    <Test />
+  </AliveScope>, 
+  document.getElementById('root')
+)
+```
 
-  componentDidActivate() {
-    console.log('Test: componentDidActivate')
-  }
+#### 3. 用 `<KeepAlive>` 包裹需要保持状态的组件
 
-  componentWillUnactivate() {
-    console.log('Test: componentWillUnactivate')
-  }
+如例子中的 `<Counter>` 组件
 
-  render() {
-    const { count } = this.state
-    
-    return (
-      <div>
-        count: {count}
-        <button onClick={() => this.setCount(count + 1)}>add</button>
-      </div>
-    )
-  }
+```javascript
+// Test.js
+
+import React, { useState } from 'react'
+import KeepAlive from 'react-activation'
+
+function Counter() {
+  const [count, setCount] = useState(0)
+
+  return (
+    <div>
+      <p>count: {count}</p>
+      <button onClick={() => setCount(count => count + 1)}>Add</button>
+    </div>
+  )
 }
 
-function App() {
+function Test() {
   const [show, setShow] = useState(true)
 
   return (
-    <AliveScope>
+    <div>
       <button onClick={() => setShow(show => !show)}>Toggle</button>
       {show && (
         <KeepAlive>
           <Test />
         </KeepAlive>
       )}
-    </AliveScope>
+    </div>
   )
 }
 
-ReactDOM.render(<App />, document.getElementById('root'))
+export default Test
 ```
 
 - - -
@@ -117,7 +125,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ```javascript
 ...
-import KeepAlive, { useActivate, useUnactivate， withActivation } from 'react-activation'
+import KeepAlive, { useActivate, useUnactivate, withActivation } from 'react-activation'
 
 @withActivation
 class TestClass extends Component {

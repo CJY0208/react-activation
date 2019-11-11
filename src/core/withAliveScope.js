@@ -1,7 +1,7 @@
 import React, { forwardRef, useContext } from 'react'
 import hoistStatics from 'hoist-non-react-statics'
 
-import { isFunction } from '../helpers'
+import { get, isFunction, isUndefined } from '../helpers'
 
 import { Acceptor } from './Bridge'
 import AliveIdProvider from './AliveIdProvider'
@@ -13,17 +13,33 @@ function controllerCherryPick(controller) {
 }
 
 export const expandKeepAlive = KeepAlive => {
-  const renderContent = ({ idPrefix, helpers, props }) => (
-    <AliveIdProvider prefix={idPrefix} key={props._ka}>
-      {id => (
-        <Acceptor id={id}>
-          {bridgeProps => (
-            <KeepAlive key={id} {...props} {...bridgeProps} id={id} _helpers={helpers} />
-          )}
-        </Acceptor>
-      )}
-    </AliveIdProvider>
-  )
+  const renderContent = ({ idPrefix, helpers, props }) => {
+    const isOutsideAliveScope = isUndefined(helpers)
+
+    if (isOutsideAliveScope) {
+      console.error('You should not use <KeepAlive /> outside a <AliveScope>')
+    }
+
+    return isOutsideAliveScope ? (
+      get(props, 'children', null)
+    ) : (
+      <AliveIdProvider prefix={idPrefix} key={props._ka}>
+        {id => (
+          <Acceptor id={id}>
+            {bridgeProps => (
+              <KeepAlive
+                key={id}
+                {...props}
+                {...bridgeProps}
+                id={id}
+                _helpers={helpers}
+              />
+            )}
+          </Acceptor>
+        )}
+      </AliveIdProvider>
+    )
+  }
   const HookExpand = ({ id: idPrefix, ...props }) =>
     renderContent({ idPrefix, helpers: useContext(aliveScopeContext), props })
 
