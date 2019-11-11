@@ -4,6 +4,11 @@ import { isArray, isFunction, isExist } from './base/is'
 import { flatten } from './utils'
 
 const body = get(root, 'document.body')
+const screenScrollingElement = get(
+  root,
+  'document.scrollingElement',
+  get(root, 'document.documentElement', {})
+)
 
 function isScrollableNode(node = {}) {
   if (!isExist(node)) {
@@ -30,9 +35,7 @@ export default function saveScrollPosition(from, screenInclude) {
     ...new Set([
       ...flatten((!isArray(from) ? [from] : from).map(getScrollableNodes)),
       ...(screenInclude
-        ? [get(root, 'document.documentElement', {}), body].filter(
-            isScrollableNode
-          )
+        ? [screenScrollingElement, body].filter(isScrollableNode)
         : [])
     ])
   ]

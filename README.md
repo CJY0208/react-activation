@@ -40,9 +40,9 @@ npm install react-activation
 
 ## Usage
 
-Add `react-activation/babel` plugins in `.babelrc`
+#### 1. Add `react-activation/babel` plugins in `.babelrc`
 
-The plugin adds a `_ka` attribute to each JSX element during compilation to help the `<KeepAlive />` runtime generate a unique identifier by render location.
+The plugin adds a `_ka` attribute to each JSX element during compilation to help the `react-activation` runtime **generate an unique identifier by render location**.
 
 ```javascript
 {
@@ -52,57 +52,64 @@ The plugin adds a `_ka` attribute to each JSX element during compilation to help
 }
 ```
 
-In your business code
+#### 2. In your business code, place the `<AliveScope>` outer layer at a location that will not be unmounted, usually at the application entrance
+
+Note: When used with `react-router` or `react-redux`, you need to place `<AliveScope>` inside `<Router>` or `<Provider>`
 
 ```javascript
-import React, { Component, useState } from 'react'
+// entry.js
+
+import React from 'react'
 import ReactDOM from 'react-dom'
-import KeepAlive, { AliveScope, withActivation } from 'react-activation'
+import { AliveScope } from 'react-activation'
 
-@withActivation
-class Test extends Component {
-  state = {
-    count: 0
-  }
+import Test from './Test'
 
-  setCount = count => this.setState({ count })
+ReactDOM.render(
+  <AliveScope>
+    <Test />
+  </AliveScope>, 
+  document.getElementById('root')
+)
+```
 
-  componentDidActivate() {
-    console.log('Test: componentDidActivate')
-  }
+#### 3. Wrap the components that need to keep states with `<KeepAlive>`
 
-  componentWillUnactivate() {
-    console.log('Test: componentWillUnactivate')
-  }
+Like the `<Counter>` component in the example
 
-  render() {
-    const { count } = this.state
-    
-    return (
-      <div>
-        count: {count}
-        <button onClick={() => this.setCount(count + 1)}>add</button>
-      </div>
-    )
-  }
+```javascript
+// Test.js
+
+import React, { useState } from 'react'
+import KeepAlive from 'react-activation'
+
+function Counter() {
+  const [count, setCount] = useState(0)
+
+  return (
+    <div>
+      <p>count: {count}</p>
+      <button onClick={() => setCount(count => count + 1)}>Add</button>
+    </div>
+  )
 }
 
-function App() {
+function Test() {
   const [show, setShow] = useState(true)
 
   return (
-    <AliveScope>
+    <div>
       <button onClick={() => setShow(show => !show)}>Toggle</button>
       {show && (
         <KeepAlive>
           <Test />
         </KeepAlive>
       )}
-    </AliveScope>
+    </div>
   )
 }
 
-ReactDOM.render(<App />, document.getElementById('root'))
+export default Test
 ```
 
 - - -
@@ -117,7 +124,7 @@ Use `componentDidActivate` and `componentWillUnactivate` to correspond to the tw
 
 ```javascript
 ...
-import KeepAlive, { useActivate, useUnactivate， withActivation } from 'react-activation'
+import KeepAlive, { useActivate, useUnactivate, withActivation } from 'react-activation'
 
 @withActivation
 class TestClass extends Component {

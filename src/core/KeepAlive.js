@@ -21,9 +21,9 @@ import saveScrollPosition from '../helpers/saveScrollPosition'
 const getErrorTips = name =>
   `<KeepAlive ${
     name ? `name="${name}" ` : ''
-  }/>  瞬时更新次数过多，可能遇到了更新的死循环，已强制暂停更新
-您现在可见的更新结果存在严重的性能问题
-可能遇到了隐含的 bug，请不要使用 KeepAlive 并联系作者解决`
+  }/> Too many transient updates, may have encountered an infinite loop of updates, forced to pause the update
+There are serious performance issues with the update results you are currently seeing
+May encounter an implied bug, please don't use KeepAlive and contact the author to solve`
 
 const parseWhenResult = res => {
   if (isArray(res)) {
