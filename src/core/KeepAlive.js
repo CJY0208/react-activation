@@ -45,9 +45,9 @@ class KeepAlive extends Component {
   }, 100)
   releaseUpdateTimes = debounce(() => {
     this.updateTimes = 0
-  }, 32)
+  }, 16)
   needForceStopUpdate = () => {
-    const needForceStopUpdate = this.updateTimes > 16
+    const needForceStopUpdate = this.updateTimes > 64
 
     if (needForceStopUpdate) {
       this.errorTips()
