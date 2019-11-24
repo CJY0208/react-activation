@@ -8,18 +8,14 @@ import Keeper from './Keeper'
 export default class AliveScope extends Component {
   store = new Map()
   nodes = new Map()
+  keepers = new Map()
 
-  // FIXME: 每次 update 均触发 forceUpdate，可能存在性能问题，待验证
   update = (id, params) =>
     new Promise(resolve => {
-      const node = this.nodes.get(id) || null
-      const isNew = !node
+      const keeper = this.keepers.get(id)
+      const isNew = !keeper
       const now = Date.now()
-
-      if (isNew) {
-        this.helpers = { ...this.helpers }
-      }
-
+      const node = this.nodes.get(id) || null
       this.nodes.set(id, {
         id,
         createTime: now,
@@ -28,7 +24,14 @@ export default class AliveScope extends Component {
         ...params
       })
 
-      this.forceUpdate(resolve)
+      if (isNew) {
+        this.helpers = { ...this.helpers }
+
+        this.forceUpdate(resolve)
+      } else {
+        const { children, bridgeProps } = params
+        keeper.setState({ children, bridgeProps }, resolve)
+      }
     })
   keep = (id, params) =>
     new Promise(resolve => {
@@ -122,7 +125,15 @@ export default class AliveScope extends Component {
         {children}
         <div style={{ display: 'none' }}>
           {[...this.nodes.values()].map(({ children, ...props }) => (
-            <Keeper key={props.id} {...props} store={this.store}>
+            <Keeper
+              key={props.id}
+              {...props}
+              store={this.store}
+              keepers={this.keepers}
+              ref={keeper => {
+                this.keepers.set(props.id, keeper)
+              }}
+            >
               {children}
             </Keeper>
           ))}
