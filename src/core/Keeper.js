@@ -125,7 +125,7 @@ export default class Keeper extends Component {
           this.wrapper = node
         }}
       >
-        <div key="keeper-container">
+        <div key="keeper-container" className="ka-content">
           <Bridge id={id} bridgeProps={bridgeProps}>
             <AliveNodeProvider value={this.contextValue}>
               {children}
