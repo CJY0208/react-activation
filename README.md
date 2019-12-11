@@ -52,6 +52,8 @@ The plugin adds a `_ka` attribute to each JSX element during compilation to help
 }
 ```
 
+[Why is it needed?](https://github.com/CJY0208/react-activation/issues/18#issuecomment-564360695)
+
 #### 2. In your business code, place the `<AliveScope>` outer layer at a location that will not be unmounted, usually at the application entrance
 
 Note: When used with `react-router` or `react-redux`, you need to place `<AliveScope>` inside `<Router>` or `<Provider>`
