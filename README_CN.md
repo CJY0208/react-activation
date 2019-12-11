@@ -53,6 +53,8 @@ npm install react-activation
 }
 ```
 
+[为什么需要它？](https://github.com/CJY0208/react-activation/issues/18#issuecomment-564360695)
+
 #### 2. 业务代码中，在不会被销毁的位置放置 `<AliveScope>` 外层，一般为应用入口处
 
 注意：与 `react-router` 或 `react-redux` 配合使用时，需要将 `<AliveScope>` 放置在 `<Router>` 或 `<Provider>` 内部
