@@ -10,7 +10,7 @@ export interface KeepAliveProps {
 }
 
 export declare class KeepAlive extends React.Component<KeepAliveProps> {}
-export default KeepAlive 
+export default KeepAlive
 
 export declare class AliveScope extends React.Component<{
   children: ReactNode | ReactNodeArray
@@ -33,6 +33,7 @@ export interface CachingNode {
   updateTime: number
   name?: string
   id: string
+  [key: string]: any
 }
 export interface AliveController {
   drop: (name: string | RegExp) => Promise<boolean>
