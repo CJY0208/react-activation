@@ -181,6 +181,11 @@ class KeepAlive extends Component {
         ...rest
       })
       .then(cache => {
+        // fix #22
+        if (!cache) {
+          return
+        }
+
         this.inject()
 
         // 触发 didActivate 生命周期
@@ -268,7 +273,9 @@ class KeepAlive extends Component {
 function SSRKeepAlive({ children }) {
   return (
     <div key="keep-alive-placeholder" className="ka-wrapper">
-      <div key="keeper-container" className="ka-content">{children}</div>
+      <div key="keeper-container" className="ka-content">
+        {children}
+      </div>
     </div>
   )
 }

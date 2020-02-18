@@ -1,4 +1,4 @@
-import { get, isObject, isString, getKey2Id } from '../helpers'
+import { get, isObject, isString, getKey2Id } from '../../helpers'
 
 const isArrReg = /^iAr/
 

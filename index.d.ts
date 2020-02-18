@@ -1,5 +1,11 @@
 /// <reference types="react" />
-import * as React from 'react'
+import {
+  ReactNode,
+  ReactNodeArray,
+  Context,
+  Component,
+  ComponentClass
+} from 'react'
 
 export interface KeepAliveProps {
   children: ReactNode | ReactNodeArray
@@ -9,17 +15,21 @@ export interface KeepAliveProps {
   saveScrollPosition?: boolean | 'screen'
 }
 
-export declare class KeepAlive extends React.Component<KeepAliveProps> {}
+export declare class KeepAlive extends Component<KeepAliveProps> {}
 export default KeepAlive
 
-export declare class AliveScope extends React.Component<{
+export declare class AliveScope extends Component<{
   children: ReactNode | ReactNodeArray
 }> {}
 
-export function withActivation(Component: React.ComponentClass): React.ComponentClass
-export function withAliveScope(Component: React.ComponentClass): React.ComponentClass
+export declare class NodeKey extends Component<{
+  prefix?: string
+}> {}
 
-export function fixContext(Context: React.Context): void
+export function withActivation(Component: ComponentClass): ComponentClass
+export function withAliveScope(Component: ComponentClass): ComponentClass
+
+export function fixContext(context: Context<any>): void
 export function createContext<T>(
   defaultValue: T,
   calculateChangedBits?: (prev: T, next: T) => number

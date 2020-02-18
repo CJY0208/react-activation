@@ -4,7 +4,7 @@ import hoistStatics from 'hoist-non-react-statics'
 import { get, isFunction, isUndefined } from '../helpers'
 
 import { Acceptor } from './Bridge'
-import AliveIdProvider from './AliveIdProvider'
+import NodeKey from './NodeKey'
 import { AliveScopeConsumer, aliveScopeContext } from './context'
 
 function controllerCherryPick(controller) {
@@ -23,7 +23,7 @@ export const expandKeepAlive = KeepAlive => {
     return isOutsideAliveScope ? (
       get(props, 'children', null)
     ) : (
-      <AliveIdProvider prefix={idPrefix} key={props._ka}>
+      <NodeKey prefix={idPrefix} key={props._ka}>
         {id => (
           <Acceptor id={id}>
             {bridgeProps => (
@@ -37,7 +37,7 @@ export const expandKeepAlive = KeepAlive => {
             )}
           </Acceptor>
         )}
-      </AliveIdProvider>
+      </NodeKey>
     )
   }
   const HookExpand = ({ id: idPrefix, ...props }) =>
