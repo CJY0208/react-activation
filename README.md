@@ -1,4 +1,4 @@
-# React Activation 
+# React Activation
 
 [![size](https://img.shields.io/bundlephobia/minzip/react-activation.svg)](https://github.com/CJY0208/react-activation)
 [![dm](https://img.shields.io/npm/dm/react-activation.svg)](https://github.com/CJY0208/react-activation)
@@ -7,7 +7,7 @@ English | [中文说明](./README_CN.md)
 
 Implementation of the `<keep-alive />` function in `Vue` For `React`
 
-- - -
+---
 
 Same as [react-keep-alive](https://github.com/StructureBuilder/react-keep-alive)
 
@@ -19,15 +19,17 @@ More stable `<KeepAlive />` function with `babel` pre-compilation
 
 <img src="./docs/basicReactActivation.gif">
 
-- - -
+---
 
 ## Compatibility
 
 - React v16+
 
+- Preact v10+
+
 - Compatible with SSR
 
-- - -
+---
 
 ## Install
 
@@ -36,7 +38,8 @@ yarn add react-activation
 # or
 npm install react-activation
 ```
-- - -
+
+---
 
 ## Usage
 
@@ -70,7 +73,7 @@ import Test from './Test'
 ReactDOM.render(
   <AliveScope>
     <Test />
-  </AliveScope>, 
+  </AliveScope>,
   document.getElementById('root')
 )
 ```
@@ -114,7 +117,7 @@ function Test() {
 export default Test
 ```
 
-- - -
+---
 
 ## Lifecycle
 
@@ -166,7 +169,7 @@ function App() {
 ...
 ```
 
-- - -
+---
 
 ## Save Scroll Position (`true` by default)
 
@@ -183,7 +186,8 @@ If your components share screen scroll container, `document.body` or `document.d
 ```javascript
 <KeepAlive saveScrollPosition="screen" />
 ```
-- - -
+
+---
 
 ## Multiple Cache
 
@@ -192,24 +196,30 @@ Under the same parent node, `<KeepAlive>` in the same location will use the same
 For example, with the following parameter routing scenario, the `/item` route will be rendered differently by `id`, but only the same cache can be kept.
 
 ```javascript
-<Route path="/item/:id" render={props => (
-  <KeepAlive>
-    <Item {...props} />
-  </KeepAlive>
-)} />
+<Route
+  path="/item/:id"
+  render={props => (
+    <KeepAlive>
+      <Item {...props} />
+    </KeepAlive>
+  )}
+/>
 ```
 
 Similar scenarios, you can use the `id` attribute of `<KeepAlive>` to implement multiple caches according to specific conditions.
 
 ```javascript
-<Route path="/item/:id" render={props => (
-  <KeepAlive id={props.match.params.id}>
-    <Item {...props} />
-  </KeepAlive>
-)} />
+<Route
+  path="/item/:id"
+  render={props => (
+    <KeepAlive id={props.match.params.id}>
+      <Item {...props} />
+    </KeepAlive>
+  )}
+/>
 ```
 
-- - -
+---
 
 ## Cache Control
 
@@ -228,23 +238,21 @@ Add the `when` attribute to the `<KeepAlive />` tag that needs to control the ca
 
 #### When the `when` type is `Array`
 
-The **1th** parameter indicates whether it needs to be cached at the time of uninstallation. 
+The **1th** parameter indicates whether it needs to be cached at the time of uninstallation.
 
 The **2th** parameter indicates whether to unload all cache contents of `<KeepAlive>`, including all `<KeepAlive>` nested in `<KeepAlive>`.
 
 ```javascript
-// For example: 
+// For example:
 // The following indicates that it is not cached when uninstalling
 // And uninstalls all nested `<KeepAlive>`
 <KeepAlive when={[false, true]}>
   ...
-    <KeepAlive>
-      ...
-        <KeepAlive>
-          ...
-        </KeepAlive>
-      ...
-    </KeepAlive>
+  <KeepAlive>
+    ...
+    <KeepAlive>...</KeepAlive>
+    ...
+  </KeepAlive>
   ...
 </KeepAlive>
 ```
@@ -260,20 +268,20 @@ The return value is the above `Boolean` or `Array`, which takes effect as descri
 2. Get control functions using `withAliveScope` or `useAliveController`
 
    - **drop(name)**
-   
-      Unload the `<KeepAlive>` node in cache state by name. The name can be of type `String` or `RegExp`. Note that only the first layer of content that hits `<KeepAlive>` is unloaded and will not be uninstalled in `<KeepAlive>`. Would not unload nested `<KeepAlive>`
-      
+
+     Unload the `<KeepAlive>` node in cache state by name. The name can be of type `String` or `RegExp`. Note that only the first layer of content that hits `<KeepAlive>` is unloaded and will not be uninstalled in `<KeepAlive>`. Would not unload nested `<KeepAlive>`
+
    - **dropScope(name)**
-   
-      Unloads the `<KeepAlive>` node in cache state by name. The name optional type is `String` or `RegExp`, which will unload all content of `<KeepAlive>`, including all `<KeepAlive>` nested in `<KeepAlive>`.
-      
+
+     Unloads the `<KeepAlive>` node in cache state by name. The name optional type is `String` or `RegExp`, which will unload all content of `<KeepAlive>`, including all `<KeepAlive>` nested in `<KeepAlive>`.
+
    - **clear()**
-   
-      will clear all `<KeepAlive>` in the cache
-      
+
+     will clear all `<KeepAlive>` in the cache
+
    - **getCachingNodes()**
-   
-      Get all the nodes in the cache
+
+     Get all the nodes in the cache
 
 ```javascript
 ...
@@ -322,7 +330,7 @@ class App extends Component {
 ...
 ```
 
-- - -
+---
 
 ## Principle
 
@@ -336,128 +344,134 @@ Since `<Keeper />` will not be uninstalled, caching can be implemented.
 
 <img src="./docs/reactActivationPrinciple.gif">
 
-- - -
+---
 
 ## Breaking Change
 
 1. `<KeepAlive />` needs to pass children to `<AliveScope />` , so the rendering of the real content will be **slower than the normal situation**
 
-    Will have a certain impact on the function of strictly relying on the lifecycle order, such as getting the value of `ref` in `componentDidMount`, as follows
+   Will have a certain impact on the function of strictly relying on the lifecycle order, such as getting the value of `ref` in `componentDidMount`, as follows
 
-    ```javascript
-    class Test extends Component {
-      componentDidMount() {
-        console.log(this.outside) // will log <div /> instance
-        console.log(this.inside) // will log undefined
-      }
+   ```javascript
+   class Test extends Component {
+     componentDidMount() {
+       console.log(this.outside) // will log <div /> instance
+       console.log(this.inside) // will log undefined
+     }
 
-      render() {
-        return (
-          <div>
-            <div ref={ref => {
-              this.outside = ref
-            }}>
-              Outside KeepAlive
-            </div>
-            <KeepAlive>
-              <div ref={ref => {
-                this.inside = ref
-              }}>
-                Inside KeepAlive
-              </div>
-            </KeepAlive>
-          </div>
-        )
-      }
-    }
-    ```
+     render() {
+       return (
+         <div>
+           <div
+             ref={ref => {
+               this.outside = ref
+             }}
+           >
+             Outside KeepAlive
+           </div>
+           <KeepAlive>
+             <div
+               ref={ref => {
+                 this.inside = ref
+               }}
+             >
+               Inside KeepAlive
+             </div>
+           </KeepAlive>
+         </div>
+       )
+     }
+   }
+   ```
 
-    The above error in `ClassComponent` can be fixed by using the `withActivation` high-level component
+   The above error in `ClassComponent` can be fixed by using the `withActivation` high-level component
 
-    `FunctionComponent` currently has no processing method, you can use `setTimeout` or `nextTick` to delay ref getting behavior
+   `FunctionComponent` currently has no processing method, you can use `setTimeout` or `nextTick` to delay ref getting behavior
 
-    ```javascript
-    @withActivation
-    class Test extends Component {
-      componentDidMount() {
-        console.log(this.outside) // will log <div /> instance
-        console.log(this.inside) // will log <div /> instance
-      }
+   ```javascript
+   @withActivation
+   class Test extends Component {
+     componentDidMount() {
+       console.log(this.outside) // will log <div /> instance
+       console.log(this.inside) // will log <div /> instance
+     }
 
-      render() {
-        return (
-          <div>
-            <div ref={ref => {
-              this.outside = ref
-            }}>
-              Outside KeepAlive
-            </div>
-            <KeepAlive>
-              <div ref={ref => {
-                this.inside = ref
-              }}>
-                Inside KeepAlive
-              </div>
-            </KeepAlive>
-          </div>
-        )
-      }
-    }
-    ```
+     render() {
+       return (
+         <div>
+           <div
+             ref={ref => {
+               this.outside = ref
+             }}
+           >
+             Outside KeepAlive
+           </div>
+           <KeepAlive>
+             <div
+               ref={ref => {
+                 this.inside = ref
+               }}
+             >
+               Inside KeepAlive
+             </div>
+           </KeepAlive>
+         </div>
+       )
+     }
+   }
+   ```
 
 2. Destructive impact on `Context`, need to be manually fixed
 
-    Problem reference: https://github.com/StructureBuilder/react-keep-alive/issues/36
+   Problem reference: https://github.com/StructureBuilder/react-keep-alive/issues/36
 
-    ```javascript
-    (
-      <Provider value={1}>
-        {show && (
-          <KeepAlive>
-            <Consumer>
-              {context => ( // Since the rendering level is broken, the context cannot be obtained here.
-                <Test contextValue={context} />
-              )}
-            </Consumer>
-          </KeepAlive>
-        )}
-        <button onClick={toggle}>toggle</button>
-      </Provider>
-    )
-    ```
+   ```javascript
+   <Provider value={1}>
+     {show && (
+       <KeepAlive>
+         <Consumer>
+           {(
+             context // Since the rendering level is broken, the context cannot be obtained here.
+           ) => <Test contextValue={context} />}
+         </Consumer>
+       </KeepAlive>
+     )}
+     <button onClick={toggle}>toggle</button>
+   </Provider>
+   ```
 
-    Choose a repair method
+   Choose a repair method
 
-      - Create `Context` using `createContext` exported from `react-activation`
-      
-      - Fix the affected `Context` with `fixContext` exported from `react-activation`
+   - Create `Context` using `createContext` exported from `react-activation`
 
-    ```javascript
-    ...
-    import { createContext } from 'react-activation'
+   - Fix the affected `Context` with `fixContext` exported from `react-activation`
 
-    const { Provider, Consumer } = createContext()
-    ...
-    // or
-    ...
-    import { createContext } from 'react'
-    import { fixContext } from 'react-activation'
+   ```javascript
+   ...
+   import { createContext } from 'react-activation'
 
-    const Context = createContext()
-    const { Provider, Consumer } = Context
+   const { Provider, Consumer } = createContext()
+   ...
+   // or
+   ...
+   import { createContext } from 'react'
+   import { fixContext } from 'react-activation'
 
-    fixContext(Context)
-    ...
-    ```
+   const Context = createContext()
+   const { Provider, Consumer } = Context
+
+   fixContext(Context)
+   ...
+   ```
 
 3. Affects the functionality that depends on the level of the React component, as follows
 
-    - [x] ~~Error Boundaries~~ (Fixed)
-    - [x] ~~React.Suspense & React.lazy~~ (Fixed)
-    - [ ] React Synthetic Event Bubbling Failure
-    - [ ] Other undiscovered features
+   - [x] ~~Error Boundaries~~ (Fixed)
+   - [x] ~~React.Suspense & React.lazy~~ (Fixed)
+   - [ ] React Synthetic Event Bubbling Failure
+   - [ ] Other undiscovered features
 
-- - -
+---
 
 ## More complicated example
 

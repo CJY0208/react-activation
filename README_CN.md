@@ -25,6 +25,8 @@ Vue 中 `<keep-alive />` 功能在 React 中的实现
 
 - React v16+
 
+- Preact v10+
+
 - 兼容 SSR
 
 - - -
