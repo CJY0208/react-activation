@@ -26,7 +26,8 @@ export default [
     output: {
       file: 'lib/index.js',
       format: 'cjs',
-      exports: 'named'
+      exports: 'named',
+      sourcemap: true
     },
     external: ['react', 'create-react-context', 'hoist-non-react-statics'],
     plugins: [

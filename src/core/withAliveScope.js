@@ -57,14 +57,14 @@ const withAliveScope = WrappedComponent => {
     <WrappedComponent {...props} {...helpers} ref={forwardedRef} />
   )
 
-  const HookStore = ({ forwardedRef, ...props }) =>
+  const HookScope = ({ forwardedRef, ...props }) =>
     renderContent({
       helpers: controllerCherryPick(useContext(aliveScopeContext) || {}),
       props,
       forwardedRef
     })
 
-  const WithStore = ({ forwardedRef, ...props }) => (
+  const WithScope = ({ forwardedRef, ...props }) => (
     <AliveScopeConsumer>
       {(controller = {}) =>
         renderContent({
@@ -76,7 +76,7 @@ const withAliveScope = WrappedComponent => {
     </AliveScopeConsumer>
   )
 
-  const HOCWithAliveScope = isFunction(useContext) ? HookStore : WithStore
+  const HOCWithAliveScope = isFunction(useContext) ? HookScope : WithScope
 
   if (isFunction(forwardRef)) {
     const ForwardedRefHOC = forwardRef((props, ref) => (

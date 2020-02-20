@@ -107,7 +107,7 @@ function Test() {
       <button onClick={() => setShow(show => !show)}>Toggle</button>
       {show && (
         <KeepAlive>
-          <Test />
+          <Counter />
         </KeepAlive>
       )}
     </div>
