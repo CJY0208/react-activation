@@ -15,7 +15,8 @@ export default class Keeper extends Component {
 
     this.state = {
       children: props.children,
-      bridgeProps: props.bridgeProps
+      bridgeProps: props.bridgeProps,
+      key: Math.random()
     }
   }
 
@@ -115,9 +116,17 @@ export default class Keeper extends Component {
     attach: this.attach
   }
 
+  refresh = cb =>
+    this.setState(
+      {
+        key: Math.random()
+      },
+      cb
+    )
+
   render() {
     const { id, ...props } = this.props
-    const { children, bridgeProps } = this.state
+    const { children, bridgeProps, key } = this.state
 
     return (
       <div
@@ -128,7 +137,9 @@ export default class Keeper extends Component {
         <div key="keeper-container" className="ka-content">
           <Bridge id={id} bridgeProps={bridgeProps}>
             <AliveNodeProvider value={this.contextValue}>
-              {children}
+              {React.cloneElement(children, {
+                key: `${children.key}:${key}`
+              })}
             </AliveNodeProvider>
           </Bridge>
         </div>
