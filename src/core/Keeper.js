@@ -134,7 +134,7 @@ export default class Keeper extends Component {
           this.wrapper = node
         }}
       >
-        <div key="keeper-container" className="ka-content">
+        <div key="keeper-container" nodeKeyIgnore className="ka-content">
           <Bridge id={id} bridgeProps={bridgeProps}>
             <AliveNodeProvider value={this.contextValue}>
               {React.cloneElement(children, {

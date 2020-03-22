@@ -1,5 +1,4 @@
 import resolve from 'rollup-plugin-node-resolve'
-import commonjs from 'rollup-plugin-commonjs'
 import babel from 'rollup-plugin-babel'
 import { uglify } from 'rollup-plugin-uglify'
 
@@ -12,7 +11,12 @@ export default [
       name: 'ReactActivation',
       exports: 'named'
     },
-    external: ['react', 'create-react-context', 'hoist-non-react-statics'],
+    external: [
+      'react',
+      'create-react-context',
+      'hoist-non-react-statics',
+      'react-node-key'
+    ],
     plugins: [
       resolve(),
       babel({
@@ -29,7 +33,12 @@ export default [
       exports: 'named',
       sourcemap: true
     },
-    external: ['react', 'create-react-context', 'hoist-non-react-statics'],
+    external: [
+      'react',
+      'create-react-context',
+      'hoist-non-react-statics',
+      'react-node-key'
+    ],
     plugins: [
       resolve(),
       babel({
@@ -43,10 +52,10 @@ export default [
       file: 'lib/babel/index.js',
       format: 'cjs'
     },
-    external: ['jsx-ast-utils'],
+    external: ['react-node-key'],
     plugins: [
       resolve(),
-      commonjs(),
+      // commonjs(),
       babel({
         babelrc: false,
         presets: [

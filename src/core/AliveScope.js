@@ -5,6 +5,9 @@ import { get, flatten, isRegExp } from '../helpers'
 import { AliveScopeProvider } from './context'
 import Keeper from './Keeper'
 
+const HANDLE_TYPE_DROP = 'drop'
+const HANDLE_TYPE_REFRESH = 'refresh'
+
 export default class AliveScope extends Component {
   store = new Map()
   nodes = new Map()
@@ -64,16 +67,33 @@ export default class AliveScope extends Component {
     return flatten(ids.map(id => getCachingNodesId(id)))
   }
 
-  dropById = id => this.dropNodes([id])
-  dropScopeByIds = ids => this.dropNodes(this.getScopeIds(ids))
+  dropById = id => this.handleNodes([id], HANDLE_TYPE_DROP)
+  dropScopeByIds = ids =>
+    this.handleNodes(this.getScopeIds(ids), HANDLE_TYPE_DROP)
 
   drop = name =>
-    this.dropNodes(this.getCachingNodesByName(name).map(node => node.id))
+    this.handleNodes(
+      this.getCachingNodesByName(name).map(node => node.id),
+      HANDLE_TYPE_DROP
+    )
 
   dropScope = name =>
     this.dropScopeByIds(this.getCachingNodesByName(name).map(({ id }) => id))
 
-  dropNodes = nodesId =>
+  refreshById = id => this.handleNodes([id], HANDLE_TYPE_REFRESH)
+  refreshScopeByIds = ids =>
+    this.handleNodes(this.getScopeIds(ids), HANDLE_TYPE_REFRESH)
+
+  refresh = name =>
+    this.handleNodes(
+      this.getCachingNodesByName(name).map(node => node.id),
+      HANDLE_TYPE_REFRESH
+    )
+
+  refreshScope = name =>
+    this.refreshScopeByIds(this.getCachingNodesByName(name).map(({ id }) => id))
+
+  handleNodes = (nodesId, type = HANDLE_TYPE_DROP) =>
     new Promise(resolve => {
       const willRefreshKeepers = []
       const willDropNodes = []
@@ -85,8 +105,10 @@ export default class AliveScope extends Component {
           return
         }
 
-        const canRefresh = !get(cache, 'cached')
-        const canDrop = get(cache, 'cached') || get(cache, 'willDrop')
+        const canRefresh = type === HANDLE_TYPE_REFRESH && !get(cache, 'cached')
+        const canDrop =
+          (type === HANDLE_TYPE_DROP && get(cache, 'cached')) ||
+          get(cache, 'willDrop')
 
         if (canDrop) {
           // 用在多层 KeepAlive 同时触发 drop 时，避免触发深层 KeepAlive 节点的缓存生命周期
@@ -120,7 +142,7 @@ export default class AliveScope extends Component {
       )
     })
 
-  clear = () => this.dropNodes(this.getCachingNodes().map(({ id }) => id))
+  clear = () => this.handleNodes(this.getCachingNodes().map(({ id }) => id))
 
   getCache = id => this.store.get(id)
   getNode = id => this.nodes.get(id)
@@ -134,6 +156,10 @@ export default class AliveScope extends Component {
     dropScope: this.dropScope,
     dropById: this.dropById,
     dropScopeByIds: this.dropScopeByIds,
+    refresh: this.refresh,
+    refreshScope: this.refreshScope,
+    refreshById: this.refreshById,
+    refreshScopeByIds: this.refreshScopeByIds,
     getScopeIds: this.getScopeIds,
     clear: this.clear,
     getCache: this.getCache,

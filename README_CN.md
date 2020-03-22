@@ -9,10 +9,6 @@ Vue 中 `<keep-alive />` 功能在 React 中的实现
 
 ---
 
-定位与 [react-keep-alive](https://github.com/StructureBuilder/react-keep-alive) 相同
-
-但修复了 https://github.com/StructureBuilder/react-keep-alive/issues/36 中的部分问题
-
 配合 babel 预编译实现更稳定的 KeepAlive 功能
 
 [在线 Demo](https://codesandbox.io/s/affectionate-beaver-solkt)
@@ -45,7 +41,9 @@ npm install react-activation
 
 #### 1. babel 配置文件 `.babelrc` 中增加 `react-activation/babel` 插件
 
-该插件会于编译阶段在各 JSX 元素上增加 `_ka` 属性，帮助 `react-activation` 在运行时**按渲染位置生成唯一的缓存 id 标识**
+[为什么需要它？](https://github.com/CJY0208/react-activation/issues/18#issuecomment-564360695)
+
+该插件将借助 `react-node-key` 于编译阶段在各 JSX 元素上增加 `_nk` 属性，帮助 `react-activation` 在运行时**按渲染位置生成唯一的缓存 id 标识**
 
 ```javascript
 {
@@ -54,8 +52,6 @@ npm install react-activation
   ]
 }
 ```
-
-[为什么需要它？](https://github.com/CJY0208/react-activation/issues/18#issuecomment-564360695)
 
 #### 2. 业务代码中，在不会被销毁的位置放置 `<AliveScope>` 外层，一般为应用入口处
 
