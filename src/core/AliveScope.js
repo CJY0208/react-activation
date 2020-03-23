@@ -5,6 +5,9 @@ import { get, flatten, isRegExp } from '../helpers'
 import { AliveScopeProvider } from './context'
 import Keeper from './Keeper'
 
+const HANDLE_TYPE_DROP = 'drop'
+const HANDLE_TYPE_REFRESH = 'refresh'
+
 export default class AliveScope extends Component {
   store = new Map()
   nodes = new Map()
@@ -33,6 +36,7 @@ export default class AliveScope extends Component {
         keeper.setState({ children, bridgeProps }, resolve)
       }
     })
+
   keep = (id, params) =>
     new Promise(resolve => {
       this.update(id, {
@@ -47,9 +51,6 @@ export default class AliveScope extends Component {
     this.getCachingNodes().filter(node =>
       isRegExp(name) ? name.test(node.name) : node.name === name
     )
-
-  dropById = id => this.dropNodes([id])
-  dropScopeByIds = ids => this.dropNodes(this.getScopeIds(ids))
 
   getScopeIds = ids => {
     // 递归采集 scope alive nodes id
@@ -66,37 +67,82 @@ export default class AliveScope extends Component {
     return flatten(ids.map(id => getCachingNodesId(id)))
   }
 
+  dropById = id => this.handleNodes([id], HANDLE_TYPE_DROP)
+  dropScopeByIds = ids =>
+    this.handleNodes(this.getScopeIds(ids), HANDLE_TYPE_DROP)
+
   drop = name =>
-    this.dropNodes(this.getCachingNodesByName(name).map(node => node.id))
+    this.handleNodes(
+      this.getCachingNodesByName(name).map(node => node.id),
+      HANDLE_TYPE_DROP
+    )
 
   dropScope = name =>
     this.dropScopeByIds(this.getCachingNodesByName(name).map(({ id }) => id))
 
-  dropNodes = nodesId =>
+  refreshById = id => this.handleNodes([id], HANDLE_TYPE_REFRESH)
+  refreshScopeByIds = ids =>
+    this.handleNodes(this.getScopeIds(ids), HANDLE_TYPE_REFRESH)
+
+  refresh = name =>
+    this.handleNodes(
+      this.getCachingNodesByName(name).map(node => node.id),
+      HANDLE_TYPE_REFRESH
+    )
+
+  refreshScope = name =>
+    this.refreshScopeByIds(this.getCachingNodesByName(name).map(({ id }) => id))
+
+  handleNodes = (nodesId, type = HANDLE_TYPE_DROP) =>
     new Promise(resolve => {
-      const willDropNodes = nodesId.filter(id => {
+      const willRefreshKeepers = []
+      const willDropNodes = []
+
+      nodesId.forEach(id => {
         const cache = this.store.get(id)
-        const canDrop = get(cache, 'cached') || get(cache, 'willDrop')
+
+        if (!cache) {
+          return
+        }
+
+        const canRefresh = type === HANDLE_TYPE_REFRESH && !get(cache, 'cached')
+        const canDrop =
+          (type === HANDLE_TYPE_DROP && get(cache, 'cached')) ||
+          get(cache, 'willDrop')
 
         if (canDrop) {
           // 用在多层 KeepAlive 同时触发 drop 时，避免触发深层 KeepAlive 节点的缓存生命周期
           cache.willDrop = true
           this.nodes.delete(id)
+          willDropNodes.push(id)
         }
 
-        return canDrop
+        if (canRefresh) {
+          const keeper = this.keepers.get(id)
+          willRefreshKeepers.push(keeper)
+        }
       })
 
-      if (willDropNodes.length === 0) {
-        resolve(false)
-        return
-      }
-
-      this.helpers = { ...this.helpers }
-      this.forceUpdate(() => resolve(true))
+      Promise.all([
+        willDropNodes.length === 0
+          ? Promise.resolve(false)
+          : new Promise(resolve => {
+              this.helpers = { ...this.helpers }
+              this.forceUpdate(() => resolve(true))
+            }),
+        willRefreshKeepers.length === 0
+          ? Promise.resolve(false)
+          : Promise.all(
+              willRefreshKeepers.map(
+                keeper => new Promise(resolve => keeper.refresh(resolve))
+              )
+            )
+      ]).then(([dropSuccessfully, refreshSuccessfully]) =>
+        resolve(Boolean(dropSuccessfully || refreshSuccessfully))
+      )
     })
 
-  clear = () => this.dropNodes(this.getCachingNodes().map(({ id }) => id))
+  clear = () => this.handleNodes(this.getCachingNodes().map(({ id }) => id))
 
   getCache = id => this.store.get(id)
   getNode = id => this.nodes.get(id)
@@ -110,6 +156,10 @@ export default class AliveScope extends Component {
     dropScope: this.dropScope,
     dropById: this.dropById,
     dropScopeByIds: this.dropScopeByIds,
+    refresh: this.refresh,
+    refreshScope: this.refreshScope,
+    refreshById: this.refreshById,
+    refreshScopeByIds: this.refreshScopeByIds,
     getScopeIds: this.getScopeIds,
     clear: this.clear,
     getCache: this.getCache,

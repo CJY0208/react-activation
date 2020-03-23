@@ -1,6 +1,6 @@
 {
   "name": "react-activation",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "<KeepAlive /> for React like <keep-alive /> in vue",
   "main": "index.js",
   "scripts": {
@@ -27,7 +27,8 @@
   "dependencies": {
     "create-react-context": "^0.3.0",
     "hoist-non-react-statics": "^3.3.0",
-    "jsx-ast-utils": "^2.2.1"
+    "jsx-ast-utils": "^2.2.1",
+    "react-node-key": "^0.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
@@ -36,7 +37,6 @@
     "@babel/preset-react": "^7.0.0",
     "rollup": "^1.11.3",
     "rollup-plugin-babel": "^4.3.2",
-    "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^4.2.3",
     "rollup-plugin-uglify": "^6.0.2"
   }

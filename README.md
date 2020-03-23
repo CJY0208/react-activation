@@ -9,10 +9,6 @@ Implementation of the `<keep-alive />` function in `Vue` For `React`
 
 ---
 
-Same as [react-keep-alive](https://github.com/StructureBuilder/react-keep-alive)
-
-But fixed some of the issues in https://github.com/StructureBuilder/react-keep-alive/issues/36
-
 More stable `<KeepAlive />` function with `babel` pre-compilation
 
 [Online Demo](https://codesandbox.io/s/affectionate-beaver-solkt)
@@ -45,7 +41,9 @@ npm install react-activation
 
 #### 1. Add `react-activation/babel` plugins in `.babelrc`
 
-The plugin adds a `_ka` attribute to each JSX element during compilation to help the `react-activation` runtime **generate an unique identifier by render location**.
+[Why is it needed?](https://github.com/CJY0208/react-activation/issues/18#issuecomment-564360695)
+
+The plugin adds a `_nk` attribute to each JSX element during compilation to help the `react-activation` runtime **generate an unique identifier by render location** base on `react-node-key`.
 
 ```javascript
 {
@@ -54,8 +52,6 @@ The plugin adds a `_ka` attribute to each JSX element during compilation to help
   ]
 }
 ```
-
-[Why is it needed?](https://github.com/CJY0208/react-activation/issues/18#issuecomment-564360695)
 
 #### 2. In your business code, place the `<AliveScope>` outer layer at a location that will not be unmounted, usually at the application entrance
 
