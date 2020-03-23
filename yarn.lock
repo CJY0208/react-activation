@@ -1074,10 +1074,10 @@ react-is@^16.7.0:
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.9.0.tgz#21ca9561399aad0ff1a7701c01683e8ca981edcb"
   integrity sha512-tJBzzzIgnnRfEm046qRcURvwQnZVXmuCbscxUO5RWrGTXpon2d4c8mI0D8WE6ydVIm29JiLB6+RslkIvym9Rjw==
 
-react-node-key@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.npmjs.org/react-node-key/-/react-node-key-0.0.3.tgz#45f55dd6ac2c529bc1127cc97557581448653271"
-  integrity sha512-1vkzX2sFFeFfXE9aexbE1zzo1mrZHd7e57TyLwqvqWNTPOUulaF0gsPo5nB+qNhK0lbqoWHbv7BX1b0CyqBeGw==
+react-node-key@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.npmjs.org/react-node-key/-/react-node-key-0.0.4.tgz#b65451e4a4643a8ff8adf306c3d8cfbeaabc1d31"
+  integrity sha512-DdiEv9BgKBEDnYjQP58wOd0Y2omVGq7QNFxL8wgjAJa/gMf9FKrD0JEAlAkC2IIhGwxdbNbFyF3vwuXKZ73WuQ==
   dependencies:
     jsx-ast-utils "^2.2.1"
 
