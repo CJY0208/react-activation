@@ -1,3 +1,4 @@
 'use strict'
+const nodeKeyPlugin = require('react-node-key/babel');
 
-module.exports = require('./lib/babel/index.js');
+module.exports = nodeKeyPlugin;

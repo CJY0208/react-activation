@@ -9,21 +9,24 @@ export default [
       file: 'lib/index.min.js',
       format: 'umd',
       name: 'ReactActivation',
-      exports: 'named'
+      exports: 'named',
     },
-    external: [
-      'react',
-      'create-react-context',
-      'hoist-non-react-statics',
-      'react-node-key'
-    ],
+    external: (name) =>
+      [
+        'react',
+        'create-react-context',
+        'hoist-non-react-statics',
+        'react-node-key',
+      ].includes(name) ||
+      /core-js/.test(name) ||
+      /szfe-tools/.test(name),
     plugins: [
       resolve(),
       babel({
-        exclude: 'node_modules/**'
+        exclude: 'node_modules/**',
       }),
-      uglify()
-    ]
+      uglify(),
+    ],
   },
   {
     input: 'src/index.js',
@@ -31,45 +34,22 @@ export default [
       file: 'lib/index.js',
       format: 'cjs',
       exports: 'named',
-      sourcemap: true
+      sourcemap: true,
     },
-    external: [
-      'react',
-      'create-react-context',
-      'hoist-non-react-statics',
-      'react-node-key'
+    external: (name) =>
+      [
+        'react',
+        'create-react-context',
+        'hoist-non-react-statics',
+        'react-node-key',
+      ].includes(name) ||
+      /core-js/.test(name) ||
+      /szfe-tools/.test(name),
+    plugins: [
+      resolve(),
+      babel({
+        exclude: 'node_modules/**',
+      }),
     ],
-    plugins: [
-      resolve(),
-      babel({
-        exclude: 'node_modules/**'
-      })
-    ]
   },
-  {
-    input: 'src/babel/index.js',
-    output: {
-      file: 'lib/babel/index.js',
-      format: 'cjs'
-    },
-    external: ['react-node-key'],
-    plugins: [
-      resolve(),
-      // commonjs(),
-      babel({
-        babelrc: false,
-        presets: [
-          [
-            '@babel/env',
-            {
-              targets: {
-                node: true
-              }
-            }
-          ]
-        ],
-        exclude: 'node_modules/**'
-      })
-    ]
-  }
 ]

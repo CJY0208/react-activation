@@ -3,13 +3,12 @@ module.exports = {
     [
       '@babel/env',
       {
-        modules: false
-      }
+        modules: false,
+        useBuiltIns: 'usage',
+        corejs: 3,
+      },
     ],
-    '@babel/react'
+    '@babel/react',
   ],
-  plugins: [
-    '@babel/plugin-proposal-class-properties',
-    './src/babel'
-  ]
+  plugins: ['@babel/plugin-proposal-class-properties', 'react-node-key/babel'],
 }

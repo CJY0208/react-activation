@@ -1,11 +1,5 @@
 /// <reference types="react" />
-import {
-  ReactNode,
-  ReactNodeArray,
-  Context,
-  Component,
-  ComponentClass
-} from 'react'
+import { ReactNode, ReactNodeArray, Context, Component } from 'react'
 
 export interface KeepAliveProps {
   children: ReactNode | ReactNodeArray
@@ -24,10 +18,11 @@ export declare class AliveScope extends Component<{
 
 export declare class NodeKey extends Component<{
   prefix?: string
+  onHandleNode?: (node: any, mark?: string) => string | undefined | null
 }> {}
 
-export function withActivation(Component: ComponentClass): ComponentClass
-export function withAliveScope(Component: ComponentClass): ComponentClass
+export function withActivation(Component: any): any
+export function withAliveScope(Component: any): any
 
 export function fixContext(context: Context<any>): void
 export function createContext<T>(
