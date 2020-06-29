@@ -1,6 +1,6 @@
 {
   "name": "react-activation",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "<KeepAlive /> for React like <keep-alive /> in vue",
   "main": "index.js",
   "scripts": {
@@ -35,6 +35,7 @@
     "react": ">=16"
   },
   "dependencies": {
+    "core-js": "^3.6.5",
     "create-react-context": "^0.3.0",
     "hoist-non-react-statics": "^3.3.0",
     "jsx-ast-utils": "^2.2.1",
