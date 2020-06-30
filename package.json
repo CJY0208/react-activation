@@ -39,7 +39,7 @@
     "create-react-context": "^0.3.0",
     "hoist-non-react-statics": "^3.3.0",
     "jsx-ast-utils": "^2.2.1",
-    "react-node-key": "^0.1.6"
+    "react-node-key": "^0.1.7"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
