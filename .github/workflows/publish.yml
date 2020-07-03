@@ -1,8 +1,10 @@
 name: npm-publish
+
 on:
   push:
     branches:
-      - master # Change this to your default branch
+      - master
+
 jobs:
   npm-publish:
     name: npm-publish
@@ -10,24 +12,38 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@master
-      
+
+    - name: Check if version has been updated
+      id: check
+      uses: EndBug/version-check@master
+      with:
+        file-url: https://unpkg.com/react-activation/package.json
+        static-checking: localIsNew
+
+    - name: Log if version has been updated
+      if: steps.check.outputs.changed == 'true'
+      run: 'echo "Version change found in commit ${{ steps.check.outputs.commit }}! New version: ${{ steps.check.outputs.version }} (${{ steps.check.outputs.type }})"'
+
     - name: Set up Node.js
+      if: steps.check.outputs.changed == 'true'
       uses: actions/setup-node@master
       with:
         node-version: 13.11.0
 
-    - name: Install
-      uses: CultureHQ/actions-yarn@master
+    - name: Install Dependencies
+      if: steps.check.outputs.changed == 'true'
+      uses: bahmutov/npm-install@v1
       with:
         args: install
-        
+
     - name: Build
+      if: steps.check.outputs.changed == 'true'
       run: 'sudo npm run build'
-      
-    - name: Publish if version has been updated
+
+    - name: Publish
+      if: steps.check.outputs.changed == 'true'
       uses: pascalgn/npm-publish-action@1.2.0
-      with: # All of theses inputs are optional
+      with:
         commit_pattern: "^Release (\\S+)"
-      env: # More info about the environment variables in the README
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Leave this as is, it's automatically generated
-        NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }} # You need to set this in your repo settings
+      env:
+        NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
