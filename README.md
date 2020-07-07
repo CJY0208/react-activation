@@ -17,6 +17,14 @@ More stable `<KeepAlive />` function with `babel` pre-compilation
 
 ---
 
+## More complicated example
+
+- [Closable tabs with `react-router`](https://codesandbox.io/s/keguanbideyifangwenluyou-tab-shilikeanluyoucanshufenduofenhuancun-ewycx)
+- [Closable tabs with `umi`](https://codesandbox.io/s/umi-keep-alive-tabs-demo-knfxy)
+- [Using Animation with `react-router`](https://codesandbox.io/s/luyouzhuanchangdonghuashili-jdhq1)
+
+---
+
 ## Compatibility
 
 - React v16+
@@ -468,8 +476,3 @@ Since `<Keeper />` will not be uninstalled, caching can be implemented.
    - [ ] Other undiscovered features
 
 ---
-
-## More complicated example
-
-- [Closable tabs with `react-router`](https://codesandbox.io/s/keguanbideyifangwenluyou-tab-shilikeanluyoucanshufenduofenhuancun-ewycx)
-- [Using Animation with `react-router`](https://codesandbox.io/s/luyouzhuanchangdonghuashili-jdhq1)
