@@ -17,7 +17,7 @@ More stable `<KeepAlive />` function with `babel` pre-compilation
 
 ---
 
-## More complicated example
+## More examples
 
 - [Closable tabs with `react-router`](https://codesandbox.io/s/keguanbideyifangwenluyou-tab-shilikeanluyoucanshufenduofenhuancun-ewycx)
 - [Closable tabs with `umi`](https://codesandbox.io/s/umi-keep-alive-tabs-demo-knfxy)
