@@ -17,6 +17,14 @@ Vue 中 `<keep-alive />` 功能在 React 中的实现
 
 ---
 
+## 更多复杂示例
+
+- [可关闭的路由 tabs 示例](https://codesandbox.io/s/keguanbideyifangwenluyou-tab-shilikeanluyoucanshufenduofenhuancun-ewycx)
+- [可关闭的路由 tabs 示例（`umijs`）](https://codesandbox.io/s/umi-keep-alive-tabs-demo-knfxy)
+- [使用路由转场动画](https://codesandbox.io/s/luyouzhuanchangdonghuashili-jdhq1)
+
+---
+
 ## 兼容性
 
 - React v16+
@@ -465,10 +473,3 @@ class App extends Component {
    - [x] ~~React.Suspense & React.lazy~~（已修复）
    - [ ] React 合成事件冒泡失效
    - [ ] 其他未发现的功能
-
----
-
-## 更多复杂示例
-
-- [可关闭的路由 tabs 示例](https://codesandbox.io/s/keguanbideyifangwenluyou-tab-shilikeanluyoucanshufenduofenhuancun-ewycx)
-- [使用路由转场动画](https://codesandbox.io/s/luyouzhuanchangdonghuashili-jdhq1)
