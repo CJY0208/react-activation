@@ -1,5 +1,14 @@
-/// <reference types="react" />
-import { ReactNode, ReactNodeArray, Context, Component } from 'react'
+/*
+ * @Date: 2020-07-07 14:17:59
+ * @Author: 芦杰
+ * @Description: Do not edit
+ * @LastEditors: 芦杰
+ * @LastEditTime: 2020-07-07 16:08:38
+ */
+
+import { ReactNode, ReactNodeArray, Context, Component, ComponentType, NamedExoticComponent, FunctionComponent } from 'react'
+
+export declare type GetProps<C> = C extends ComponentType<infer P> ? P : never;
 
 export interface KeepAliveProps {
   children: ReactNode | ReactNodeArray
@@ -9,20 +18,17 @@ export interface KeepAliveProps {
   saveScrollPosition?: boolean | 'screen'
 }
 
-export declare class KeepAlive extends Component<KeepAliveProps> {}
+export declare class KeepAlive extends Component<KeepAliveProps> { }
 export default KeepAlive
 
 export declare class AliveScope extends Component<{
   children: ReactNode | ReactNodeArray
-}> {}
+}> { }
 
 export declare class NodeKey extends Component<{
   prefix?: string
   onHandleNode?: (node: any, mark?: string) => string | undefined | null
-}> {}
-
-export function withActivation(Component: any): any
-export function withAliveScope(Component: any): any
+}> { }
 
 export function fixContext(context: Context<any>): void
 export function createContext<T>(
@@ -49,3 +55,6 @@ export interface AliveController {
   getCachingNodes: () => Array<CachingNode>
 }
 export function useAliveController(): AliveController
+
+export declare function withActivation<C extends ComponentType<GetProps<C>>>(component: C): C
+export declare function withAliveScope<C extends ComponentType<GetProps<C>>>(component: C): C
