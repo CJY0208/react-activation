@@ -13,7 +13,9 @@
     "keep-alive",
     "KeepAlive",
     "activation",
-    "react cache"
+    "react cache",
+    "react tabs cache"
+    "react router cache"
   ],
   "sideEffects": false,
   "files": [
