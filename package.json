@@ -14,8 +14,9 @@
     "KeepAlive",
     "activation",
     "react cache",
-    "react tabs cache"
-    "react router cache"
+    "react tabs cache",
+    "react router cache",
+    "vue keep-alive"
   ],
   "sideEffects": false,
   "files": [
