@@ -2,7 +2,7 @@
 
 [![size](https://img.shields.io/bundlephobia/minzip/react-activation.svg)](https://github.com/CJY0208/react-activation)
 [![dm](https://img.shields.io/npm/dm/react-activation.svg)](https://github.com/CJY0208/react-activation)
-![visitor](https://visitor-badge.glitch.me/badge?page_id=cjy0208.react-activation)
+![](https://visitor-badge.glitch.me/badge?page_id=cjy0208.react-activation)
 
 English | [中文说明](./README_CN.md)
 
