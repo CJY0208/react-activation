@@ -30,7 +30,7 @@ export const expandKeepAlive = KeepAlive => {
     return isOutsideAliveScope ? (
       get(props, 'children', null)
     ) : (
-      <NodeKey prefix={idPrefix} key={props._ka}>
+      <NodeKey prefix={idPrefix} key={props._nk}>
         {id => (
           <Acceptor id={id}>
             {bridgeProps => (
