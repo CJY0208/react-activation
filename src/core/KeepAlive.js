@@ -73,7 +73,7 @@ class KeepAlive extends Component {
         const { id, _helpers } = this.props
         const cache = _helpers.getCache(id)
         const node = _helpers.getNode(id)
-        if (node) {
+        if (node && lifecycleName == LIFECYCLE_ACTIVATE) {
           node.updateTime = Date.now()
         }
 
