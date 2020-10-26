@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component,PureComponent } from 'react'
 
 import { get, run, nextTick } from '../helpers'
 
@@ -6,7 +6,7 @@ import Bridge from './Bridge'
 import { AliveNodeProvider } from './context'
 import { LIFECYCLE_ACTIVATE, LIFECYCLE_UNACTIVATE } from './lifecycles'
 
-export default class Keeper extends Component {
+export default class Keeper extends PureComponent {
   listeners = new Map()
   wrapper = null
 
