@@ -469,6 +469,7 @@ class App extends Component {
 
 3. 对依赖于 React 层级的功能造成影响，如下
 
+   - [x] [react-router 的 withRouter/hooks 功能异常修正](https://github.com/CJY0208/react-activation/issues/77)
    - [x] ~~Error Boundaries~~（已修复）
    - [x] ~~React.Suspense & React.lazy~~（已修复）
    - [ ] React 合成事件冒泡失效
