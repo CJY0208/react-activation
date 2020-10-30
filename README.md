@@ -471,6 +471,7 @@ Since `<Keeper />` will not be uninstalled, caching can be implemented.
 
 3. Affects the functionality that depends on the level of the React component, as follows
 
+   - [x] [Fix `withRouter/hooks` of react-router](https://github.com/CJY0208/react-activation/issues/77)
    - [x] ~~Error Boundaries~~ (Fixed)
    - [x] ~~React.Suspense & React.lazy~~ (Fixed)
    - [ ] React Synthetic Event Bubbling Failure
