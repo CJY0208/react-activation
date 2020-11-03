@@ -2629,10 +2629,10 @@ react-is@^16.7.0:
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.9.0.tgz#21ca9561399aad0ff1a7701c01683e8ca981edcb"
   integrity sha512-tJBzzzIgnnRfEm046qRcURvwQnZVXmuCbscxUO5RWrGTXpon2d4c8mI0D8WE6ydVIm29JiLB6+RslkIvym9Rjw==
 
-react-node-key@^0.1.7:
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/react-node-key/-/react-node-key-0.1.7.tgz#702d756ce9c04c881d47aefe3b40e7f026042c71"
-  integrity sha512-ogNt52P7gTUsg3qc650ZjE5ZoKfthCBfAaXwxSYyeNT6lPO7PEBzW1j/XjYvnmVf7caSxc+7UpQIAO5hpVKT6w==
+react-node-key@^0.1.8:
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/react-node-key/-/react-node-key-0.1.8.tgz#d7c5f9d44bf1240c6ead154667c2ac8b1cc50dd0"
+  integrity sha512-bnGmaUU+q6QXs+dWcWzA+atOO46R2ClEna5cxzIKhvcJrF4y9ZG/4t1xXIiz4yvihJ9zi73M/OtKKw5lEMvZIg==
   dependencies:
     core-js "^3.6.5"
     jsx-ast-utils "^2.2.1"
