@@ -28,6 +28,8 @@ More stable `<KeepAlive />` function with `babel` pre-compilation
 
 ## Compatibility
 
+- React v17+ (beta)
+
 - React v16+
 
 - Preact v10+
@@ -52,7 +54,7 @@ npm install react-activation
 
 [Why is it needed?](https://github.com/CJY0208/react-activation/issues/18#issuecomment-564360695)
 
-The plugin adds a `_nk` attribute to each JSX element during compilation to help the `react-activation` runtime **generate an unique identifier by render location** base on `react-node-key`.
+The plugin adds a `_nk` attribute to each JSX element during compilation to help the `react-activation` runtime **generate an unique identifier by render location** base on [`react-node-key`](https://github.com/CJY0208/react-node-key).
 
 ```javascript
 {
@@ -471,6 +473,7 @@ Since `<Keeper />` will not be uninstalled, caching can be implemented.
 
 3. Affects the functionality that depends on the level of the React component, as follows
 
+   - [x] [Fix `withRouter/hooks` of react-router](https://github.com/CJY0208/react-activation/issues/77)
    - [x] ~~Error Boundaries~~ (Fixed)
    - [x] ~~React.Suspense & React.lazy~~ (Fixed)
    - [ ] React Synthetic Event Bubbling Failure

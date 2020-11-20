@@ -1,6 +1,6 @@
 {
   "name": "react-activation",
-  "version": "0.5.5",
+  "version": "0.5.7",
   "description": "<KeepAlive /> for React like <keep-alive /> in vue",
   "main": "index.js",
   "scripts": {
@@ -42,7 +42,7 @@
     "create-react-context": "^0.3.0",
     "hoist-non-react-statics": "^3.3.0",
     "jsx-ast-utils": "^2.2.1",
-    "react-node-key": "^0.1.7"
+    "react-node-key": "^0.1.8"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",

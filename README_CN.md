@@ -27,6 +27,8 @@ Vue 中 `<keep-alive />` 功能在 React 中的实现
 
 ## 兼容性
 
+- React v17+ (beta)
+
 - React v16+
 
 - Preact v10+
@@ -51,7 +53,7 @@ npm install react-activation
 
 [为什么需要它？](https://github.com/CJY0208/react-activation/issues/18#issuecomment-564360695)
 
-该插件将借助 `react-node-key` 于编译阶段在各 JSX 元素上增加 `_nk` 属性，帮助 `react-activation` 在运行时**按渲染位置生成唯一的缓存 id 标识**
+该插件将借助 [`react-node-key`](https://github.com/CJY0208/react-node-key) 于编译阶段在各 JSX 元素上增加 `_nk` 属性，帮助 `react-activation` 在运行时**按渲染位置生成唯一的缓存 id 标识**
 
 ```javascript
 {
@@ -469,6 +471,7 @@ class App extends Component {
 
 3. 对依赖于 React 层级的功能造成影响，如下
 
+   - [x] [react-router 的 withRouter/hooks 功能异常修正](https://github.com/CJY0208/react-activation/issues/77)
    - [x] ~~Error Boundaries~~（已修复）
    - [x] ~~React.Suspense & React.lazy~~（已修复）
    - [ ] React 合成事件冒泡失效
