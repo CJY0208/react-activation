@@ -8,7 +8,8 @@ import {
   nextTick,
   isFunction,
   isArray,
-  debounce
+  debounce,
+  flatten
 } from '../helpers'
 
 import { expandKeepAlive } from './withAliveScope'
