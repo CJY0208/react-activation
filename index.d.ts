@@ -7,7 +7,7 @@ export interface KeepAliveProps {
   name?: string
   id?: string
   when?: boolean | Array<boolean> | (() => boolean | Array<boolean>)
-  saveScrollPosition?: boolean | 'screen'
+  saveScrollPosition?: boolean | string
 }
 
 export declare class KeepAlive extends Component<KeepAliveProps> {}
