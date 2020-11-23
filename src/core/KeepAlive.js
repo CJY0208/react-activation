@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import {
+  value,
   get,
   run,
   globalThis as root,
@@ -17,6 +18,13 @@ import {
   withActivation
 } from './lifecycles'
 import saveScrollPosition from '../helpers/saveScrollPosition'
+
+const body = get(root, 'document.body')
+const screenScrollingElement = get(
+  root,
+  'document.scrollingElement',
+  get(root, 'document.documentElement', {})
+)
 
 const getErrorTips = name =>
   `<KeepAlive ${
@@ -126,24 +134,29 @@ class KeepAlive extends Component {
 
   // DOM 操作将实际内容移出占位元素
   eject = (willUnactivate = true) => {
-    const {
-      id,
-      saveScrollPosition: needToSaveScrollPosition,
-      _helpers
-    } = this.props
+    const { id, _helpers } = this.props
+    const nodesNeedToSaveScrollPosition = flatten(
+      flatten([this.props.saveScrollPosition]).map((flag) => {
+        if (flag === true) {
+          return cache.nodes
+        }
+
+        if (flag === 'screen') {
+          return [screenScrollingElement, body]
+        }
+
+        return [...value(run(root, 'document.querySelectorAll', flag), [])]
+      })
+    ).filter(Boolean)
     const cache = _helpers.getCache(id)
 
     // DOM 操作有风险，try catch 护体
     try {
-      if (willUnactivate && needToSaveScrollPosition) {
+      if (willUnactivate && nodesNeedToSaveScrollPosition.length > 0) {
         // 保存该节点下各可滚动元素的滚动位置
-        cache.revertScrollPos = saveScrollPosition(
-          cache.nodes,
-          needToSaveScrollPosition === 'screen'
-        )
+        cache.revertScrollPos = saveScrollPosition(nodesNeedToSaveScrollPosition)
       }
 
-      //
       // // 原计划不增加额外的节点，直接将 Keeper 中所有内容节点一一迁移
       // // 后发现缺乏统一 react 认可的外层包裹，可能会造成 react dom 操作的错误
       // // 且将导致 KeepAlive 进行 update 时需先恢复各 dom 节点的组件归属，成本过高
@@ -198,8 +211,8 @@ class KeepAlive extends Component {
       })
   }
 
-  update = ({ _helpers, id, name, ...rest }) => {
-    if (this.cached || this.needForceStopUpdate(name)) {
+  update = ({ _helpers, id, name, ...rest } = {}) => {
+    if (!_helpers || this.cached || this.needForceStopUpdate(name)) {
       return
     }
 
