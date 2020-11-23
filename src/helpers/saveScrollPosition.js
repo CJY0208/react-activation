@@ -1,14 +1,7 @@
 import root from './base/globalThis'
 import { get, run, value } from './base/try'
-import { isArray, isFunction, isExist } from './base/is'
+import { isFunction, isExist } from './base/is'
 import { flatten } from './utils'
-
-const body = get(root, 'document.body')
-const screenScrollingElement = get(
-  root,
-  'document.scrollingElement',
-  get(root, 'document.documentElement', {})
-)
 
 function isScrollableNode(node = {}) {
   if (!isExist(node)) {
@@ -30,15 +23,8 @@ function getScrollableNodes(from) {
   )
 }
 
-export default function saveScrollPosition(from, screenInclude) {
-  const nodes = [
-    ...new Set([
-      ...flatten((!isArray(from) ? [from] : from).map(getScrollableNodes)),
-      ...(screenInclude
-        ? [screenScrollingElement, body].filter(isScrollableNode)
-        : [])
-    ])
-  ]
+export default function saveScrollPosition(from) {
+  const nodes = [...new Set([...flatten(from.map(getScrollableNodes))])]
 
   const saver = nodes.map(node => [
     node,
