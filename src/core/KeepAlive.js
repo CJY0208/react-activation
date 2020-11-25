@@ -136,6 +136,7 @@ class KeepAlive extends Component {
   // DOM 操作将实际内容移出占位元素
   eject = (willUnactivate = true) => {
     const { id, _helpers } = this.props
+    const cache = _helpers.getCache(id)
     const nodesNeedToSaveScrollPosition = flatten(
       flatten([this.props.saveScrollPosition]).map((flag) => {
         if (flag === true) {
@@ -149,7 +150,6 @@ class KeepAlive extends Component {
         return [...value(run(root, 'document.querySelectorAll', flag), [])]
       })
     ).filter(Boolean)
-    const cache = _helpers.getCache(id)
 
     // DOM 操作有风险，try catch 护体
     try {
