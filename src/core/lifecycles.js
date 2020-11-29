@@ -3,25 +3,24 @@ import React, {
   forwardRef,
   useEffect,
   useRef,
-  useContext
+  useContext,
 } from 'react'
 import hoistStatics from 'hoist-non-react-statics'
-
 import {
   get,
   run,
   nextTick,
   isObject,
   isFunction,
-  isUndefined
-} from '../helpers'
+  isUndefined,
+} from 'szfe-tools'
 
 import { AliveNodeConsumer, aliveNodeContext } from './context'
 
 export const LIFECYCLE_ACTIVATE = 'componentDidActivate'
 export const LIFECYCLE_UNACTIVATE = 'componentWillUnactivate'
 
-export const withActivation = WrappedComponent => {
+export const withActivation = (WrappedComponent) => {
   class HOC extends Component {
     drop = null
 
@@ -36,10 +35,10 @@ export const withActivation = WrappedComponent => {
         <AliveNodeConsumer>
           {({ attach } = {}) => (
             <WrappedComponent
-              ref={ref => {
+              ref={(ref) => {
                 if (
                   [LIFECYCLE_ACTIVATE, LIFECYCLE_UNACTIVATE].every(
-                    lifecycleName => !isFunction(get(ref, lifecycleName))
+                    (lifecycleName) => !isFunction(get(ref, lifecycleName))
                   )
                 ) {
                   return
@@ -92,7 +91,7 @@ export const withActivation = WrappedComponent => {
 
 const useActivation = (funcName, func) => {
   // 兼容性判断
-  if ([useRef, useContext, useEffect].some(fn => !isFunction(fn))) {
+  if ([useRef, useContext, useEffect].some((fn) => !isFunction(fn))) {
     return
   }
 

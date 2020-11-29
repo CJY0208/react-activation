@@ -1,6 +1,5 @@
 import React, { lazy, Suspense, Component, Fragment } from 'react'
-
-import { run, isUndefined, isFunction } from '../../helpers'
+import { run, isUndefined, isFunction } from 'szfe-tools'
 
 // 兼容性检测
 const isSupported = isFunction(lazy) && !isUndefined(Suspense)
@@ -41,24 +40,24 @@ function SuspenseBridge({ children, sus$$ }) {
 export const LazyBridge = isSupported
   ? class LazyBridge extends Component {
       state = {
-        suspense: false
+        suspense: false,
       }
 
       onSuspenseStart = () => {
         this.setState({
-          suspense: true
+          suspense: true,
         })
       }
 
       onSuspenseEnd = () => {
         this.setState({
-          suspense: false
+          suspense: false,
         })
       }
 
       sus$$ = {
         onSuspenseStart: this.onSuspenseStart,
-        onSuspenseEnd: this.onSuspenseEnd
+        onSuspenseEnd: this.onSuspenseEnd,
       }
 
       render() {
@@ -75,4 +74,4 @@ export const LazyBridge = isSupported
     }
   : SusNotSupported
 
-export default (isSupported ? SuspenseBridge : SusNotSupported)
+export default isSupported ? SuspenseBridge : SusNotSupported

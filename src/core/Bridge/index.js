@@ -1,10 +1,9 @@
 import React from 'react'
+import { run } from 'szfe-tools'
 
 import { ProviderBridge, ConsumerBridge } from './Context'
 import SuspenseBridge, { LazyBridge } from './Suspense'
 import ErrorBoundaryBridge, { ErrorThrower } from './ErrorBoundary'
-
-import { run } from '../../helpers'
 
 // 用于 Keeper 中，实现 Keeper 向外或向内的桥接代理
 export default function Bridge({ id, children, bridgeProps }) {
@@ -29,19 +28,19 @@ export function Acceptor({ id, children }) {
   return (
     /* 由内向外透传 componentDidCatch 捕获的 error */
     <ErrorThrower>
-      {error$$ => (
+      {(error$$) => (
         /* 由内向外透传 lazy 行为 */
         <LazyBridge>
-          {sus$$ => (
+          {(sus$$) => (
             /* 由外向内透传可能被捕获的 Provider 数据 */
             <ConsumerBridge id={id}>
-              {ctx$$ =>
+              {(ctx$$) =>
                 run(children, undefined, {
                   bridgeProps: {
                     sus$$,
                     ctx$$,
-                    error$$
-                  }
+                    error$$,
+                  },
                 })
               }
             </ConsumerBridge>

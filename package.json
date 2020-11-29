@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "rollup --config",
+    "format": "prettier --write \"./src/**/*.js\"",
     "manual:publish": "npm run build && np --no-cleanup --yolo --no-publish && npm publish"
   },
   "keywords": [
@@ -41,15 +42,17 @@
     "create-react-context": "^0.3.0",
     "hoist-non-react-statics": "^3.3.0",
     "jsx-ast-utils": "^2.2.1",
-    "react-node-key": "^0.1.8"
+    "react-node-key": "^0.2.0",
+    "szfe-tools": "^0.0.0-beta.7"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
-    "core-js": "^3.7.0",
+    "babel-plugin-import": "^1.13.3",
     "np": "^6.2.5",
+    "prettier": "^2.2.1",
     "rollup": "^1.11.3",
     "rollup-plugin-babel": "^4.3.2",
     "rollup-plugin-node-resolve": "^4.2.3",

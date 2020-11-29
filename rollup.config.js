@@ -17,9 +17,7 @@ export default [
         'create-react-context',
         'hoist-non-react-statics',
         'react-node-key',
-      ].includes(name) ||
-      /core-js/.test(name) ||
-      /szfe-tools/.test(name),
+      ].includes(name) || /szfe-tools/.test(name),
     plugins: [
       resolve(),
       babel({
@@ -42,9 +40,7 @@ export default [
         'create-react-context',
         'hoist-non-react-statics',
         'react-node-key',
-      ].includes(name) ||
-      /core-js/.test(name) ||
-      /szfe-tools/.test(name),
+      ].includes(name) || /szfe-tools/.test(name),
     plugins: [
       resolve(),
       babel({

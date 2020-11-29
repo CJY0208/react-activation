@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react'
-
-import { get, run, nextTick } from '../helpers'
+import { get, run, nextTick } from 'szfe-tools'
 
 import Bridge from './Bridge'
 import { AliveNodeProvider } from './context'
@@ -16,7 +15,7 @@ export default class Keeper extends PureComponent {
     this.state = {
       children: props.children,
       bridgeProps: props.bridgeProps,
-      key: Math.random()
+      key: Math.random(),
     }
   }
 
@@ -38,7 +37,7 @@ export default class Keeper extends PureComponent {
       wrapper: node,
       nodes: [...node.children],
       [LIFECYCLE_ACTIVATE]: () => this[LIFECYCLE_ACTIVATE](),
-      [LIFECYCLE_UNACTIVATE]: () => this[LIFECYCLE_UNACTIVATE]()
+      [LIFECYCLE_UNACTIVATE]: () => this[LIFECYCLE_UNACTIVATE](),
     })
   }
 
@@ -47,7 +46,7 @@ export default class Keeper extends PureComponent {
     // 卸载前尝试归位 DOM 节点
     try {
       const cache = store.get(id)
-      cache.nodes.forEach(node => {
+      cache.nodes.forEach((node) => {
         cache.wrapper.appendChild(node)
       })
     } catch (error) {
@@ -58,7 +57,7 @@ export default class Keeper extends PureComponent {
   }
 
   [LIFECYCLE_ACTIVATE]() {
-    this.listeners.forEach(listener => run(listener, [LIFECYCLE_ACTIVATE]))
+    this.listeners.forEach((listener) => run(listener, [LIFECYCLE_ACTIVATE]))
   }
 
   [LIFECYCLE_UNACTIVATE]() {
@@ -84,7 +83,7 @@ export default class Keeper extends PureComponent {
   // }
 
   // 生命周期绑定
-  attach = ref => {
+  attach = (ref) => {
     const listeners = this.listeners
 
     if (!ref) {
@@ -101,7 +100,7 @@ export default class Keeper extends PureComponent {
 
     listeners.set(ref, {
       [LIFECYCLE_ACTIVATE]: () => run(ref, LIFECYCLE_ACTIVATE),
-      [LIFECYCLE_UNACTIVATE]: () => run(ref, LIFECYCLE_UNACTIVATE)
+      [LIFECYCLE_UNACTIVATE]: () => run(ref, LIFECYCLE_UNACTIVATE),
     })
 
     // 返回 listenerRemover 用以在对应组件卸载时解除监听
@@ -113,13 +112,13 @@ export default class Keeper extends PureComponent {
   // 静态化节点上下文内容，防止重复渲染
   contextValue = {
     id: this.props.id,
-    attach: this.attach
+    attach: this.attach,
   }
 
-  refresh = cb =>
+  refresh = (cb) =>
     this.setState(
       {
-        key: Math.random()
+        key: Math.random(),
       },
       cb
     )
@@ -130,7 +129,7 @@ export default class Keeper extends PureComponent {
 
     return (
       <div
-        ref={node => {
+        ref={(node) => {
           this.wrapper = node
         }}
       >
@@ -138,7 +137,7 @@ export default class Keeper extends PureComponent {
           <Bridge id={id} bridgeProps={bridgeProps}>
             <AliveNodeProvider value={this.contextValue}>
               {React.cloneElement(children, {
-                key: `${children.key}:${key}`
+                key: `${children.key}:${key}`,
               })}
             </AliveNodeProvider>
           </Bridge>

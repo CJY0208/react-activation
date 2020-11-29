@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-
 import {
   value,
   get,
@@ -9,14 +8,14 @@ import {
   isFunction,
   isArray,
   debounce,
-  flatten
-} from '../helpers'
+  flatten,
+} from 'szfe-tools'
 
 import { expandKeepAlive } from './withAliveScope'
 import {
   LIFECYCLE_ACTIVATE,
   LIFECYCLE_UNACTIVATE,
-  withActivation
+  withActivation,
 } from './lifecycles'
 import saveScrollPosition from '../helpers/saveScrollPosition'
 
@@ -27,14 +26,14 @@ const screenScrollingElement = get(
   get(root, 'document.documentElement', {})
 )
 
-const getErrorTips = name =>
+const getErrorTips = (name) =>
   `<KeepAlive ${
     name ? `name="${name}" ` : ''
   }/> Too many transient updates, may have encountered an infinite loop of updates, forced to pause the update
 There are serious performance issues with the update results you are currently seeing
 May encounter an implied bug, please don't use KeepAlive and contact the author to solve`
 
-const parseWhenResult = res => {
+const parseWhenResult = (res) => {
   if (isArray(res)) {
     return res
   }
@@ -44,7 +43,7 @@ const parseWhenResult = res => {
 
 class KeepAlive extends Component {
   static defaultProps = {
-    saveScrollPosition: true
+    saveScrollPosition: true,
   }
   // 本段为 KeepAlive 更新隐患检测，通过检测 KeepAlive 瞬时更新次数来判断是否进入死循环，并在 update 中强制阻止更新
   updateTimes = 0
@@ -77,7 +76,7 @@ class KeepAlive extends Component {
     this.init()
 
     // 继承响应父级 KeepAlive 的生命周期
-    ;[LIFECYCLE_ACTIVATE, LIFECYCLE_UNACTIVATE].forEach(lifecycleName => {
+    ;[LIFECYCLE_ACTIVATE, LIFECYCLE_UNACTIVATE].forEach((lifecycleName) => {
       this[lifecycleName] = () => {
         const { id, _helpers } = this.props
         const cache = _helpers.getCache(id)
@@ -120,7 +119,7 @@ class KeepAlive extends Component {
       // })
       // this.parentNode.removeChild(this.placeholder)
       // 将 AliveScopeProvider 中的渲染内容通过 dom 操作置回当前 KeepAlive
-      cache.nodes.forEach(node => {
+      cache.nodes.forEach((node) => {
         this.placeholder.appendChild(node)
       })
 
@@ -155,7 +154,9 @@ class KeepAlive extends Component {
     try {
       if (willUnactivate && nodesNeedToSaveScrollPosition.length > 0) {
         // 保存该节点下各可滚动元素的滚动位置
-        cache.revertScrollPos = saveScrollPosition(nodesNeedToSaveScrollPosition)
+        cache.revertScrollPos = saveScrollPosition(
+          nodesNeedToSaveScrollPosition
+        )
       }
 
       // // 原计划不增加额外的节点，直接将 Keeper 中所有内容节点一一迁移
@@ -172,7 +173,7 @@ class KeepAlive extends Component {
       // })
       // this.parentNode.insertBefore(this.placeholder, cache.nodes[0])
       // 将 KeepAlive 中的节点恢复为原先的占位节点，保证卸载操作正常进行
-      cache.nodes.forEach(node => {
+      cache.nodes.forEach((node) => {
         if (willUnactivate) {
           this.placeholder.removeChild(node)
         } else {
@@ -192,9 +193,9 @@ class KeepAlive extends Component {
       .keep(id, {
         children,
         getInstance: () => this,
-        ...rest
+        ...rest,
       })
-      .then(cache => {
+      .then((cache) => {
         // fix #22
         if (!cache) {
           return
@@ -224,7 +225,7 @@ class KeepAlive extends Component {
     _helpers.update(id, {
       name,
       getInstance: () => this,
-      ...rest
+      ...rest,
     })
     // this.inject(false)
   }
@@ -253,10 +254,10 @@ class KeepAlive extends Component {
       if (isScope) {
         const needToDrop = [
           cache,
-          ..._helpers.getScopeIds([id]).map(id => _helpers.getCache(id))
+          ..._helpers.getScopeIds([id]).map((id) => _helpers.getCache(id)),
         ]
 
-        needToDrop.forEach(cache => {
+        needToDrop.forEach((cache) => {
           cache.willDrop = true
         })
         nextTick(() => _helpers.dropScopeByIds([id]))
@@ -276,7 +277,7 @@ class KeepAlive extends Component {
         key="keep-alive-placeholder"
         nodeKeyIgnore
         className="ka-wrapper"
-        ref={node => {
+        ref={(node) => {
           this.placeholder = node
         }}
       />

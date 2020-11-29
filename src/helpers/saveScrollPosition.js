@@ -1,7 +1,12 @@
-import root from './base/globalThis'
-import { get, run, value } from './base/try'
-import { isFunction, isExist } from './base/is'
-import { flatten } from './utils'
+import {
+  globalThis as root,
+  get,
+  run,
+  value,
+  isFunction,
+  isExist,
+  flatten,
+} from 'szfe-tools'
 
 function isScrollableNode(node = {}) {
   if (!isExist(node)) {
@@ -26,12 +31,12 @@ function getScrollableNodes(from) {
 export default function saveScrollPosition(from) {
   const nodes = [...new Set([...flatten(from.map(getScrollableNodes))])]
 
-  const saver = nodes.map(node => [
+  const saver = nodes.map((node) => [
     node,
     {
       x: node.scrollLeft,
-      y: node.scrollTop
-    }
+      y: node.scrollTop,
+    },
   ])
 
   return function revert() {

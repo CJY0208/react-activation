@@ -1,6 +1,5 @@
 import { Component } from 'react'
-
-import { run } from '../../helpers'
+import { run } from 'szfe-tools'
 
 export default class ErrorBoundaryBridge extends Component {
   // Error Boundary 透传至对应 KeepAlive 实例位置
@@ -20,7 +19,7 @@ export default class ErrorBoundaryBridge extends Component {
 
 export class ErrorThrower extends Component {
   state = {
-    error: null
+    error: null,
   }
 
   throwError = (error, cb) => this.setState({ error }, cb)

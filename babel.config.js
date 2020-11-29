@@ -1,14 +1,14 @@
 module.exports = {
-  presets: [
+  presets: [['@babel/env', { modules: false }], '@babel/react'],
+  plugins: [
+    '@babel/plugin-proposal-class-properties',
+    'react-node-key/babel',
     [
-      '@babel/env',
+      'babel-plugin-import',
       {
-        modules: false,
-        useBuiltIns: 'usage',
-        corejs: 3,
+        libraryName: 'szfe-tools',
+        camel2DashComponentName: false,
       },
     ],
-    '@babel/react',
   ],
-  plugins: ['@babel/plugin-proposal-class-properties', 'react-node-key/babel'],
 }

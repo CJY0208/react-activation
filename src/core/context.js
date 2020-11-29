@@ -4,12 +4,12 @@ import createContext from 'create-react-context'
 export const aliveScopeContext = createContext()
 export const {
   Provider: AliveScopeProvider,
-  Consumer: AliveScopeConsumer
+  Consumer: AliveScopeConsumer,
 } = aliveScopeContext
 
 // KeepAlive 组件的上下文，实现缓存生命周期功能
 export const aliveNodeContext = createContext()
 export const {
   Provider: AliveNodeProvider,
-  Consumer: AliveNodeConsumer
+  Consumer: AliveNodeConsumer,
 } = aliveNodeContext

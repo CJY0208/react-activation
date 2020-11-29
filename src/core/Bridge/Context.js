@@ -5,8 +5,7 @@
  */
 import React, { PureComponent, useContext, useRef, useEffect } from 'react'
 import createReactContext from 'create-react-context'
-
-import { run, get, nextTick, isUndefined, isFunction } from '../../helpers'
+import { run, get, nextTick, isUndefined, isFunction } from 'szfe-tools'
 
 const fixedContext = []
 const updateListenerCache = new Map()
@@ -32,7 +31,7 @@ export class ProviderBridge extends PureComponent {
 
     if (ctxValues.length === 0) {
       this.state = {
-        ctxValue: null
+        ctxValue: null,
       }
 
       return
@@ -41,12 +40,12 @@ export class ProviderBridge extends PureComponent {
     const [{ ctx, value, onUpdate }] = ctxValues
 
     this.state = {
-      ctxValue: value
+      ctxValue: value,
     }
 
-    this.unmount = onUpdate(value => {
+    this.unmount = onUpdate((value) => {
       this.setState({
-        ctxValue: value
+        ctxValue: value,
       })
     })
   }
@@ -107,12 +106,12 @@ class ConsumerWrapper extends PureComponent {
       ctx,
       value,
       // 注册上下文更新的监听，保证上下文更新时 Keeper 中 ProviderBridge 内容的同步
-      onUpdate: updator => {
+      onUpdate: (updator) => {
         this.updateListener.set(updator, updator)
 
         // 返回更新监听器的注销方法
         return () => this.updateListener.delete(updator)
-      }
+      },
     }
   }
 
@@ -126,7 +125,7 @@ class ConsumerWrapper extends PureComponent {
     // 此处保留其中已生成的更新监听器，用以在重新挂载后保持与对应 Keeper 中 ProviderBridge 的联系
     updateListenerCache.set(ctx, {
       ...get(updateListenerCache.get(ctx), undefined, {}),
-      [id]: this.updateListener
+      [id]: this.updateListener,
     })
   }
 
@@ -137,7 +136,7 @@ class ConsumerWrapper extends PureComponent {
     const shouldUpdate = prevValue !== value
 
     if (shouldUpdate) {
-      run(this.updateListener, 'forEach', fn => fn(value))
+      run(this.updateListener, 'forEach', (fn) => fn(value))
     }
 
     return shouldUpdate
@@ -146,7 +145,7 @@ class ConsumerWrapper extends PureComponent {
   render() {
     const { value, renderWrapper, renderContent, id } = this.props
 
-    return renderWrapper(ctx$$ =>
+    return renderWrapper((ctx$$) =>
       renderContent(isUndefined(value) ? ctx$$ : [...ctx$$, this.ctxInfo])
     )
   }
@@ -158,16 +157,16 @@ function RecursiveConsumerBridge({ children: renderChildren, id }) {
     (render, ctx) => {
       const { Consumer } = ctx
 
-      const renderWrapper = renderContent => (
+      const renderWrapper = (renderContent) => (
         <Consumer>
-          {value => (
+          {(value) => (
             <ConsumerWrapper
               {...{
                 value,
                 ctx,
                 renderWrapper: render,
                 renderContent,
-                id
+                id,
               }}
             />
           )}
@@ -176,7 +175,7 @@ function RecursiveConsumerBridge({ children: renderChildren, id }) {
 
       return renderWrapper
     },
-    renderContent => renderContent([])
+    (renderContent) => renderContent([])
   )
 
   return renderWrapper(renderChildren)
@@ -185,7 +184,7 @@ function RecursiveConsumerBridge({ children: renderChildren, id }) {
 // 若支持 Hooks，就不需要递归了，相关实现解释可参考 ConsumerWrapper
 function HooksConsumerBridge({ children: renderChildren, id }) {
   const context$$ = fixedContext
-    .map(ctx => {
+    .map((ctx) => {
       const value = useContext(ctx)
       const prevValueRef = useRef(value)
       const { current: updateListener } = useRef(
@@ -194,7 +193,7 @@ function HooksConsumerBridge({ children: renderChildren, id }) {
 
       // 尽可能早地进行更新
       if (prevValueRef.current !== value) {
-        nextTick(() => run(updateListener, 'forEach', fn => fn(value)))
+        nextTick(() => run(updateListener, 'forEach', (fn) => fn(value)))
       }
       prevValueRef.current = value
 
@@ -206,7 +205,7 @@ function HooksConsumerBridge({ children: renderChildren, id }) {
 
           updateListenerCache.set(ctx, {
             ...get(updateListenerCache.get(ctx), undefined, {}),
-            [id]: updateListener
+            [id]: updateListener,
           })
         }
       }, [])
@@ -214,11 +213,11 @@ function HooksConsumerBridge({ children: renderChildren, id }) {
       return {
         ctx,
         value,
-        onUpdate: fn => {
+        onUpdate: (fn) => {
           updateListener.set(fn, fn)
 
           return () => updateListener.delete(fn)
-        }
+        },
       }
     })
     .filter(({ value }) => !isUndefined(value))

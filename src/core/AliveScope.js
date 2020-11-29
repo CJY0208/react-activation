@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
+import { get, flatten } from 'szfe-tools'
 
-import { get, flatten, isRegExp } from '../helpers'
-
+import { isRegExp } from '../helpers/is'
 import { AliveScopeProvider } from './context'
 import Keeper from './Keeper'
 
@@ -14,7 +14,7 @@ export default class AliveScope extends Component {
   keepers = new Map()
 
   update = (id, params) =>
-    new Promise(resolve => {
+    new Promise((resolve) => {
       const keeper = this.keepers.get(id)
       const isNew = !keeper
       const now = Date.now()
@@ -24,7 +24,7 @@ export default class AliveScope extends Component {
         createTime: now,
         updateTime: now,
         ...node,
-        ...params
+        ...params,
       })
 
       if (isNew) {
@@ -38,23 +38,23 @@ export default class AliveScope extends Component {
     })
 
   keep = (id, params) =>
-    new Promise(resolve => {
+    new Promise((resolve) => {
       this.update(id, {
         id,
-        ...params
+        ...params,
       }).then(() => {
         resolve(this.store.get(id))
       })
     })
 
-  getCachingNodesByName = name =>
-    this.getCachingNodes().filter(node =>
+  getCachingNodesByName = (name) =>
+    this.getCachingNodes().filter((node) =>
       isRegExp(name) ? name.test(node.name) : node.name === name
     )
 
-  getScopeIds = ids => {
+  getScopeIds = (ids) => {
     // 递归采集 scope alive nodes id
-    const getCachingNodesId = id => {
+    const getCachingNodesId = (id) => {
       const aliveNodesId = get(this.getCache(id), 'aliveNodesId', [])
 
       if (aliveNodesId.size > 0) {
@@ -64,41 +64,41 @@ export default class AliveScope extends Component {
       return [id, ...aliveNodesId]
     }
 
-    return flatten(ids.map(id => getCachingNodesId(id)))
+    return flatten(ids.map((id) => getCachingNodesId(id)))
   }
 
-  dropById = id => this.handleNodes([id], HANDLE_TYPE_DROP)
-  dropScopeByIds = ids =>
+  dropById = (id) => this.handleNodes([id], HANDLE_TYPE_DROP)
+  dropScopeByIds = (ids) =>
     this.handleNodes(this.getScopeIds(ids), HANDLE_TYPE_DROP)
 
-  drop = name =>
+  drop = (name) =>
     this.handleNodes(
-      this.getCachingNodesByName(name).map(node => node.id),
+      this.getCachingNodesByName(name).map((node) => node.id),
       HANDLE_TYPE_DROP
     )
 
-  dropScope = name =>
+  dropScope = (name) =>
     this.dropScopeByIds(this.getCachingNodesByName(name).map(({ id }) => id))
 
-  refreshById = id => this.handleNodes([id], HANDLE_TYPE_REFRESH)
-  refreshScopeByIds = ids =>
+  refreshById = (id) => this.handleNodes([id], HANDLE_TYPE_REFRESH)
+  refreshScopeByIds = (ids) =>
     this.handleNodes(this.getScopeIds(ids), HANDLE_TYPE_REFRESH)
 
-  refresh = name =>
+  refresh = (name) =>
     this.handleNodes(
-      this.getCachingNodesByName(name).map(node => node.id),
+      this.getCachingNodesByName(name).map((node) => node.id),
       HANDLE_TYPE_REFRESH
     )
 
-  refreshScope = name =>
+  refreshScope = (name) =>
     this.refreshScopeByIds(this.getCachingNodesByName(name).map(({ id }) => id))
 
   handleNodes = (nodesId, type = HANDLE_TYPE_DROP) =>
-    new Promise(resolve => {
+    new Promise((resolve) => {
       const willRefreshKeepers = []
       const willDropNodes = []
 
-      nodesId.forEach(id => {
+      nodesId.forEach((id) => {
         const cache = this.store.get(id)
 
         if (!cache) {
@@ -126,7 +126,7 @@ export default class AliveScope extends Component {
       Promise.all([
         willDropNodes.length === 0
           ? Promise.resolve(false)
-          : new Promise(resolve => {
+          : new Promise((resolve) => {
               this.helpers = { ...this.helpers }
               this.forceUpdate(() => resolve(true))
             }),
@@ -134,9 +134,9 @@ export default class AliveScope extends Component {
           ? Promise.resolve(false)
           : Promise.all(
               willRefreshKeepers.map(
-                keeper => new Promise(resolve => keeper.refresh(resolve))
+                (keeper) => new Promise((resolve) => keeper.refresh(resolve))
               )
-            )
+            ),
       ]).then(([dropSuccessfully, refreshSuccessfully]) =>
         resolve(Boolean(dropSuccessfully || refreshSuccessfully))
       )
@@ -144,8 +144,8 @@ export default class AliveScope extends Component {
 
   clear = () => this.handleNodes(this.getCachingNodes().map(({ id }) => id))
 
-  getCache = id => this.store.get(id)
-  getNode = id => this.nodes.get(id)
+  getCache = (id) => this.store.get(id)
+  getNode = (id) => this.nodes.get(id)
   getCachingNodes = () => [...this.nodes.values()]
 
   // 静态化节点上下文内容，防止重复渲染
@@ -164,7 +164,7 @@ export default class AliveScope extends Component {
     clear: this.clear,
     getCache: this.getCache,
     getNode: this.getNode,
-    getCachingNodes: this.getCachingNodes
+    getCachingNodes: this.getCachingNodes,
   }
 
   render() {
@@ -180,7 +180,7 @@ export default class AliveScope extends Component {
               {...props}
               store={this.store}
               keepers={this.keepers}
-              ref={keeper => {
+              ref={(keeper) => {
                 this.keepers.set(props.id, keeper)
               }}
             >
