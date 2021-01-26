@@ -8,6 +8,7 @@ export interface KeepAliveProps {
   id?: string
   when?: boolean | Array<boolean> | (() => boolean | Array<boolean>)
   saveScrollPosition?: boolean | string
+  [key: string]: any
 }
 
 export declare class KeepAlive extends Component<KeepAliveProps> {}
