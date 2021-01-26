@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { get, run, nextTick } from 'szfe-tools'
+import { get, run, isArray, nextTick } from 'szfe-tools'
 
 import Bridge from './Bridge'
 import { AliveNodeProvider } from './context'
@@ -136,9 +136,11 @@ export default class Keeper extends PureComponent {
         <div key="keeper-container" nodeKeyIgnore className="ka-content">
           <Bridge id={id} bridgeProps={bridgeProps}>
             <AliveNodeProvider value={this.contextValue}>
-              {React.cloneElement(children, {
-                key: `${children.key}:${key}`,
-              })}
+              {(isArray(children) ? children : [children]).map((child, idx) => (
+                React.cloneElement(child, {
+                  key: `${child.key || ''}:${key}:${idx}`,
+                })
+              ))}
             </AliveNodeProvider>
           </Bridge>
         </div>
