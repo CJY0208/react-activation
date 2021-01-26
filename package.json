@@ -1,6 +1,6 @@
 {
   "name": "react-activation",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "<KeepAlive /> for React like <keep-alive /> in vue",
   "main": "index.js",
   "scripts": {
