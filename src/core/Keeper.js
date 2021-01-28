@@ -35,7 +35,7 @@ export default class Keeper extends PureComponent {
       inited: false,
       cached: false,
       wrapper: node,
-      nodes: [...node.children],
+      nodes: isArray(node.children) ? [...node.children] : [node.children],
       [LIFECYCLE_ACTIVATE]: () => this[LIFECYCLE_ACTIVATE](),
       [LIFECYCLE_UNACTIVATE]: () => this[LIFECYCLE_UNACTIVATE](),
     })
