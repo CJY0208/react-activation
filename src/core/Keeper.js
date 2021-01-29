@@ -28,6 +28,13 @@ export default class Keeper extends PureComponent {
     if (store.has(id)) {
       return
     }
+    
+    let nodes
+    try {
+      nodes = [...node.children]
+    } catch (e) {
+      nodes = [node.children]
+    }
 
     store.set(id, {
       listeners,
@@ -35,7 +42,7 @@ export default class Keeper extends PureComponent {
       inited: false,
       cached: false,
       wrapper: node,
-      nodes: isArray(node.children) ? [...node.children] : [node.children],
+      nodes,
       [LIFECYCLE_ACTIVATE]: () => this[LIFECYCLE_ACTIVATE](),
       [LIFECYCLE_UNACTIVATE]: () => this[LIFECYCLE_UNACTIVATE](),
     })
