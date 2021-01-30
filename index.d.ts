@@ -51,5 +51,8 @@ export interface AliveController {
 export function useAliveController(): AliveController
 
 export declare function withActivation<C extends ComponentType<GetProps<C>>>(component: C): C
-export declare function withAliveScope<C extends ComponentType<GetProps<C>>>(component: C): C
-export const version: string
+export declare function withAliveScope<C extends ComponentType<GetProps<C>>>(component: C): class name {
+  constructor(parameters) {
+    
+  }
+}

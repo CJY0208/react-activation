@@ -8,7 +8,6 @@ import {
 } from './core/Bridge/Context'
 import withAliveScope, { useAliveController } from './core/withAliveScope'
 import NodeKey from './core/NodeKey'
-import { version } from '../package.json'
 
 export default KeepAlive
 export {
@@ -23,5 +22,4 @@ export {
   withAliveScope,
   useAliveController,
   NodeKey,
-  version,
 }
