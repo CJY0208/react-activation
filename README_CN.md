@@ -426,11 +426,26 @@ class App extends Component {
    }
    ```
 
-2. 对 Context 的破坏性影响，需手动修复
+2. 对 Context 的破坏性影响
+   
+   react-actication@0.8.0 版本后 React 16.3+ 版本中已自动修复
+
+   react-actication@0.8.0 版本配合 React 17+ 需要做如下调整以达到自动修复效果
+
+   ```jsx
+   import { autoFixContext } from 'react-activation'
+
+   autoFixContext(
+    [require('react/jsx-runtime'), 'jsx', 'jsxs', 'jsxDEV'],
+    [require('react/jsx-dev-runtime'), 'jsx', 'jsxs', 'jsxDEV']
+   )
+   ```
+   
+   react-actication@0.8.0 以下版本需手动修复，参考以下
 
    问题情景参考：https://github.com/StructureBuilder/react-keep-alive/issues/36
 
-   ```javascript
+   ```jsx
    <Provider value={1}>
      {show && (
        <KeepAlive>
