@@ -17,6 +17,8 @@ export default [
         'create-react-context',
         'hoist-non-react-statics',
         'react-node-key',
+        'react/jsx-runtime',
+        'react/jsx-dev-runtime',
       ].includes(name) || /szfe-tools/.test(name),
     plugins: [
       resolve(),
@@ -40,6 +42,8 @@ export default [
         'create-react-context',
         'hoist-non-react-statics',
         'react-node-key',
+        'react/jsx-runtime',
+        'react/jsx-dev-runtime',
       ].includes(name) || /szfe-tools/.test(name),
     plugins: [
       resolve(),

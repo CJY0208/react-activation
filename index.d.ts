@@ -28,6 +28,7 @@ export function createContext<T>(
   defaultValue: T,
   calculateChangedBits?: (prev: T, next: T) => number
 ): Context<T>
+export function autoFixContext(configs?: any[]): void
 
 export function useActivate(effect: () => void): void
 export function useUnactivate(effect: () => void): void
