@@ -1,9 +1,14 @@
 import AliveScope from './core/AliveScope'
 import { withActivation, useActivate, useUnactivate } from './core/lifecycles'
 import KeepAlive from './core/KeepAlive'
-import { fixContext, createContext, autoFixContext } from './core/Bridge/Context'
+import {
+  fixContext,
+  createContext,
+  autoFixContext,
+} from './core/Bridge/Context'
 import withAliveScope, { useAliveController } from './core/withAliveScope'
 import NodeKey from './core/NodeKey'
+import { version } from '../package.json'
 
 export default KeepAlive
 export {
@@ -18,4 +23,5 @@ export {
   withAliveScope,
   useAliveController,
   NodeKey,
+  version,
 }

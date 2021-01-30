@@ -5,13 +5,7 @@ import React, {
   useEffect,
   useState,
 } from 'react'
-import {
-  run,
-  get,
-  nextTick,
-  isUndefined,
-  isFunction,
-} from 'szfe-tools'
+import { run, get, nextTick, isUndefined, isFunction } from 'szfe-tools'
 
 import ConsumerWrapper from './ConsumerWrapper'
 import { fixedContext, eventBus, updateListenerCache } from './fixContext'

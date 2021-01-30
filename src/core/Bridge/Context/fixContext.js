@@ -25,9 +25,11 @@ export const createContext = (defaultValue, calculateChangedBits) => {
 }
 
 const tryFixCtx = memoize((type) => {
-  const ctx = get(type, '_context')
+  // 尝试读取 Provider 或 Consumer 中的 context 静态属性
+  const ctx = get(type, '_context') || get(type, 'context') // 16.3.0 版本为 context，之后为 _context
 
-  if (ctx) {
+  // 判断是否为 ReactContext 类型
+  if (get(ctx, '$$typeof') === get(aliveScopeContext, '$$typeof')) {
     fixContext(ctx)
   }
 })
@@ -35,7 +37,10 @@ const tryFixCtx = memoize((type) => {
 const override = (configs) => {
   configs.forEach(([host, ...methods]) => {
     methods.forEach((method) => {
-      if (!isFunction(get(host, method))) {
+      if (
+        !isFunction(get(host, method)) ||
+        get(host, [method, '_overridden'])
+      ) {
         return
       }
       const originMethod = host[method].bind(host)
@@ -45,35 +50,31 @@ const override = (configs) => {
         }
         return originMethod(type, ...args)
       }
+      host[method]._overridden = true
     })
   })
 }
 
-export const autoFixContext = (configs = []) => {
-  let ReactJSXRuntime, ReactJSXDevRuntime
-
+/**
+ * 通过覆写 React.createElement 方法来探测 Provider 或 Consumer 的创建，并攫取其中 context 主动进行修复
+ * TODO：同时兼容 React 17+，目前仅默认兼容 React.createElement 方法
+ * React 17+ 为 require('react/jsx-runtime') 或 require('react/jsx-dev-runtime') 的 jsx、jsxs、jsxDEV 方法
+ * 但由于无法动态 require，暂未想到方式同时兼容
+ * 若需兼容 17+，目前手法为
+ *
+ * autoFixContext(
+ *   [require('react/jsx-runtime'), 'jsx', 'jsxs', 'jsxDEV'],
+ *   [require('react/jsx-dev-runtime'), 'jsx', 'jsxs', 'jsxDEV']
+ * )
+ *
+ * Note: 需注意 16.2.x 及以下版本不支持此方法
+ */
+export const autoFixContext = (...configs) => {
   try {
-    ReactJSXRuntime = require('react/jsx-runtime')
+    override(configs)
   } catch (err) {
-    // nothing
-  }
-
-  try {
-    ReactJSXDevRuntime = require('react/jsx-dev-runtime')
-  } catch (err) {
-    // nothing
-  }
-
-  try {
-    override([
-      [React, 'createElement'],
-      [ReactJSXDevRuntime, 'jsx', 'jsxs', 'jsxDEV'],
-      [ReactJSXRuntime, 'jsx', 'jsxs', 'jsxDEV'],
-      ...configs,
-    ])
-  } catch (err) {
-    console.warn('auto fix failed:', err)
+    console.warn('activation override failed:', err)
   }
 }
 
-autoFixContext()
+autoFixContext([React, 'createElement'])

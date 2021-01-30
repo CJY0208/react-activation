@@ -428,7 +428,22 @@ Since `<Keeper />` will not be uninstalled, caching can be implemented.
    }
    ```
 
-2. Destructive impact on `Context`, need to be manually fixed
+2. Destructive impact on `Context`
+
+   after `react-actication@0.8.0` with `react@16.3+`, this question has been automatic fixed
+
+   `react-actication@0.8.0` with `react@17+` you Need to make the following changes to achieve automatic repair
+
+   ```jsx
+   import { autoFixContext } from 'react-activation'
+
+   autoFixContext(
+    [require('react/jsx-runtime'), 'jsx', 'jsxs', 'jsxDEV'],
+    [require('react/jsx-dev-runtime'), 'jsx', 'jsxs', 'jsxDEV']
+   )
+   ```
+   
+   Versions below `react-actication@0.8.0` need to be repaired manually, refer to the following
 
    Problem reference: https://github.com/StructureBuilder/react-keep-alive/issues/36
 

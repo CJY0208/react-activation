@@ -28,7 +28,7 @@ export default class Keeper extends PureComponent {
     if (store.has(id)) {
       return
     }
-    
+
     let nodes
     try {
       nodes = [...node.children]
@@ -143,11 +143,11 @@ export default class Keeper extends PureComponent {
         <div key="keeper-container" nodeKeyIgnore className="ka-content">
           <Bridge id={id} bridgeProps={bridgeProps}>
             <AliveNodeProvider value={this.contextValue}>
-              {(isArray(children) ? children : [children]).map((child, idx) => (
+              {React.Children.map(children, (child, idx) =>
                 React.cloneElement(child, {
                   key: `${child.key || ''}:${key}:${idx}`,
                 })
-              ))}
+              )}
             </AliveNodeProvider>
           </Bridge>
         </div>

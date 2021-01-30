@@ -1,11 +1,11 @@
-import { PureComponent } from 'react'
+import { Component } from 'react'
 import { run, get, isUndefined } from 'szfe-tools'
 
 import { updateListenerCache } from './fixContext'
 
 // 在 KeepAlive 位置使用待修复上下文的 Consumer 探测可能存在的上下文关系
 // 若成功捕获上下文则保存其内容，用以后续 Keeper 中上下文的重建
-export default class ConsumerWrapper extends PureComponent {
+export default class ConsumerWrapper extends Component {
   updateListener = null
   ctxInfo = null
   constructor(props) {
