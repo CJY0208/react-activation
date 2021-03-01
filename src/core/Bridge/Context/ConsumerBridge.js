@@ -12,13 +12,15 @@ import { fixedContext, eventBus, updateListenerCache } from './fixContext'
 
 // 对 ConsumerWrapper 的递归结构，会在 devtool 中生成较深的嵌套结构，可用 hooks 消除嵌套结构
 class RecursiveConsumerBridge extends PureComponent {
+  _forceUpdate = () => this.forceUpdate()
+  
   componentDidMount() {
     // 渲染时若 fixedContext 列表更新，则需强制刷新
-    eventBus.on('update', this.forceUpdate)
+    eventBus.on('update', this._forceUpdate)
   }
 
   componentWillUnmount() {
-    eventBus.off('update', this.forceUpdate)
+    eventBus.off('update', this._forceUpdate)
   }
 
   render() {
@@ -107,8 +109,9 @@ function HooksConsumerBridge({ children: renderChildren, id }) {
   return renderChildren(context$$)
 }
 
-const ConsumerBridge = [useContext, useRef, useEffect].every(isFunction)
-  ? HooksConsumerBridge
-  : RecursiveConsumerBridge
-
-export default ConsumerBridge
+// fix #99
+// const ConsumerBridge = [useContext, useRef, useEffect].every(isFunction)
+//   ? HooksConsumerBridge
+//   : RecursiveConsumerBridge
+// fix #99
+export default RecursiveConsumerBridge
