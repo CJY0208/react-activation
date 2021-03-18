@@ -14,7 +14,7 @@ export const fixContext = memoize((ctx) => {
     return
   }
   fixedContext.push(ctx)
-  eventBus.emit('update')
+  setTimeout(() => eventBus.emit('update'))
 })
 
 export const createContext = (defaultValue, calculateChangedBits) => {
