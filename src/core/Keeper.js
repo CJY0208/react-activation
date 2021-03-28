@@ -1,11 +1,12 @@
 import React, { PureComponent } from 'react'
-import { get, run, isArray, nextTick } from 'szfe-tools'
+import { get, run, isArray, nextTick, EventBus } from 'szfe-tools'
 
 import Bridge from './Bridge'
 import { AliveNodeProvider } from './context'
 import { LIFECYCLE_ACTIVATE, LIFECYCLE_UNACTIVATE } from './lifecycles'
 
 export default class Keeper extends PureComponent {
+  eventBus = new EventBus()
   listeners = new Map()
   wrapper = null
 
@@ -19,6 +20,7 @@ export default class Keeper extends PureComponent {
     }
   }
 
+  cache = undefined
   componentDidMount() {
     const { store, id } = this.props
     const listeners = this.listeners
@@ -36,7 +38,7 @@ export default class Keeper extends PureComponent {
       nodes = [node.children]
     }
 
-    store.set(id, {
+    this.cache = {
       listeners,
       aliveNodesId: [],
       inited: false,
@@ -45,7 +47,9 @@ export default class Keeper extends PureComponent {
       nodes,
       [LIFECYCLE_ACTIVATE]: () => this[LIFECYCLE_ACTIVATE](),
       [LIFECYCLE_UNACTIVATE]: () => this[LIFECYCLE_UNACTIVATE](),
-    })
+    }
+
+    store.set(id, this.cache)
   }
 
   componentWillUnmount() {
@@ -64,10 +68,12 @@ export default class Keeper extends PureComponent {
   }
 
   [LIFECYCLE_ACTIVATE]() {
+    this.eventBus.emit(LIFECYCLE_ACTIVATE)
     this.listeners.forEach((listener) => run(listener, [LIFECYCLE_ACTIVATE]))
   }
 
   [LIFECYCLE_UNACTIVATE]() {
+    this.eventBus.emit(LIFECYCLE_UNACTIVATE)
     const listeners = [...this.listeners]
 
     listeners
@@ -122,13 +128,46 @@ export default class Keeper extends PureComponent {
     attach: this.attach,
   }
 
-  refresh = (cb) =>
-    this.setState(
-      {
-        key: Math.random(),
-      },
-      cb
-    )
+  drop = ({ delay = 1200 } = {}) =>
+    new Promise((resolve) => {
+      let timeout
+      const { scope, id } = this.props
+      const drop = () => {
+        clearTimeout(timeout)
+        this.eventBus.off(LIFECYCLE_UNACTIVATE, drop)
+        // 用在多层 KeepAlive 同时触发 drop 时，避免触发深层 KeepAlive 节点的缓存生命周期
+        this.cache.willDrop = true
+        scope.nodes.delete(id)
+        scope.helpers = { ...scope.helpers }
+        scope.smartForceUpdate(() => resolve(true))
+      }
+
+      const canDrop = get(this.cache, 'cached') || get(this.cache, 'willDrop')
+      if (!canDrop) {
+        this.eventBus.on(LIFECYCLE_UNACTIVATE, drop)
+        timeout = setTimeout(() => {
+          this.eventBus.off(LIFECYCLE_UNACTIVATE, drop)
+          resolve(false)
+        }, delay)
+        return
+      }
+
+      drop()
+    })
+
+  refresh = () =>
+    new Promise((resolve) => {
+      const canRefresh = !get(this.cache, 'cached')
+      if (!canRefresh) {
+        resolve(false)
+      }
+      this.setState(
+        {
+          key: Math.random(),
+        },
+        () => resolve(true)
+      )
+    })
 
   render() {
     const { id, ...props } = this.props

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, {
   PureComponent,
   useContext,
@@ -10,22 +11,23 @@ import { run, get, nextTick, isUndefined, isFunction } from 'szfe-tools'
 import ConsumerWrapper from './ConsumerWrapper'
 import { fixedContext, eventBus, updateListenerCache } from './fixContext'
 
+const fixedContextSnapshot = {}
+
 // 对 ConsumerWrapper 的递归结构，会在 devtool 中生成较深的嵌套结构，可用 hooks 消除嵌套结构
 class RecursiveConsumerBridge extends PureComponent {
-  _forceUpdate = () => this.forceUpdate()
-  
-  componentDidMount() {
-    // 渲染时若 fixedContext 列表更新，则需强制刷新
-    eventBus.on('update', this._forceUpdate)
+  constructor(props) {
+    super(props)
+    const { id } = props
+
+    if (!fixedContextSnapshot[id]) {
+      fixedContextSnapshot[id] = [...fixedContext]
+    }
   }
 
-  componentWillUnmount() {
-    eventBus.off('update', this._forceUpdate)
-  }
+  renderWrapper = (renderChildren) => {
+    const { id } = this.props
 
-  render() {
-    const { children: renderChildren, id } = this.props
-    const renderWrapper = fixedContext.reduce(
+    const renderWrapper = fixedContextSnapshot[id].reduce(
       (render, ctx) => {
         const { Consumer } = ctx
 
@@ -52,62 +54,68 @@ class RecursiveConsumerBridge extends PureComponent {
 
     return renderWrapper(renderChildren)
   }
+
+  render() {
+    const { children: renderChildren } = this.props
+
+    return this.renderWrapper(renderChildren)
+  }
 }
 
 // 若支持 Hooks，就不需要递归了，相关实现解释可参考 ConsumerWrapper
-function HooksConsumerBridge({ children: renderChildren, id }) {
-  const [, setRenderKey] = useState(Math.random)
+// function HooksConsumerBridge({ children: renderChildren, id }) {
+//   const [, setRenderKey] = useState(Math.random)
 
-  useEffect(() => {
-    // 渲染时若 fixedContext 列表更新，则需强制刷新
-    const updateListener = () => setRenderKey(Math.random)
-    eventBus.on('update', updateListener)
-    return () => {
-      eventBus.off('update', updateListener)
-    }
-  }, [])
+//   useEffect(() => {
+//     // 渲染时若 fixedContext 列表更新，则需强制刷新
+//     const updateListener = () => setRenderKey(Math.random)
+//     eventBus.on('update', updateListener)
+//     return () => {
+//       eventBus.off('update', updateListener)
+//     }
+//   }, [])
 
-  const context$$ = fixedContext
-    .map((ctx) => {
-      const value = useContext(ctx)
-      const prevValueRef = useRef(value)
-      const { current: updateListener } = useRef(
-        get(updateListenerCache.get(ctx), id, new Map())
-      )
+//   const context$$ = fixedContext
+//     .map((ctx) => {
+//       const value = useContext(ctx)
+//       const prevValueRef = useRef(value)
+//       const { current: updateListener } = useRef(
+//         get(updateListenerCache.get(ctx), id, new Map())
+//       )
 
-      // 尽可能早地进行更新
-      if (prevValueRef.current !== value) {
-        nextTick(() => run(updateListener, 'forEach', (fn) => fn(value)))
-      }
-      prevValueRef.current = value
+//       // 尽可能早地进行更新
+//       if (prevValueRef.current !== value) {
+//         nextTick(() => run(updateListener, 'forEach', (fn) => fn(value)))
+//       }
+//       prevValueRef.current = value
 
-      useEffect(() => {
-        return () => {
-          if (isUndefined(value)) {
-            return
-          }
+//       useEffect(() => {
+//         return () => {
+//           if (isUndefined(value)) {
+//             return
+//           }
 
-          updateListenerCache.set(ctx, {
-            ...get(updateListenerCache.get(ctx), undefined, {}),
-            [id]: updateListener,
-          })
-        }
-      }, [])
+//           updateListenerCache.set(ctx, {
+//             ...get(updateListenerCache.get(ctx), undefined, {}),
+//             [id]: updateListener,
+//           })
+//         }
+//       }, [])
 
-      return {
-        ctx,
-        value,
-        onUpdate: (fn) => {
-          updateListener.set(fn, fn)
+//       return {
+//         ctx,
+//         value,
+//         onUpdate: (fn) => {
+//           updateListener.set(fn, fn)
 
-          return () => updateListener.delete(fn)
-        },
-      }
-    })
-    .filter(({ value }) => !isUndefined(value))
+//           return () => updateListener.delete(fn)
+//         },
+//       }
+//     })
+//     .filter(({ value }) => !isUndefined(value))
 
-  return renderChildren(context$$)
-}
+//   return renderChildren(context$$)
+// }
 
 // fix #99
 // const ConsumerBridge = [useContext, useRef, useEffect].every(isFunction)

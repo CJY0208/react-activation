@@ -63,28 +63,7 @@ npm install react-activation
 }
 ```
 
-#### 2. 业务代码中，在不会被销毁的位置放置 `<AliveScope>` 外层，一般为应用入口处
-
-注意：与 `react-router` 或 `react-redux` 配合使用时，需要将 `<AliveScope>` 放置在 `<Router>` 或 `<Provider>` 内部
-
-```javascript
-// entry.js
-
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { AliveScope } from 'react-activation'
-
-import Test from './Test'
-
-ReactDOM.render(
-  <AliveScope>
-    <Test />
-  </AliveScope>,
-  document.getElementById('root')
-)
-```
-
-#### 3. 用 `<KeepAlive>` 包裹需要保持状态的组件
+#### 2. 用 `<KeepAlive>` 包裹需要保持状态的组件
 
 如例子中的 `<Counter>` 组件
 
@@ -121,6 +100,28 @@ function Test() {
 }
 
 export default Test
+```
+
+##### 其他： **v0.9.0 版本中不再需要放置 `<AliveScope>` 外层**，但过往使用方式依然有效
+~~业务代码中，在不会被销毁的位置放置 `<AliveScope>` 外层，一般为应用入口处~~
+
+注意：与 `react-router` 或 `react-redux` 配合使用时，需要将 `<AliveScope>` 放置在 `<Router>` 或 `<Provider>` 内部
+
+```javascript
+// entry.js
+
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { AliveScope } from 'react-activation'
+
+import Test from './Test'
+
+ReactDOM.render(
+  <AliveScope>
+    <Test />
+  </AliveScope>,
+  document.getElementById('root')
+)
 ```
 
 ---

@@ -1,10 +1,11 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { forwardRef, useContext } from 'react'
 import hoistStatics from 'hoist-non-react-statics'
 import { get, isFunction, isUndefined } from 'szfe-tools'
 
 import { Acceptor } from './Bridge'
 import NodeKey from './NodeKey'
-import { AliveScopeConsumer, aliveScopeContext } from './context'
+import { AliveScopeConsumer, useScopeContext } from './context'
 
 function controllerCherryPick(controller) {
   const {
@@ -47,7 +48,7 @@ export const expandKeepAlive = (KeepAlive) => {
     )
   }
   const HookExpand = ({ id: idPrefix, ...props }) =>
-    renderContent({ idPrefix, helpers: useContext(aliveScopeContext), props })
+    renderContent({ idPrefix, helpers: useScopeContext(), props })
 
   const WithExpand = ({ id: idPrefix, ...props }) => (
     <AliveScopeConsumer>
@@ -65,7 +66,7 @@ const withAliveScope = (WrappedComponent) => {
 
   const HookScope = ({ forwardedRef, ...props }) =>
     renderContent({
-      helpers: controllerCherryPick(useContext(aliveScopeContext) || {}),
+      helpers: controllerCherryPick(useScopeContext() || {}),
       props,
       forwardedRef,
     })
@@ -100,7 +101,7 @@ export const useAliveController = () => {
     return {}
   }
 
-  const ctxValue = useContext(aliveScopeContext)
+  const ctxValue = useScopeContext()
 
   if (!ctxValue) {
     return {}

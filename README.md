@@ -64,28 +64,7 @@ The plugin adds a `_nk` attribute to each JSX element during compilation to help
 }
 ```
 
-#### 2. In your business code, place the `<AliveScope>` outer layer at a location that will not be unmounted, usually at the application entrance
-
-Note: When used with `react-router` or `react-redux`, you need to place `<AliveScope>` inside `<Router>` or `<Provider>`
-
-```javascript
-// entry.js
-
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { AliveScope } from 'react-activation'
-
-import Test from './Test'
-
-ReactDOM.render(
-  <AliveScope>
-    <Test />
-  </AliveScope>,
-  document.getElementById('root')
-)
-```
-
-#### 3. Wrap the components that need to keep states with `<KeepAlive>`
+#### 2. Wrap the components that need to keep states with `<KeepAlive>`
 
 Like the `<Counter>` component in the example
 
@@ -122,6 +101,29 @@ function Test() {
 }
 
 export default Test
+```
+
+#### OTHERS: In the v0.9.0 version, it is no longer necessary to place the outer layer of <AliveScope>, but the previous usage is still valid
+
+~~In your business code, place the `<AliveScope>` outer layer at a location that will not be unmounted, usually at the application entrance~~
+
+~~Note: When used with `react-router` or `react-redux`, you need to place `<AliveScope>` inside `<Router>` or `<Provider>`~~
+
+```javascript
+// entry.js
+
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { AliveScope } from 'react-activation'
+
+import Test from './Test'
+
+ReactDOM.render(
+  <AliveScope>
+    <Test />
+  </AliveScope>,
+  document.getElementById('root')
+)
 ```
 
 ---
