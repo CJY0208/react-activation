@@ -68,7 +68,7 @@ npm install react-activation
 如例子中的 `<Counter>` 组件
 
 ```javascript
-// Test.js
+// App.js
 
 import React, { useState } from 'react'
 import KeepAlive from 'react-activation'
@@ -84,7 +84,7 @@ function Counter() {
   )
 }
 
-function Test() {
+function App() {
   const [show, setShow] = useState(true)
 
   return (
@@ -99,26 +99,30 @@ function Test() {
   )
 }
 
-export default Test
+export default App
 ```
 
-##### 其他： **v0.9.0 版本中不再需要放置 `<AliveScope>` 外层**，但过往使用方式依然有效
-~~业务代码中，在不会被销毁的位置放置 `<AliveScope>` 外层，一般为应用入口处~~
+##### 3： 业务代码中，在不会被销毁的位置放置 `<AliveScope>` 外层，一般为应用入口处
+
+**当配合 React 16.x 时，react-activation@0.9.x 版本中不再需要放置 `<AliveScope>` 外层**
+
+React 17.x 中由于变更了事件监听方式，依然需要放置 `<AliveScope>` 外层
+
 
 注意：与 `react-router` 或 `react-redux` 配合使用时，需要将 `<AliveScope>` 放置在 `<Router>` 或 `<Provider>` 内部
 
 ```javascript
-// entry.js
+// index.js
 
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { AliveScope } from 'react-activation'
 
-import Test from './Test'
+import App from './App'
 
 ReactDOM.render(
   <AliveScope>
-    <Test />
+    <App />
   </AliveScope>,
   document.getElementById('root')
 )

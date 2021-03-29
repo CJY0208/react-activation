@@ -69,7 +69,7 @@ The plugin adds a `_nk` attribute to each JSX element during compilation to help
 Like the `<Counter>` component in the example
 
 ```javascript
-// Test.js
+// App.js
 
 import React, { useState } from 'react'
 import KeepAlive from 'react-activation'
@@ -85,7 +85,7 @@ function Counter() {
   )
 }
 
-function Test() {
+function App() {
   const [show, setShow] = useState(true)
 
   return (
@@ -100,27 +100,29 @@ function Test() {
   )
 }
 
-export default Test
+export default App
 ```
 
-#### OTHERS: In the v0.9.0 version, it is no longer necessary to place the outer layer of <AliveScope>, but the previous usage is still valid
+#### 3: In your business code, place the `<AliveScope>` outer layer at a location that will not be unmounted, usually at the application entrance
 
-~~In your business code, place the `<AliveScope>` outer layer at a location that will not be unmounted, usually at the application entrance~~
+**While using React 16.x, with react-activation@0.9.x, there is no longer necessary to place the outer layer of `<AliveScope>`**
 
-~~Note: When used with `react-router` or `react-redux`, you need to place `<AliveScope>` inside `<Router>` or `<Provider>`~~
+In React 17.x, due to the change of the event monitoring method, the outer layer of `<AliveScope>` still needs to be placed
+
+Note: When used with `react-router` or `react-redux`, you need to place `<AliveScope>` inside `<Router>` or `<Provider>`
 
 ```javascript
-// entry.js
+// index.js
 
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { AliveScope } from 'react-activation'
 
-import Test from './Test'
+import App from './App'
 
 ReactDOM.render(
   <AliveScope>
-    <Test />
+    <App />
   </AliveScope>,
   document.getElementById('root')
 )
