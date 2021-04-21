@@ -32,7 +32,7 @@ export const expandKeepAlive = (KeepAlive) => {
     ) : (
       <NodeKey prefix={idPrefix} key={props._nk}>
         {(id) => (
-          <Acceptor id={id}>
+          <Acceptor key={id} id={id}>
             {(bridgeProps) => (
               <KeepAlive
                 key={id}
