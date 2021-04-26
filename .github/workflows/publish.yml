@@ -34,7 +34,7 @@ jobs:
       if: steps.check.outputs.changed == 'true'
       uses: bahmutov/npm-install@v1
       with:
-        args: install
+        useLockFile: false
 
     - name: Build
       if: steps.check.outputs.changed == 'true'
