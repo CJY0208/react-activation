@@ -28,8 +28,8 @@
     "package.json",
     "README.md"
   ],
-  "license": "ISC",
   "author": "CJY0208",
+  "license": "ISC",
   "homepage": "https://github.com/CJY0208/react-activation",
   "repository": {
     "type": "git",
