@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
-import { get, run, flatten, debounce } from 'szfe-tools'
+import { get, run, flatten, debounce, globalThis as root } from 'szfe-tools'
 
 import { isRegExp } from '../helpers/is'
 import { AliveScopeProvider } from './context'
@@ -195,10 +195,10 @@ export default class AliveScope extends Component {
 }
 
 function renderDefaultScope() {
-  if (!document) {
+  if (!get(root, 'document')) {
     return
   }
-  const container = document.createElement('div')
+  const container = run(root, 'document.createElement', 'div')
   render(<AliveScope />, container)
 }
 renderDefaultScope()
