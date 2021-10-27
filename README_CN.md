@@ -5,7 +5,9 @@
 
 [English](./README.md) | 中文说明
 
-Vue 中 `<keep-alive />` 功能在 React 中的实现
+Vue 中 `<keep-alive />` 功能在 React 中的黑客实现
+
+建议关注 `React 18.x` 中的官方实现 [`<Offscreen />`](https://github.com/reactwg/react-18/discussions/19)
 
 ---
 
