@@ -1,9 +1,12 @@
-import React, { PureComponent } from 'react'
-import { get, run, isArray, nextTick, EventBus } from 'szfe-tools'
+import React, { PureComponent, Suspense } from 'react'
+import { get, run, nextTick, EventBus } from 'szfe-tools'
+import { Freeze as ReactFreeze } from 'react-freeze'
 
 import Bridge from './Bridge'
 import { AliveNodeProvider } from './context'
 import { LIFECYCLE_ACTIVATE, LIFECYCLE_UNACTIVATE } from './lifecycles'
+
+const Freeze = !!Suspense ? ReactFreeze : ({ children }) => children
 
 export default class Keeper extends PureComponent {
   eventBus = new EventBus()
@@ -17,6 +20,7 @@ export default class Keeper extends PureComponent {
       children: props.children,
       bridgeProps: props.bridgeProps,
       key: Math.random(),
+      freeze: false,
     }
   }
 
@@ -68,6 +72,9 @@ export default class Keeper extends PureComponent {
   }
 
   [LIFECYCLE_ACTIVATE]() {
+    this.setState({
+      freeze: false,
+    })
     this.eventBus.emit(LIFECYCLE_ACTIVATE)
     this.listeners.forEach((listener) => run(listener, [LIFECYCLE_ACTIVATE]))
   }
@@ -79,6 +86,10 @@ export default class Keeper extends PureComponent {
     listeners
       .reverse()
       .forEach(([, listener]) => run(listener, [LIFECYCLE_UNACTIVATE]))
+
+    this.setState({
+      freeze: true,
+    })
   }
 
   // // 原先打算更新过程中先重置 dom 节点状态，更新后恢复 dom 节点
@@ -171,26 +182,28 @@ export default class Keeper extends PureComponent {
 
   render() {
     const { id, ...props } = this.props
-    const { children, bridgeProps, key } = this.state
+    const { children, bridgeProps, key, freeze } = this.state
 
     return (
-      <div
-        ref={(node) => {
-          this.wrapper = node
-        }}
-      >
-        <div key="keeper-container" nodeKeyIgnore className="ka-content">
-          <Bridge id={id} bridgeProps={bridgeProps}>
-            <AliveNodeProvider value={this.contextValue}>
-              {React.Children.map(children, (child, idx) =>
-                React.cloneElement(child, {
-                  key: `${child.key || ''}:${key}:${idx}`,
-                })
-              )}
-            </AliveNodeProvider>
-          </Bridge>
+      <Freeze freeze={freeze}>
+        <div
+          ref={(node) => {
+            this.wrapper = node
+          }}
+        >
+          <div key="keeper-container" nodeKeyIgnore className="ka-content">
+            <Bridge id={id} bridgeProps={bridgeProps}>
+              <AliveNodeProvider value={this.contextValue}>
+                {React.Children.map(children, (child, idx) =>
+                  React.cloneElement(child, {
+                    key: `${child.key || ''}:${key}:${idx}`,
+                  })
+                )}
+              </AliveNodeProvider>
+            </Bridge>
+          </div>
         </div>
-      </div>
+      </Freeze>
     )
   }
 }
