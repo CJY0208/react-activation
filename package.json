@@ -43,7 +43,6 @@
     "create-react-context": "^0.3.0",
     "hoist-non-react-statics": "^3.3.0",
     "jsx-ast-utils": "^2.2.1",
-    "react-freeze": "1.0.0",
     "react-node-key": "^0.3.0",
     "szfe-tools": "^0.0.0-beta.7"
   },

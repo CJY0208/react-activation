@@ -1,7 +1,7 @@
 import React, { PureComponent, Suspense } from 'react'
 import { get, run, nextTick, EventBus } from 'szfe-tools'
-import { Freeze as ReactFreeze } from 'react-freeze'
 
+import ReactFreeze from './Freeze'
 import Bridge from './Bridge'
 import { AliveNodeProvider } from './context'
 import { LIFECYCLE_ACTIVATE, LIFECYCLE_UNACTIVATE } from './lifecycles'
