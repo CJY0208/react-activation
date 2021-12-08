@@ -20,6 +20,7 @@ export default class ConsumerWrapper extends Component {
     // componentWillUnmount 中保留了已生成的更新监听器
     // 此处重新挂载后恢复与对应 Keeper 中 ProviderBridge 的联系
     this.updateListener = get(updateListenerCache.get(ctx), id, new Map())
+    run(this.updateListener, 'forEach', (fn) => fn(value))
     this.ctxInfo = {
       ctx,
       value,
@@ -50,7 +51,7 @@ export default class ConsumerWrapper extends Component {
   // 利用 shouldComponentUpdate 尽早将上下文更新的咨询通知到对应 Keeper 中 ProviderBridge
   // TODO: 改用 componentWillReceiveProps 更早地进行更新，需注意与 getDerivedStateFromProps 新生命周期的兼容及可能存在的死循环问题
   shouldComponentUpdate({ value }) {
-    const { prevValue } = this.props
+    const { value: prevValue } = this.props
     const shouldUpdate = prevValue !== value
 
     if (shouldUpdate) {
