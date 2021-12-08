@@ -1,6 +1,6 @@
 import React from 'react'
 import createReactContext from 'create-react-context'
-import { get, isString, isFunction, memoize, EventBus } from 'szfe-tools'
+import { get, isString, isFunction, memoize, EventBus, isExist } from 'szfe-tools'
 
 import { aliveScopeContext, aliveNodeContext } from '../../context'
 
@@ -9,6 +9,10 @@ export const updateListenerCache = new Map()
 export const eventBus = new EventBus()
 
 export const fixContext = memoize((ctx) => {
+  if (!isExist(ctx)) {
+    return
+  }
+
   // 排除 KeepAlive 功能的上下文
   if ([aliveScopeContext, aliveNodeContext].includes(ctx)) {
     return
