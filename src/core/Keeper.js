@@ -71,7 +71,11 @@ export default class Keeper extends PureComponent {
     keepers.delete(id)
   }
 
-  [LIFECYCLE_ACTIVATE]() {
+  freezeTimeout = null
+
+  ;[LIFECYCLE_ACTIVATE]() {
+    clearTimeout(this.freezeTimeout)
+    // 激活后，立即解冻
     this.setState({
       freeze: false,
     })
@@ -79,7 +83,7 @@ export default class Keeper extends PureComponent {
     this.listeners.forEach((listener) => run(listener, [LIFECYCLE_ACTIVATE]))
   }
 
-  [LIFECYCLE_UNACTIVATE]() {
+  ;[LIFECYCLE_UNACTIVATE]() {
     this.eventBus.emit(LIFECYCLE_UNACTIVATE)
     const listeners = [...this.listeners]
 
@@ -87,9 +91,13 @@ export default class Keeper extends PureComponent {
       .reverse()
       .forEach(([, listener]) => run(listener, [LIFECYCLE_UNACTIVATE]))
 
-    this.setState({
-      freeze: true,
-    })
+    // 缓存后，延迟冻结，保证各项后续处理得以进行，如关闭弹窗等
+    clearTimeout(this.freezeTimeout)
+    this.freezeTimeout = setTimeout(() => {
+      this.setState({
+        freeze: true,
+      })
+    }, 1000)
   }
 
   // // 原先打算更新过程中先重置 dom 节点状态，更新后恢复 dom 节点
