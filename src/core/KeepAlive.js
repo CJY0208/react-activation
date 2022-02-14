@@ -255,7 +255,7 @@ class KeepAlive extends Component {
         const needToDrop = [
           cache,
           ..._helpers.getScopeIds([id]).map((id) => _helpers.getCache(id)),
-        ]
+        ].filter(Boolean)
 
         needToDrop.forEach((cache) => {
           cache.willDrop = true
