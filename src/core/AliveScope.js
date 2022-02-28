@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { render } from 'react-dom'
+import ReactDOM from 'react-dom'
 import { get, run, flatten, debounce, globalThis as root } from 'szfe-tools'
 
 import { isRegExp } from '../helpers/is'
@@ -199,6 +199,8 @@ function renderDefaultScope() {
     return
   }
   const container = run(root, 'document.createElement', 'div')
-  render(<AliveScope />, container)
+  // compatible with react 18
+  if (ReactDOM.createRoot) ReactDOM.createRoot(container).render(<AliveScope />)
+  else ReactDOM.render(<AliveScope />, container)
 }
 renderDefaultScope()
