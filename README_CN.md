@@ -184,93 +184,7 @@ function App() {
 
 ---
 
-## 保存滚动位置（默认为 `true`）
-
-`<KeepAlive />` 会检测它的 `children` 属性中是否存在可滚动的元素，然后在 `componentWillUnactivate` 之前自动保存滚动位置，在 `componentDidActivate` 之后恢复保存的滚动位置
-
-如果你不需要 `<KeepAlive />` 做这件事，可以将 `saveScrollPosition` 属性设置为 `false`
-
-```javascript
-<KeepAlive saveScrollPosition={false} />
-```
-
-如果你的组件共享了屏幕滚动容器如 `document.body` 或 `document.documentElement`, 将 `saveScrollPosition` 属性设置为 `"screen"` 可以在 `componentWillUnactivate` 之前自动保存共享屏幕容器的滚动位置
-
-```javascript
-<KeepAlive saveScrollPosition="screen" />
-```
-
----
-
-## 多份缓存
-
-同一个父节点下，相同位置的 `<KeepAlive>` 默认会使用同一份缓存
-
-例如下述的带参数路由场景，`/item` 路由会按 `id` 来做不同呈现，但只能保留同一份缓存
-
-```javascript
-<Route
-  path="/item/:id"
-  render={props => (
-    <KeepAlive>
-      <Item {...props} />
-    </KeepAlive>
-  )}
-/>
-```
-
-类似场景，可以使用 `<KeepAlive>` 的 `id` 属性，来实现按特定条件分成多份缓存
-
-```javascript
-<Route
-  path="/item/:id"
-  render={props => (
-    <KeepAlive id={props.match.params.id}>
-      <Item {...props} />
-    </KeepAlive>
-  )}
-/>
-```
-
----
-
 ## 缓存控制
-
-### 自动控制缓存
-
-给需要控制缓存的 `<KeepAlive />` 标签增加 `when` 属性，取值如下
-
-#### 当 `when` 类型为 `Boolean` 时
-
-- **true**: 卸载时缓存
-- **false**: 卸载时不缓存
-
-```javascript
-<KeepAlive when={true}>
-```
-
-#### 当 `when` 类型为 `Array` 时
-
-**第 1 位**参数表示是否需要在卸载时缓存
-
-**第 2 位**参数表示是否卸载 `<KeepAlive>` 的所有缓存内容，包括 `<KeepAlive>` 中嵌套的所有 `<KeepAlive>`
-
-```javascript
-// 例如：以下表示卸载时不缓存，并卸载掉嵌套的所有 `<KeepAlive>`
-<KeepAlive when={[false, true]}>
-  ...
-  <KeepAlive>
-    ...
-    <KeepAlive>...</KeepAlive>
-    ...
-  </KeepAlive>
-  ...
-</KeepAlive>
-```
-
-#### 当 `when` 类型为 `Function` 时
-
-返回值为上述 `Boolean` 或 `Array`，依照上述说明生效
 
 ### 手动控制缓存
 
@@ -278,13 +192,21 @@ function App() {
 
 2. 使用 `withAliveScope` 或 `useAliveController` 获取控制函数
 
-   - **drop(name)**:
+   - **drop(name)**: （"卸载"仅可用于缓存状态下的节点，如果节点没有被缓存但需要清空缓存状态，请使用 “刷新” 控制）
 
      按 name 卸载缓存状态下的 `<KeepAlive>` 节点，name 可选类型为 `String` 或 `RegExp`，注意，仅卸载命中 `<KeepAlive>` 的第一层内容，不会卸载 `<KeepAlive>` 中嵌套的、未命中的 `<KeepAlive>`
 
-   - **dropScope(name)**
+   - **dropScope(name)**: （"卸载"仅可用于缓存状态下的节点，如果节点没有被缓存但需要清空缓存状态，请使用 “刷新” 控制）
 
      按 name 卸载缓存状态下的 `<KeepAlive>` 节点，name 可选类型为 `String` 或 `RegExp`，将卸载命中 `<KeepAlive>` 的所有内容，包括 `<KeepAlive>` 中嵌套的所有 `<KeepAlive>`
+
+  - **refresh(name)**:
+
+     按 name 刷新缓存状态下的 `<KeepAlive>` 节点，name 可选类型为 `String` 或 `RegExp`，注意，仅刷新命中 `<KeepAlive>` 的第一层内容，不会刷新 `<KeepAlive>` 中嵌套的、未命中的 `<KeepAlive>`
+
+  - **refreshScope(name)**
+
+     按 name 刷新缓存状态下的 `<KeepAlive>` 节点，name 可选类型为 `String` 或 `RegExp`，将刷新命中 `<KeepAlive>` 的所有内容，包括 `<KeepAlive>` 中嵌套的所有 `<KeepAlive>`
 
    - **clear()**
 
@@ -340,6 +262,101 @@ class App extends Component {
   }
 }
 ...
+```
+
+---
+
+### 自动控制缓存
+
+给需要控制缓存的 `<KeepAlive />` 标签增加 `when` 属性，取值如下
+
+#### 当 `when` 类型为 `Boolean` 时
+
+- **true**: 卸载时缓存
+- **false**: 卸载时不缓存
+
+```javascript
+<KeepAlive when={true}>
+```
+
+#### 当 `when` 类型为 `Array` 时
+
+**第 1 位**参数表示是否需要在卸载时缓存
+
+**第 2 位**参数表示是否卸载 `<KeepAlive>` 的所有缓存内容，包括 `<KeepAlive>` 中嵌套的所有 `<KeepAlive>`
+
+```javascript
+// 例如：以下表示卸载时不缓存，并卸载掉嵌套的所有 `<KeepAlive>`
+<KeepAlive when={[false, true]}>
+  ...
+  <KeepAlive>
+    ...
+    <KeepAlive>...</KeepAlive>
+    ...
+  </KeepAlive>
+  ...
+</KeepAlive>
+```
+
+#### 当 `when` 类型为 `Function` 时（**建议使用这种方式**）
+
+返回值为上述 `Boolean` 或 `Array`，依照上述说明生效
+
+但 `when` 的最终计算时机调整到 `<KeepAlive>` 组件 `componentWillUnmount` 时，可避免大部分 when 属性没有达到预期效果的问题
+
+```jsx
+<KeepAlive when={() => true}>
+<KeepAlive when={() => [false, true]}>
+```
+
+---
+
+## 多份缓存
+
+同一个父节点下，相同位置的 `<KeepAlive>` 默认会使用同一份缓存
+
+例如下述的带参数路由场景，`/item` 路由会按 `id` 来做不同呈现，但只能保留同一份缓存
+
+```javascript
+<Route
+  path="/item/:id"
+  render={props => (
+    <KeepAlive>
+      <Item {...props} />
+    </KeepAlive>
+  )}
+/>
+```
+
+---
+
+类似场景，可以使用 `<KeepAlive>` 的 `id` 属性，来实现按特定条件分成多份缓存
+
+```javascript
+<Route
+  path="/item/:id"
+  render={props => (
+    <KeepAlive id={props.match.params.id}>
+      <Item {...props} />
+    </KeepAlive>
+  )}
+/>
+```
+
+## 保存滚动位置（默认为 `true`）
+
+`<KeepAlive />` 会检测它的 `children` 属性中是否存在可滚动的元素，然后在 `componentWillUnactivate` 之前自动保存滚动位置，在 `componentDidActivate` 之后恢复保存的滚动位置
+
+如果你不需要 `<KeepAlive />` 做这件事，可以将 `saveScrollPosition` 属性设置为 `false`
+
+```javascript
+<KeepAlive saveScrollPosition={false} />
+```
+
+如果你的组件共享了屏幕滚动容器如 `document.body` 或 `document.documentElement`, 将 `saveScrollPosition` 属性设置为 `"screen"` 可以在 `componentWillUnactivate` 之前自动保存共享屏幕容器的滚动位置
+
+```javascript
+<KeepAlive saveScrollPosition="screen" />
 ```
 
 ---

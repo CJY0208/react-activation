@@ -184,115 +184,36 @@ function App() {
 
 ---
 
-## Save Scroll Position (`true` by default)
-
-`<KeepAlive />` would try to detect scrollable nodes in its `children`, then, save their scroll position automaticlly before `componentWillUnactivate` and restore saving position after `componentDidActivate`
-
-If you don't want `<KeepAlive />` to do this thing, set `saveScrollPosition` prop to `false`
-
-```javascript
-<KeepAlive saveScrollPosition={false} />
-```
-
-If your components share screen scroll container, `document.body` or `document.documentElement`, set `saveScrollPosition` prop to `"screen"` can save sharing screen container's scroll position before `componentWillUnactivate`
-
-```javascript
-<KeepAlive saveScrollPosition="screen" />
-```
-
----
-
-## Multiple Cache
-
-Under the same parent node, `<KeepAlive>` in the same location will use the same cache by default.
-
-For example, with the following parameter routing scenario, the `/item` route will be rendered differently by `id`, but only the same cache can be kept.
-
-```javascript
-<Route
-  path="/item/:id"
-  render={props => (
-    <KeepAlive>
-      <Item {...props} />
-    </KeepAlive>
-  )}
-/>
-```
-
-Similar scenarios, you can use the `id` attribute of `<KeepAlive>` to implement multiple caches according to specific conditions.
-
-```javascript
-<Route
-  path="/item/:id"
-  render={props => (
-    <KeepAlive id={props.match.params.id}>
-      <Item {...props} />
-    </KeepAlive>
-  )}
-/>
-```
-
----
-
 ## Cache Control
-
-### Automatic control cache
-
-Add the `when` attribute to the `<KeepAlive />` tag that needs to control the cache. The value is as follows
-
-#### When the `when` type is `Boolean`
-
-- **true**: Cache after uninstallation
-- **false**: Not cached after uninstallation
-
-```javascript
-<KeepAlive when={false}>
-```
-
-#### When the `when` type is `Array`
-
-The **1th** parameter indicates whether it needs to be cached at the time of uninstallation.
-
-The **2th** parameter indicates whether to unload all cache contents of `<KeepAlive>`, including all `<KeepAlive>` nested in `<KeepAlive>`.
-
-```javascript
-// For example:
-// The following indicates that it is not cached when uninstalling
-// And uninstalls all nested `<KeepAlive>`
-<KeepAlive when={[false, true]}>
-  ...
-  <KeepAlive>
-    ...
-    <KeepAlive>...</KeepAlive>
-    ...
-  </KeepAlive>
-  ...
-</KeepAlive>
-```
-
-#### When the `when` type is `Function`
-
-The return value is the above `Boolean` or `Array`, which takes effect as described above.
 
 ### Manually control the cache
 
 1. Add the `name` attribute to the `<KeepAlive>` tag that needs to control the cache.
 
-2. Get control functions using `withAliveScope` or `useAliveController`
+2. Get control functions using `withAliveScope` or `useAliveController`.
 
-   - **drop(name)**
+   - **drop(name)**: (`drop` can only be used for nodes in the cache state. If the node is not cached but needs to clear the cache state, please use `refresh`)
 
-     Unload the `<KeepAlive>` node in cache state by name. The name can be of type `String` or `RegExp`. Note that only the first layer of content that hits `<KeepAlive>` is unloaded and will not be uninstalled in `<KeepAlive>`. Would not unload nested `<KeepAlive>`
+     Unload the `<KeepAlive>` node in cache state by name. The name can be of type `String` or `RegExp`. Note that only the first layer of content that hits `<KeepAlive>` is unloaded and will not be uninstalled in `<KeepAlive>`. Would not unload nested `<KeepAlive>`.
 
-   - **dropScope(name)**
+   - **dropScope(name)**: (`drop` can only be used for nodes in the cache state. If the node is not cached but needs to clear the cache state, please use `refreshScope`)
 
      Unloads the `<KeepAlive>` node in cache state by name. The name optional type is `String` or `RegExp`, which will unload all content of `<KeepAlive>`, including all `<KeepAlive>` nested in `<KeepAlive>`.
 
-   - **clear()**
+  - **refresh(name)**:
+
+     Refresh the `<KeepAlive>` node in cache state by name. The name can be of type `String` or `RegExp`. Note that only the first layer of content that hits `<KeepAlive>` is refreshed and will not be uninstalled in `<KeepAlive>`. Would not refresh nested `<KeepAlive>`.
+
+  - **refreshScope(name)**:
+
+     Refresh the `<KeepAlive>` node in cache state by name. The name optional type is `String` or `RegExp`, which will refresh all content of `<KeepAlive>`, including all `<KeepAlive>` nested in `<KeepAlive>`.
+
+
+   - **clear()**:
 
      will clear all `<KeepAlive>` in the cache
 
-   - **getCachingNodes()**
+   - **getCachingNodes()**:
 
      Get all the nodes in the cache
 
@@ -341,6 +262,103 @@ class App extends Component {
   }
 }
 ...
+```
+
+---
+
+### Automatic control cache
+
+Add the `when` attribute to the `<KeepAlive />` tag that needs to control the cache. The value is as follows
+
+#### When the `when` type is `Boolean`
+
+- **true**: Cache after uninstallation
+- **false**: Not cached after uninstallation
+
+```javascript
+<KeepAlive when={false}>
+```
+
+#### When the `when` type is `Array`
+
+The **1th** parameter indicates whether it needs to be cached at the time of uninstallation.
+
+The **2th** parameter indicates whether to unload all cache contents of `<KeepAlive>`, including all `<KeepAlive>` nested in `<KeepAlive>`.
+
+```javascript
+// For example:
+// The following indicates that it is not cached when uninstalling
+// And uninstalls all nested `<KeepAlive>`
+<KeepAlive when={[false, true]}>
+  ...
+  <KeepAlive>
+    ...
+    <KeepAlive>...</KeepAlive>
+    ...
+  </KeepAlive>
+  ...
+</KeepAlive>
+```
+
+#### When the `when` type is `Function` (**Recommended**)
+
+The return value is the above `Boolean` or `Array`, which takes effect as described above.
+
+The final calculation time of `when` is adjusted to `componentWillUnmount` lifecicle of `<KeepAlive>`, the problem that most of the `when` do not achieve the expected effect can be avoided.
+
+```jsx
+<KeepAlive when={() => true}>
+<KeepAlive when={() => [false, true]}>
+```
+
+---
+
+## Multiple Cache
+
+Under the same parent node, `<KeepAlive>` in the same location will use the same cache by default.
+
+For example, with the following parameter routing scenario, the `/item` route will be rendered differently by `id`, but only the same cache can be kept.
+
+```javascript
+<Route
+  path="/item/:id"
+  render={props => (
+    <KeepAlive>
+      <Item {...props} />
+    </KeepAlive>
+  )}
+/>
+```
+
+Similar scenarios, you can use the `id` attribute of `<KeepAlive>` to implement multiple caches according to specific conditions.
+
+```javascript
+<Route
+  path="/item/:id"
+  render={props => (
+    <KeepAlive id={props.match.params.id}>
+      <Item {...props} />
+    </KeepAlive>
+  )}
+/>
+```
+
+---
+
+## Save Scroll Position (`true` by default)
+
+`<KeepAlive />` would try to detect scrollable nodes in its `children`, then, save their scroll position automaticlly before `componentWillUnactivate` and restore saving position after `componentDidActivate`
+
+If you don't want `<KeepAlive />` to do this thing, set `saveScrollPosition` prop to `false`
+
+```javascript
+<KeepAlive saveScrollPosition={false} />
+```
+
+If your components share screen scroll container, `document.body` or `document.documentElement`, set `saveScrollPosition` prop to `"screen"` can save sharing screen container's scroll position before `componentWillUnactivate`
+
+```javascript
+<KeepAlive saveScrollPosition="screen" />
 ```
 
 ---
