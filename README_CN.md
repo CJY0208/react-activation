@@ -104,7 +104,7 @@ function App() {
 export default App
 ```
 
-##### 3： 业务代码中，在不会被销毁的位置放置 `<AliveScope>` 外层，一般为应用入口处
+##### 3. 业务代码中，在不会被销毁的位置放置 `<AliveScope>` 外层，一般为应用入口处
 
 **当配合 React 16.x 时，react-activation@0.9.x 版本中不再需要放置 `<AliveScope>` 外层**
 
@@ -200,20 +200,20 @@ function App() {
 
      按 name 卸载缓存状态下的 `<KeepAlive>` 节点，name 可选类型为 `String` 或 `RegExp`，将卸载命中 `<KeepAlive>` 的所有内容，包括 `<KeepAlive>` 中嵌套的所有 `<KeepAlive>`
 
-  - **refresh(name)**:
+   - **refresh(name)**:
 
      按 name 刷新缓存状态下的 `<KeepAlive>` 节点，name 可选类型为 `String` 或 `RegExp`，注意，仅刷新命中 `<KeepAlive>` 的第一层内容，不会刷新 `<KeepAlive>` 中嵌套的、未命中的 `<KeepAlive>`
 
-  - **refreshScope(name)**
+   - **refreshScope(name)**:
 
      按 name 刷新缓存状态下的 `<KeepAlive>` 节点，name 可选类型为 `String` 或 `RegExp`，将刷新命中 `<KeepAlive>` 的所有内容，包括 `<KeepAlive>` 中嵌套的所有 `<KeepAlive>`
 
-   - **clear()**
+   - **clear()**:
 
      将清空所有缓存中的 KeepAlive
 
 
-    - **getCachingNodes()**
+    - **getCachingNodes()**:
 
       获取所有缓存中的节点
 

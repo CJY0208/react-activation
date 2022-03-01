@@ -105,7 +105,7 @@ function App() {
 export default App
 ```
 
-#### 3: In your business code, place the `<AliveScope>` outer layer at a location that will not be unmounted, usually at the application entrance
+#### 3. In your business code, place the `<AliveScope>` outer layer at a location that will not be unmounted, usually at the application entrance
 
 **While using React 16.x, with react-activation@0.9.x, there is no longer necessary to place the outer layer of `<AliveScope>`**
 
@@ -200,11 +200,11 @@ function App() {
 
      Unloads the `<KeepAlive>` node in cache state by name. The name optional type is `String` or `RegExp`, which will unload all content of `<KeepAlive>`, including all `<KeepAlive>` nested in `<KeepAlive>`.
 
-  - **refresh(name)**:
+   - **refresh(name)**:
 
      Refresh the `<KeepAlive>` node in cache state by name. The name can be of type `String` or `RegExp`. Note that only the first layer of content that hits `<KeepAlive>` is refreshed and will not be uninstalled in `<KeepAlive>`. Would not refresh nested `<KeepAlive>`.
 
-  - **refreshScope(name)**:
+   - **refreshScope(name)**:
 
      Refresh the `<KeepAlive>` node in cache state by name. The name optional type is `String` or `RegExp`, which will refresh all content of `<KeepAlive>`, including all `<KeepAlive>` nested in `<KeepAlive>`.
 
