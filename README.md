@@ -196,7 +196,7 @@ function App() {
 
      Unload the `<KeepAlive>` node in cache state by name. The name can be of type `String` or `RegExp`. Note that only the first layer of content that hits `<KeepAlive>` is unloaded and will not be uninstalled in `<KeepAlive>`. Would not unload nested `<KeepAlive>`.
 
-   - **dropScope(name)**: (`drop` can only be used for nodes in the cache state. If the node is not cached but needs to clear the cache state, please use `refreshScope`)
+   - **dropScope(name)**: (`dropScope` can only be used for nodes in the cache state. If the node is not cached but needs to clear the cache state, please use `refreshScope`)
 
      Unloads the `<KeepAlive>` node in cache state by name. The name optional type is `String` or `RegExp`, which will unload all content of `<KeepAlive>`, including all `<KeepAlive>` nested in `<KeepAlive>`.
 
