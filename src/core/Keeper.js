@@ -56,6 +56,15 @@ export default class Keeper extends PureComponent {
     store.set(id, this.cache)
   }
 
+  
+  unmounted = false
+  safeSetState = (nextState, callback) => {
+    // fix #170
+    if (this.unmounted) {
+      return
+    }
+    this.setState(nextState, callback)
+  }
   componentWillUnmount() {
     const { store, keepers, id } = this.props
     // 卸载前尝试归位 DOM 节点
@@ -69,6 +78,7 @@ export default class Keeper extends PureComponent {
     }
     store.delete(id)
     keepers.delete(id)
+    this.unmounted = true
   }
 
   freezeTimeout = null
@@ -76,7 +86,7 @@ export default class Keeper extends PureComponent {
   ;[LIFECYCLE_ACTIVATE]() {
     clearTimeout(this.freezeTimeout)
     // 激活后，立即解冻
-    this.setState({
+    this.safeSetState({
       freeze: false,
     })
     this.eventBus.emit(LIFECYCLE_ACTIVATE)
@@ -94,7 +104,7 @@ export default class Keeper extends PureComponent {
     // 缓存后，延迟冻结，保证各项后续处理得以进行，如关闭弹窗等
     clearTimeout(this.freezeTimeout)
     this.freezeTimeout = setTimeout(() => {
-      this.setState({
+      this.safeSetState({
         freeze: true,
       })
     }, 1000)
@@ -180,7 +190,7 @@ export default class Keeper extends PureComponent {
       if (!canRefresh) {
         resolve(false)
       }
-      this.setState(
+      this.safeSetState(
         {
           key: Math.random(),
         },
