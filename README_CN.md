@@ -13,6 +13,8 @@ Vue 中 `<keep-alive />` 功能在 React 中的黑客实现
 
 配合 babel 预编译实现更稳定的 KeepAlive 功能
 
+[实现原理说明 - 想读源码的同学关注这里~](https://github.com/CJY0208/react-activation/blob/master/README_CN.md#%E5%8E%9F%E7%90%86%E6%A6%82%E8%BF%B0)
+
 [在线 Demo](https://codesandbox.io/s/affectionate-beaver-solkt)
 
 <img src="./docs/basicReactActivation.gif">
@@ -361,13 +363,21 @@ class App extends Component {
 
 ---
 
-## 原理概述
+## 原理概述（欢迎加我微信讨论 375564567）
 
 将 `<KeepAlive />` 的 `children` 属性传递到 `<AliveScope />` 中，通过 `<Keeper />` 进行渲染
 
 `<Keeper />` 完成渲染后通过 `DOM` 操作，将内容转移到 `<KeepAlive />` 中
 
 由于 `<Keeper />` 不会被卸载，故能实现缓存功能
+
+围绕最简实现，后续所有的代码都只集中在
+
+1. 主要借助 React 的上下文实现生命周期机制
+  
+2. 借助[桥接机制](https://github.com/StructureBuilder/react-keep-alive/issues/36#issuecomment-527490445)修复断层
+  
+3. 借助 babel 标记各节点，建立[渲染坐标系](https://github.com/CJY0208/react-node-key/issues/3)来增强[稳定性](https://github.com/CJY0208/react-activation/issues/18#issuecomment-564360695)
 
 [最简实现示例](https://codesandbox.io/s/zuijian-react-keepalive-shixian-ovh90)
 
