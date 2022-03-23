@@ -363,7 +363,9 @@ class App extends Component {
 
 ---
 
-## 原理概述（欢迎加我微信讨论 375564567）
+## 原理概述
+
+**（源码欢迎微信讨论 375564567，欢迎 PR）**
 
 将 `<KeepAlive />` 的 `children` 属性传递到 `<AliveScope />` 中，通过 `<Keeper />` 进行渲染
 
