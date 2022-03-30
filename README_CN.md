@@ -106,14 +106,9 @@ function App() {
 export default App
 ```
 
-##### 3. 业务代码中，在不会被销毁的位置放置 `<AliveScope>` 外层，一般为应用入口处
+##### 3. 在不会被销毁的位置放置 `<AliveScope>` 外层，一般为应用入口处
 
-**当配合 React 16.x 时，react-activation@0.9.x 版本中不再需要放置 `<AliveScope>` 外层**
-
-React 17.x 中由于变更了事件监听方式，依然需要放置 `<AliveScope>` 外层
-
-
-注意：与 `react-router` 或 `react-redux` 配合使用时，需要将 `<AliveScope>` 放置在 `<Router>` 或 `<Provider>` 内部
+注意：与 `react-router` 或 `react-redux` 配合使用时，建议将 `<AliveScope>` 放置在 `<Router>` 或 `<Provider>` 内部
 
 ```javascript
 // index.js

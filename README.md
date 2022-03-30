@@ -105,11 +105,7 @@ function App() {
 export default App
 ```
 
-#### 3. In your business code, place the `<AliveScope>` outer layer at a location that will not be unmounted, usually at the application entrance
-
-**While using React 16.x, with react-activation@0.9.x, there is no longer necessary to place the outer layer of `<AliveScope>`**
-
-In React 17.x, due to the change of the event monitoring method, the outer layer of `<AliveScope>` still needs to be placed
+#### 3. Place the `<AliveScope>` outer layer at a location that will not be unmounted, usually at the application entrance
 
 Note: When used with `react-router` or `react-redux`, you need to place `<AliveScope>` inside `<Router>` or `<Provider>`
 
