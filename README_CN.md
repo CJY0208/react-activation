@@ -370,7 +370,7 @@ class App extends Component {
 
 围绕最简实现，本仓库后续代码主要集中在
 
-1. 主要借助 React 的上下文实现生命周期机制
+1. 借助 React 的上下文实现生命周期机制
   
 2. 借助[桥接机制](https://github.com/StructureBuilder/react-keep-alive/issues/36#issuecomment-527490445)修复断层
   
