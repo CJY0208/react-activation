@@ -112,6 +112,35 @@ function Test() {
 export default Test
 ```
 
+#### 4. Usage for lazyload
+
+You can wrap a function like this:
+
+```tsx
+import KeepAlive from 'react-activation';
+
+export default function withKeepAlive() {
+  const KeepAliveComponent = () => (
+    <KeepAlive>
+      <Component />
+    </KeepAlive>
+  );
+  return KeepAliveComponent;
+}
+```
+
+And use in the route component:
+
+```tsx
+import withKeepAlive from '@/xxx';
+
+function Test() {
+  return <div>Test</div>;
+}
+
+export default withKeepAlive(Test);
+```
+
 - - -
 
 ## Lifecycle

@@ -113,6 +113,35 @@ function Test() {
 export default Test
 ```
 
+#### 4. 懒加载用法
+
+你可以像这样封装一个函数:
+
+```tsx
+import KeepAlive from 'react-activation';
+
+export default function withKeepAlive() {
+  const KeepAliveComponent = () => (
+    <KeepAlive>
+      <Component />
+    </KeepAlive>
+  );
+  return KeepAliveComponent;
+}
+```
+
+在路由组件中使用:
+
+```tsx
+import withKeepAlive from '@/xxx';
+
+function Test() {
+  return <div>Test</div>;
+}
+
+export default withKeepAlive(Test);
+```
+
 - - -
 
 ## 生命周期
