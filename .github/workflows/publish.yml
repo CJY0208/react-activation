@@ -39,6 +39,10 @@ jobs:
     - name: Build
       if: steps.check.outputs.changed == 'true'
       run: 'sudo npm run build'
+      
+    - name: Set up Git
+      if: steps.check.outputs.changed == 'true'
+      run: 'git config --global --add safe.directory /github/workspace'
 
     - name: Publish
       if: steps.check.outputs.changed == 'true'
