@@ -46,7 +46,7 @@ jobs:
 
     - name: Publish
       if: steps.check.outputs.changed == 'true'
-      uses: pascalgn/npm-publish-action@1.2.0
+      uses: pascalgn/npm-publish-action@1.3.9
       with:
         commit_pattern: "^Release (\\S+)"
       env:
