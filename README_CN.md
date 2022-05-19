@@ -53,7 +53,7 @@ npm install react-activation
 
 ## 使用方式
 
-#### 1. babel 配置文件 `.babelrc` 中增加 `react-activation/babel` 插件
+#### 1. （可选，建议）babel 配置文件 `.babelrc` 中增加 `react-activation/babel` 插件
 
 [为什么需要它？](https://github.com/CJY0208/react-activation/issues/18#issuecomment-564360695)
 
@@ -65,6 +65,12 @@ npm install react-activation
     "react-activation/babel"
   ]
 }
+```
+
+（0.11.0+）如果不使用 babel，建议给每个 `<KeepAlive>` 声明全局唯一且不变的 `cacheKey` 属性，以确保缓存的稳定性，如下
+
+```jsx
+<KeepAlive cacheKey="UNIQUE_ID" />
 ```
 
 #### 2. 用 `<KeepAlive>` 包裹需要保持状态的组件

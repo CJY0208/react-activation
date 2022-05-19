@@ -6,6 +6,7 @@ export interface KeepAliveProps {
   children: ReactNode | ReactNodeArray
   name?: string
   id?: string
+  cacheKey?: string
   when?: boolean | Array<boolean> | (() => boolean | Array<boolean>)
   saveScrollPosition?: boolean | string
   [key: string]: any

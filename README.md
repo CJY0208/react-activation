@@ -52,7 +52,7 @@ npm install react-activation
 
 ## Usage
 
-#### 1. Add `react-activation/babel` plugins in `.babelrc`
+#### 1. (Optional, Recommended) Add `react-activation/babel` plugins in `.babelrc`
 
 [Why is it needed?](https://github.com/CJY0208/react-activation/issues/18#issuecomment-564360695)
 
@@ -64,6 +64,12 @@ The plugin adds a `_nk` attribute to each JSX element during compilation to help
     "react-activation/babel"
   ]
 }
+```
+
+**(0.11.0+)** If you don't want to use Babel, it is recommended that each `<KeepAlive>` declare a globally unique and invariant `cacheKey` attribute to ensure the stability of the cache, as follows:
+
+```jsx
+<KeepAlive cacheKey="UNIQUE_ID" />
 ```
 
 #### 2. Wrap the components that need to keep states with `<KeepAlive>`

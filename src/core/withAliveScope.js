@@ -31,19 +31,23 @@ export const expandKeepAlive = (KeepAlive) => {
       get(props, 'children', null)
     ) : (
       <NodeKey prefix={idPrefix} key={props._nk}>
-        {(id) => (
-          <Acceptor key={id} id={id}>
-            {(bridgeProps) => (
-              <KeepAlive
-                key={id}
-                {...props}
-                {...bridgeProps}
-                id={id}
-                _helpers={helpers}
-              />
-            )}
-          </Acceptor>
-        )}
+        {(nkId) => {
+          const id = props.cacheKey || nkId
+
+          return (
+            <Acceptor key={id} id={id}>
+              {(bridgeProps) => (
+                <KeepAlive
+                  key={id}
+                  {...props}
+                  {...bridgeProps}
+                  id={id}
+                  _helpers={helpers}
+                />
+              )}
+            </Acceptor>
+          )
+        }}
       </NodeKey>
     )
   }
