@@ -30,7 +30,7 @@ export const expandKeepAlive = (KeepAlive) => {
     return isOutsideAliveScope ? (
       get(props, 'children', null)
     ) : (
-      <NodeKey prefix={idPrefix} key={props._nk}>
+      <NodeKey prefix={idPrefix} key={props._nk} manualKey={props.cacheKey}>
         {(nkId) => {
           const id = props.cacheKey || nkId
 
