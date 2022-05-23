@@ -58,7 +58,7 @@ export default class ConsumerWrapper extends Component {
       run(this.updateListener, 'forEach', (fn) => fn(value))
     }
 
-    return shouldUpdate
+    return true
   }
 
   render() {
