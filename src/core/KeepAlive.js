@@ -26,13 +26,6 @@ const screenScrollingElement = get(
   get(root, 'document.documentElement', {})
 )
 
-const getErrorTips = (name) =>
-  `<KeepAlive ${
-    name ? `name="${name}" ` : ''
-  }/> Too many transient updates, may have encountered an infinite loop of updates, forced to pause the update
-There are serious performance issues with the update results you are currently seeing
-May encounter an implied bug, please don't use KeepAlive and contact the author to solve`
-
 const parseWhenResult = (res) => {
   if (isArray(res)) {
     return res
@@ -44,27 +37,6 @@ const parseWhenResult = (res) => {
 class KeepAlive extends Component {
   static defaultProps = {
     saveScrollPosition: true,
-  }
-  // 本段为 KeepAlive 更新隐患检测，通过检测 KeepAlive 瞬时更新次数来判断是否进入死循环，并在 update 中强制阻止更新
-  updateTimes = 0
-  errorTips = debounce(() => {
-    const { name } = this.props
-    console.error(getErrorTips(name))
-  }, 100)
-  releaseUpdateTimes = debounce(() => {
-    this.updateTimes = 0
-  }, 16)
-  needForceStopUpdate = () => {
-    const needForceStopUpdate = this.updateTimes > 64
-
-    if (needForceStopUpdate) {
-      this.errorTips()
-    }
-
-    this.updateTimes++
-    this.releaseUpdateTimes()
-
-    return needForceStopUpdate
   }
 
   id = null // 用作 Keeper 识别 KeepAlive
@@ -214,7 +186,7 @@ class KeepAlive extends Component {
   }
 
   update = ({ _helpers, id, name, ...rest } = {}) => {
-    if (!_helpers || this.cached || this.needForceStopUpdate(name)) {
+    if (!_helpers || this.cached) {
       return
     }
 
