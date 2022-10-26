@@ -1,4 +1,5 @@
 import React, { PureComponent, Suspense } from 'react'
+import { flushSync } from 'react-dom'
 import { get, run, nextTick, EventBus } from 'szfe-tools'
 
 import ReactFreeze from './Freeze'
@@ -104,8 +105,10 @@ export default class Keeper extends PureComponent {
     // 缓存后，延迟冻结，保证各项后续处理得以进行，如关闭弹窗等
     clearTimeout(this.freezeTimeout)
     this.freezeTimeout = setTimeout(() => {
-      this.safeSetState({
-        freeze: true,
+      flushSync(() => {
+        this.safeSetState({
+          freeze: true,
+        })
       })
     }, 1000)
   }
