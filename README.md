@@ -1,3 +1,8 @@
+### NOTICE
+
+- DO NOT use `<React.StrictMode />`
+- (React v18+) DO NOT use `ReactDOMClient.createRoot`, use `ReactDOM.render` instead
+
 # React Activation
 
 [![size](https://img.shields.io/bundlephobia/minzip/react-activation@latest.svg)](https://bundlephobia.com/result?p=react-activation@latest)
@@ -30,9 +35,7 @@ More stable `<KeepAlive />` function with `babel` pre-compilation
 
 ## Compatibility
 
-- React v17+ (beta)
-
-- React v16+
+- React v16 / v17 / v18
 
 - Preact v10+
 
