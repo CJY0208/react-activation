@@ -1,3 +1,8 @@
+### 注意
+
+- 不要使用 `<React.StrictMode />` 严格模式
+- (React v18+) 不要使用 `ReactDOMClient.createRoot`, 而是使用 `ReactDOM.render`
+
 # React Activation
 
 [![size](https://img.shields.io/bundlephobia/minzip/react-activation@latest.svg)](https://bundlephobia.com/result?p=react-activation@latest)
@@ -32,9 +37,7 @@ Vue 中 `<keep-alive />` 功能在 React 中的黑客实现
 
 ## 兼容性
 
-- React v17+ (beta)
-
-- React v16+
+- React v16 / v17 / v18
 
 - Preact v10+
 
