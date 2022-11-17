@@ -9,6 +9,7 @@ export interface KeepAliveProps {
   cacheKey?: string
   when?: boolean | Array<boolean> | (() => boolean | Array<boolean>)
   saveScrollPosition?: boolean | string
+  autoFreeze?: boolean
   [key: string]: any
 }
 

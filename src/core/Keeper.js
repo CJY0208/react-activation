@@ -202,11 +202,11 @@ export default class Keeper extends PureComponent {
     })
 
   render() {
-    const { id, ...props } = this.props
+    const { id, autoFreeze = true, ...props } = this.props
     const { children, bridgeProps, key, freeze } = this.state
 
     return (
-      <Freeze freeze={freeze}>
+      <Freeze freeze={autoFreeze && freeze}>
         <div
           ref={(node) => {
             this.wrapper = node
