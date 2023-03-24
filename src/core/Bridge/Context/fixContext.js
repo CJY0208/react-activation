@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useContext, Fragment } from 'react'
 import createReactContext from 'create-react-context'
-import { get, isString, isFunction, memoize, EventBus, isExist } from 'szfe-tools'
+import { run, get, isString, isFunction, memoize, EventBus, isExist } from 'szfe-tools'
 
 import { aliveScopeContext, aliveNodeContext } from '../../context'
 
@@ -17,6 +17,19 @@ export const fixContext = memoize((ctx) => {
   if ([aliveScopeContext, aliveNodeContext].includes(ctx)) {
     return
   }
+
+  // #259: 结合 use-context-selector 时，修复被删除的 Consumer
+  if (!isExist(ctx.Consumer)) {
+    function Consumer({ children }) {
+      const ctxValue = run(useContext, undefined, ctx)
+    
+      return <Fragment>{run(children, undefined, ctxValue)}</Fragment>
+    }
+    
+    // 重新声明 Consumer
+    ctx.Consumer = Consumer
+  }
+
   fixedContext.push(ctx)
   setTimeout(() => eventBus.emit('update'))
 })

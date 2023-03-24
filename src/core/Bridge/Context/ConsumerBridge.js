@@ -6,7 +6,7 @@ import React, {
   useEffect,
   useState,
 } from 'react'
-import { run, get, nextTick, isUndefined, isFunction } from 'szfe-tools'
+import { run, get, nextTick, isUndefined, isFunction, isExist } from 'szfe-tools'
 
 import ConsumerWrapper from './ConsumerWrapper'
 import { fixedContext, eventBus, updateListenerCache } from './fixContext'
@@ -20,7 +20,7 @@ class RecursiveConsumerBridge extends PureComponent {
     const { id } = props
 
     if (!fixedContextSnapshot[id]) {
-      fixedContextSnapshot[id] = [...fixedContext]
+      fixedContextSnapshot[id] = [...fixedContext].filter(ctx => isExist(ctx.Consumer))
     }
   }
 
