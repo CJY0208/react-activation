@@ -38,7 +38,8 @@ export default class ProviderBridge extends PureComponent {
   // }
 
   render() {
-    const { value: ctxValues, children } = this.props
+    const { value: propCtxValues, children } = this.props
+    const ctxValues = propCtxValues.filter(Boolean)
 
     if (ctxValues.length === 0) {
       return children
