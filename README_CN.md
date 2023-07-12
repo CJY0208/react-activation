@@ -7,7 +7,7 @@
 
 [![size](https://img.shields.io/bundlephobia/minzip/react-activation@latest.svg)](https://bundlephobia.com/result?p=react-activation@latest)
 [![dm](https://img.shields.io/npm/dm/react-activation.svg)](https://github.com/CJY0208/react-activation)
-![](https://visitor-badge.glitch.me/badge?page_id=cjy0208.react-activation)
+![](https://komarev.com/ghpvc/?username=cjy0208-react-activation&label=VIEWS)
 
 [English](./README.md) | 中文说明
 
