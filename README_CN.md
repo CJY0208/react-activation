@@ -386,7 +386,7 @@ class App extends Component {
   
 3. 借助 babel 标记各节点，建立[渲染坐标系](https://github.com/CJY0208/react-node-key/issues/3)来增强[稳定性](https://github.com/CJY0208/react-activation/issues/18#issuecomment-564360695)
 
-**（源码欢迎微信讨论 375564567，欢迎 PR）**
+**（源码欢迎微信讨论 375564567）**
 
 <img src="./docs/reactActivationPrinciple.gif">
 
