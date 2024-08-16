@@ -158,7 +158,7 @@ class KeepAlive extends Component {
   }
 
   init = () => {
-    const { _helpers, id, children, ...rest } = this.props
+    const { _helpers, id, children, className,style, ...rest } = this.props
 
     // 将 children 渲染至 AliveScopeProvider 中
     _helpers
@@ -248,7 +248,8 @@ class KeepAlive extends Component {
       <div
         key="keep-alive-placeholder"
         nodeKeyIgnore
-        className="ka-wrapper"
+        style={props.style}
+        className={`"ka-wrapper" ${props.className}`}
         ref={(node) => {
           this.placeholder = node
         }}
