@@ -13,7 +13,7 @@ English | [中文说明](./README_CN.md)
 
 **HACK Implementation** of the `<keep-alive />` function in `Vue` For `React`
 
-Please also pay attention to official support [`<Offsreen />`](https://github.com/reactwg/react-18/discussions/19) in `React 18.x`
+Please also pay attention to official support [`<Offscreen />`](https://github.com/reactwg/react-18/discussions/19) in `React 18.x`
 
 ---
 
