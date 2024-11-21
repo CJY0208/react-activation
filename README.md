@@ -1,4 +1,4 @@
-### NOTICE
+# ⚠️ NOTICE
 
 - DO NOT use `<React.StrictMode />`
 - (React v18+) DO NOT use `ReactDOMClient.createRoot`, use `ReactDOM.render` instead, https://github.com/CJY0208/react-activation/issues/225#issuecomment-1311136388
