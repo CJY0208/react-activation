@@ -1,4 +1,4 @@
-### 注意
+# ⚠️ 注意
 
 - 不要使用 `<React.StrictMode />` 严格模式
 - (React v18+) 不要使用 `ReactDOMClient.createRoot`, 而是使用 `ReactDOM.render`, https://github.com/CJY0208/react-activation/issues/225#issuecomment-1311136388
