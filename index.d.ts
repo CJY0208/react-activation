@@ -1,6 +1,14 @@
-import { ReactNode, ReactNodeArray, Context, Component, ComponentType } from 'react'
+import {
+  ReactNode,
+  ReactNodeArray,
+  Context,
+  Component,
+  ComponentType,
+} from 'react'
 
-export declare type GetProps<C> = C extends ComponentType<infer P> ? P : never;
+export declare type GetProps<C> = C extends ComponentType<infer P> ? P : never
+
+type DivProps = React.HTMLAttributes<HTMLDivElement>
 
 export interface KeepAliveProps {
   children: ReactNode | ReactNodeArray
@@ -10,6 +18,8 @@ export interface KeepAliveProps {
   when?: boolean | Array<boolean> | (() => boolean | Array<boolean>)
   saveScrollPosition?: boolean | string
   autoFreeze?: boolean
+  wrapperProps?: DivProps
+  contentProps?: DivProps
   [key: string]: any
 }
 
@@ -53,5 +63,9 @@ export interface AliveController {
 }
 export function useAliveController(): AliveController
 
-export declare function withActivation<C extends ComponentType<GetProps<C>>>(component: C): C
-export declare function withAliveScope<C extends ComponentType<GetProps<C>>>(component: C): C
+export declare function withActivation<C extends ComponentType<GetProps<C>>>(
+  component: C
+): C
+export declare function withAliveScope<C extends ComponentType<GetProps<C>>>(
+  component: C
+): C

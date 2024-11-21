@@ -244,11 +244,13 @@ class KeepAlive extends Component {
   }
 
   render() {
+    const { wrapperProps = {} } = this.props || {}
     return (
       <div
-        key="keep-alive-placeholder"
+        {...wrapperProps}
+        key='keep-alive-placeholder'
         nodeKeyIgnore
-        className="ka-wrapper"
+        className={`ka-wrapper ${wrapperProps.className || ''}`}
         ref={(node) => {
           this.placeholder = node
         }}
@@ -259,9 +261,20 @@ class KeepAlive extends Component {
 
 // 兼容 SSR 服务端渲染
 function SSRKeepAlive({ children }) {
+  const { wrapperProps = {}, contentProps = {} } = this.props || {}
   return (
-    <div key="keep-alive-placeholder" nodeKeyIgnore className="ka-wrapper">
-      <div key="keeper-container" nodeKeyIgnore className="ka-content">
+    <div
+      {...wrapperProps}
+      key='keep-alive-placeholder'
+      nodeKeyIgnore
+      className={`ka-wrapper ${wrapperProps.className || ''}`}
+    >
+      <div
+        {...contentProps}
+        key='keeper-container'
+        nodeKeyIgnore
+        className={`ka-content ${contentProps.className || ''}`}
+      >
         {children}
       </div>
     </div>

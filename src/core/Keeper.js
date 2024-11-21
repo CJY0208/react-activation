@@ -57,7 +57,6 @@ export default class Keeper extends PureComponent {
     store.set(id, this.cache)
   }
 
-  
   unmounted = false
   safeSetState = (nextState, callback) => {
     // fix #170
@@ -82,9 +81,8 @@ export default class Keeper extends PureComponent {
     this.unmounted = true
   }
 
-  freezeTimeout = null
-
-  ;[LIFECYCLE_ACTIVATE]() {
+  freezeTimeout = null;
+  [LIFECYCLE_ACTIVATE]() {
     clearTimeout(this.freezeTimeout)
     // 激活后，立即解冻
     this.safeSetState({
@@ -94,7 +92,7 @@ export default class Keeper extends PureComponent {
     this.listeners.forEach((listener) => run(listener, [LIFECYCLE_ACTIVATE]))
   }
 
-  ;[LIFECYCLE_UNACTIVATE]() {
+  [LIFECYCLE_UNACTIVATE]() {
     this.eventBus.emit(LIFECYCLE_UNACTIVATE)
     const listeners = [...this.listeners]
 
@@ -202,7 +200,7 @@ export default class Keeper extends PureComponent {
     })
 
   render() {
-    const { id, autoFreeze = true, ...props } = this.props
+    const { id, autoFreeze = true, contentProps = {}, ...props } = this.props
     const { children, bridgeProps, key, freeze } = this.state
 
     return (
@@ -212,7 +210,12 @@ export default class Keeper extends PureComponent {
             this.wrapper = node
           }}
         >
-          <div key="keeper-container" nodeKeyIgnore className="ka-content">
+          <div
+            {...contentProps}
+            key='keeper-container'
+            nodeKeyIgnore
+            className={`ka-content ${contentProps.className || ''}`}
+          >
             <Bridge id={id} bridgeProps={bridgeProps}>
               <AliveNodeProvider value={this.contextValue}>
                 {React.Children.map(children, (child, idx) =>
