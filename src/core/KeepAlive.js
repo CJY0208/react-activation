@@ -157,6 +157,11 @@ class KeepAlive extends Component {
     }
   }
 
+  drop = () => {
+    const { _helpers, id } = this.props
+    return _helpers.dropById(id)
+  }
+
   init = () => {
     const { _helpers, id, children, ...rest } = this.props
 

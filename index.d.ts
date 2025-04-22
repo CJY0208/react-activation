@@ -56,6 +56,8 @@ export interface CachingNode {
 export interface AliveController {
   drop: (name: string | RegExp) => Promise<boolean>
   dropScope: (name: string | RegExp) => Promise<boolean>
+  dropById: (id: string) => Promise<boolean>
+  dropScopeByIds: (ids: string[]) => Promise<boolean>
   refresh: (name: string | RegExp) => Promise<boolean>
   refreshScope: (name: string | RegExp) => Promise<boolean>
   clear: () => Promise<boolean>

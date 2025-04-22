@@ -15,12 +15,24 @@ function controllerCherryPick(controller) {
     refreshScope,
     clear,
     getCachingNodes,
+    dropById,
+    dropScopeByIds,
   } = controller
-  return { drop, dropScope, refresh, refreshScope, clear, getCachingNodes }
+
+  return {
+    drop,
+    dropScope,
+    refresh,
+    refreshScope,
+    clear,
+    getCachingNodes,
+    dropById,
+    dropScopeByIds,
+  }
 }
 
 export const expandKeepAlive = (KeepAlive) => {
-  const renderContent = ({ idPrefix, helpers, props }) => {
+  const renderContent = ({ idPrefix, helpers, props, forwardedRef }) => {
     const isOutsideAliveScope = isUndefined(helpers)
 
     if (isOutsideAliveScope) {
@@ -42,6 +54,7 @@ export const expandKeepAlive = (KeepAlive) => {
                   {...props}
                   {...bridgeProps}
                   id={id}
+                  ref={forwardedRef}
                   _helpers={helpers}
                 />
               )}
@@ -51,16 +64,26 @@ export const expandKeepAlive = (KeepAlive) => {
       </NodeKey>
     )
   }
-  const HookExpand = ({ id: idPrefix, ...props }) =>
-    renderContent({ idPrefix, helpers: useScopeContext(), props })
+  const HookExpand = ({ id: idPrefix, forwardedRef, ...props }) =>
+    renderContent({ idPrefix, helpers: useScopeContext(), props, forwardedRef })
 
-  const WithExpand = ({ id: idPrefix, ...props }) => (
+  const WithExpand = ({ id: idPrefix, forwardedRef, ...props }) => (
     <AliveScopeConsumer>
-      {(helpers) => renderContent({ idPrefix, helpers, props })}
+      {(helpers) => renderContent({ idPrefix, helpers, props, forwardedRef })}
     </AliveScopeConsumer>
   )
 
-  return isFunction(useContext) ? HookExpand : WithExpand
+  const ExpandKeepAlive = isFunction(useContext) ? HookExpand : WithExpand
+
+  if (isFunction(forwardRef)) {
+    const ForwardedRefHOC = forwardRef((props, ref) => (
+      <ExpandKeepAlive {...props} forwardedRef={ref} />
+    ))
+
+    return hoistStatics(ForwardedRefHOC, KeepAlive)
+  } else {
+    return hoistStatics(ExpandKeepAlive, KeepAlive)
+  }
 }
 
 const withAliveScope = (WrappedComponent) => {
