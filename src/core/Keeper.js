@@ -158,7 +158,7 @@ export default class Keeper extends PureComponent {
     attach: this.attach,
   }
 
-  drop = ({ delay = 1200 } = {}) =>
+  drop = ({ delay = 1200, refreshIfDropFailed = true } = {}) =>
     new Promise((resolve) => {
       let timeout
       const { scope, id } = this.props
@@ -177,7 +177,11 @@ export default class Keeper extends PureComponent {
         this.eventBus.on(LIFECYCLE_UNACTIVATE, drop)
         timeout = setTimeout(() => {
           this.eventBus.off(LIFECYCLE_UNACTIVATE, drop)
-          resolve(false)
+          if (refreshIfDropFailed) {
+            this.refresh().then((result) => resolve(result))
+          } else {
+            resolve(false)
+          }
         }, delay)
         return
       }

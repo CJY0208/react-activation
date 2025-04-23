@@ -53,13 +53,23 @@ export interface CachingNode {
   id: string
   [key: string]: any
 }
+
+export interface KeeperDropConfig {
+  delay: string
+  refreshIfDropFailed: boolean
+}
 export interface AliveController {
-  drop: (name: string | RegExp) => Promise<boolean>
-  dropScope: (name: string | RegExp) => Promise<boolean>
-  dropById: (id: string) => Promise<boolean>
-  dropScopeByIds: (ids: string[]) => Promise<boolean>
+  drop: (name: string | RegExp, config?: KeeperDropConfig) => Promise<boolean>
+  dropScope: (
+    name: string | RegExp,
+    config?: KeeperDropConfig
+  ) => Promise<boolean>
+  dropById: (id: string, config?: KeeperDropConfig) => Promise<boolean>
+  dropScopeByIds: (ids: string[], config?: KeeperDropConfig) => Promise<boolean>
   refresh: (name: string | RegExp) => Promise<boolean>
   refreshScope: (name: string | RegExp) => Promise<boolean>
+  refreshById: (id: string) => Promise<boolean>
+  refreshScopeByIds: (ids: string[]) => Promise<boolean>
   clear: () => Promise<boolean>
   getCachingNodes: () => Array<CachingNode>
 }

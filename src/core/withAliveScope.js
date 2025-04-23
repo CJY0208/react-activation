@@ -17,6 +17,8 @@ function controllerCherryPick(controller) {
     getCachingNodes,
     dropById,
     dropScopeByIds,
+    refreshById,
+    refreshScopeByIds,
   } = controller
 
   return {
@@ -28,6 +30,8 @@ function controllerCherryPick(controller) {
     getCachingNodes,
     dropById,
     dropScopeByIds,
+    refreshById,
+    refreshScopeByIds,
   }
 }
 
