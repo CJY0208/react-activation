@@ -3,6 +3,13 @@
 - 不要使用 `<React.StrictMode />` 严格模式
 - (React v18+) 不要使用 `ReactDOMClient.createRoot`, 而是使用 `ReactDOM.render`, https://github.com/CJY0208/react-activation/issues/225#issuecomment-1311136388
 
+   或者可以关闭 `autoFreeze` 来兼容 `createRoot`，但这会造成性能损失
+
+  ```jsx
+  import { KeepAlive } from 'react-activation'
+  KeepAlive.defautProps.autoFreeze = false // default 'true'
+  ```
+
 # React Activation
 
 [![size](https://img.shields.io/bundlephobia/minzip/react-activation@latest.svg)](https://bundlephobia.com/result?p=react-activation@latest)
