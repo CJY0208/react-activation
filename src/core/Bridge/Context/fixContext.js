@@ -1,7 +1,7 @@
 import React, { useContext, Fragment } from 'react'
-import createReactContext from 'create-react-context'
 import { run, get, isString, isFunction, memoize, EventBus, isExist } from 'szfe-tools'
 
+import createReactContext from '../../../helpers/createReactContext'
 import { aliveScopeContext, aliveNodeContext } from '../../context'
 
 export const fixedContext = []
