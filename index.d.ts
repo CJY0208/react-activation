@@ -20,6 +20,7 @@ export interface KeepAliveProps {
   autoFreeze?: boolean
   wrapperProps?: DivProps
   contentProps?: DivProps
+  saveScrollPositionIgnoreNodeIds?: string[]
   [key: string]: any
 }
 

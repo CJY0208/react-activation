@@ -373,6 +373,12 @@ If your components share screen scroll container, `document.body` or `document.d
 <KeepAlive saveScrollPosition="screen" />
 ```
 
+If you need to ignore scroll position caching for specific elements, you can use the `saveScrollPositionIgnoreNodeIds` prop to specify a list of element IDs to ignore
+
+```javascript
+<KeepAlive saveScrollPositionIgnoreNodeIds={['header', 'sidebar']} />
+```
+
 ---
 
 ## Principle

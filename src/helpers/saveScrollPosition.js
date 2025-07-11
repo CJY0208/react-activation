@@ -28,8 +28,12 @@ function getScrollableNodes(from) {
   )
 }
 
-export default function saveScrollPosition(from) {
-  const nodes = [...new Set([...flatten(from.map(getScrollableNodes))])]
+export default function saveScrollPosition(from, options = {}) {
+  const { ignoreNodeIds = [] } = options
+
+  const nodes = [...new Set([...flatten(from.map(getScrollableNodes))])].filter(
+    (node) => !ignoreNodeIds.includes(node.id)
+  )
 
   const saver = nodes.map((node) => [
     node,

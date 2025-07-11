@@ -373,6 +373,12 @@ class App extends Component {
 <KeepAlive saveScrollPosition="screen" />
 ```
 
+如果你需要忽略某些特定元素的滚动位置缓存，可以通过 `saveScrollPositionIgnoreNodeIds` 属性指定要忽略的元素 ID 列表
+
+```javascript
+<KeepAlive saveScrollPositionIgnoreNodeIds={['header', 'sidebar']} />
+```
+
 ---
 
 ## 原理概述

@@ -106,7 +106,7 @@ class KeepAlive extends Component {
 
   // DOM 操作将实际内容移出占位元素
   eject = (willUnactivate = true) => {
-    const { id, _helpers } = this.props
+    const { id, _helpers, saveScrollPositionIgnoreNodeIds } = this.props
     const cache = _helpers.getCache(id)
     const nodesNeedToSaveScrollPosition = flatten(
       flatten([this.props.saveScrollPosition]).map((flag) => {
@@ -127,7 +127,10 @@ class KeepAlive extends Component {
       if (willUnactivate && nodesNeedToSaveScrollPosition.length > 0) {
         // 保存该节点下各可滚动元素的滚动位置
         cache.revertScrollPos = saveScrollPosition(
-          nodesNeedToSaveScrollPosition
+          nodesNeedToSaveScrollPosition,
+          {
+            ignoreNodeIds: saveScrollPositionIgnoreNodeIds,
+          }
         )
       }
 
