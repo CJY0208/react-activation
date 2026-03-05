@@ -95,3 +95,33 @@ export const autoFixContext = (...configs) => {
 }
 
 autoFixContext([React, 'createElement'])
+
+// 把 react-router 注册进 react-activation 的上下文桥接池，
+// 避免 KeepAlive 前后丢掉路由上下文，导致 <Outlet /> 空白情况。
+export const fixRouterContext = () => {
+  const tryFixFromHost = (host) => {
+    if (!isExist(host)) {
+      return;
+    }
+
+    Object.keys(host).forEach((key) => {
+      if (!/Context$/.test(key)) {
+        return;
+      }
+      const ctx = host[key];
+      if (!isExist(ctx)) {
+        return;
+      }
+      if (isExist(ctx.Provider) || isExist(ctx.Consumer)) {
+        fixContext(ctx)
+      }
+    })
+  }
+
+  try {
+    tryFixFromHost(require('react-router'))
+  } catch (error) {}
+  try {
+    tryFixFromHost(require('react-router-dom'))
+  } catch (error) {}
+}

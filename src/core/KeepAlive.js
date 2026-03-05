@@ -45,7 +45,6 @@ class KeepAlive extends Component {
   constructor(props) {
     super(props)
     this.id = props.id
-    this.init()
 
     // 继承响应父级 KeepAlive 的生命周期
     ;[LIFECYCLE_ACTIVATE, LIFECYCLE_UNACTIVATE].forEach((lifecycleName) => {
@@ -73,6 +72,10 @@ class KeepAlive extends Component {
         this.cached = cached
       }
     })
+  }
+
+  componentDidMount() {
+    this.init()
   }
 
   // DOM 操作将实际内容插入占位元素
@@ -184,7 +187,6 @@ class KeepAlive extends Component {
         }
 
         this.inject()
-
         // 触发 didActivate 生命周期
         if (cache.inited) {
           run(this, LIFECYCLE_ACTIVATE)

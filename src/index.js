@@ -5,6 +5,7 @@ import {
   fixContext,
   createContext,
   autoFixContext,
+  fixRouterContext,
 } from './core/Bridge/Context'
 import withAliveScope, { useAliveController } from './core/withAliveScope'
 import NodeKey from './core/NodeKey'
@@ -16,6 +17,7 @@ export {
   withActivation,
   fixContext,
   autoFixContext,
+  fixRouterContext,
   useActivate,
   useUnactivate,
   createContext,

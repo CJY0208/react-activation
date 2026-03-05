@@ -42,6 +42,7 @@ export function createContext<T>(
 ): Context<T>
 // type ContextFixEntry = [host: any, ...methods: any[]]
 export function autoFixContext(...configs: any[]): void
+export function fixRouterContext(): void
 
 export function useActivate(effect: () => void): void
 export function useUnactivate(effect: () => void): void

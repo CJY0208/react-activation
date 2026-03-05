@@ -44,7 +44,7 @@ Vue 中 `<keep-alive />` 功能在 React 中的黑客实现
 
 ## 兼容性
 
-- React v16 / v17 / v18
+- React v16 / v17 / v18 / 19
 
 - Preact v10+
 
