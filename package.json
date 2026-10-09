@@ -1,6 +1,6 @@
 {
   "name": "react-activation",
-  "version": "0.13.4",
+  "version": "1.0.0",
   "description": "<KeepAlive /> for React like <keep-alive /> in vue",
   "main": "index.js",
   "scripts": {
@@ -37,7 +37,8 @@
     "url": "git+https://github.com/CJY0208/react-activation.git"
   },
   "peerDependencies": {
-    "react": ">=16"
+    "react": ">=16",
+    "react-dom": ">=16"
   },
   "dependencies": {
     "hoist-non-react-statics": "^3.3.0",

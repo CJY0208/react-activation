@@ -37,6 +37,8 @@ const parseWhenResult = (res) => {
 class KeepAlive extends Component {
   static defaultProps = {
     saveScrollPosition: true,
+    // React 18 createRoot / React 19：默认关闭 autoFreeze，避免 Suspense freeze 死循环
+    autoFreeze: false,
   }
 
   id = null // 用作 Keeper 识别 KeepAlive

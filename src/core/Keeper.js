@@ -1,5 +1,4 @@
 import React, { PureComponent, Suspense } from 'react'
-import { flushSync } from 'react-dom'
 import { get, run, nextTick, EventBus } from 'szfe-tools'
 
 import ReactFreeze from './Freeze'
@@ -45,7 +44,7 @@ export default class Keeper extends PureComponent {
 
     this.cache = {
       listeners,
-      aliveNodesId: [],
+      aliveNodesId: new Set(),
       inited: false,
       cached: false,
       wrapper: node,
@@ -101,12 +100,11 @@ export default class Keeper extends PureComponent {
       .forEach(([, listener]) => run(listener, [LIFECYCLE_UNACTIVATE]))
 
     // 缓存后，延迟冻结，保证各项后续处理得以进行，如关闭弹窗等
+    // 不用 flushSync：createRoot / React 19 下会绕过批更新，易触发 Maximum update depth
     clearTimeout(this.freezeTimeout)
     this.freezeTimeout = setTimeout(() => {
-      flushSync(() => {
-        this.safeSetState({
-          freeze: true,
-        })
+      this.safeSetState({
+        freeze: true,
       })
     }, 1000)
   }
@@ -137,6 +135,9 @@ export default class Keeper extends PureComponent {
       nextTick(() => {
         const { id, store } = this.props
         const cache = store.get(id)
+        if (!cache) {
+          return
+        }
         cache.aliveNodesId = new Set([...cache.aliveNodesId, ref.id])
       })
     }
@@ -204,7 +205,7 @@ export default class Keeper extends PureComponent {
     })
 
   render() {
-    const { id, autoFreeze = true, contentProps = {}, ...props } = this.props
+    const { id, autoFreeze = false, contentProps = {}, ...props } = this.props
     const { children, bridgeProps, key, freeze } = this.state
 
     return (
