@@ -9,7 +9,7 @@ import React, {
 import { run, get, nextTick, isUndefined, isFunction, isExist } from 'szfe-tools'
 
 import ConsumerWrapper from './ConsumerWrapper'
-import { fixedContext, eventBus, updateListenerCache } from './fixContext'
+import { fixedContext, updateListenerCache } from './fixContext'
 
 const fixedContextSnapshot = {}
 
@@ -19,8 +19,11 @@ class RecursiveConsumerBridge extends PureComponent {
     super(props)
     const { id } = props
 
+    // 只在首次挂载时快照：中途拉长 Consumer 链会 remount KeepAlive，表现为点击后丢缓存
     if (!fixedContextSnapshot[id]) {
-      fixedContextSnapshot[id] = [...fixedContext].filter(ctx => isExist(ctx.Consumer))
+      fixedContextSnapshot[id] = [...fixedContext].filter((ctx) =>
+        isExist(ctx.Consumer)
+      )
     }
   }
 

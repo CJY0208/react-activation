@@ -9,10 +9,17 @@ const Lazy = isSupported ? lazy(() => new Promise(() => null)) : () => null
 
 class FallbackListener extends Component {
   componentDidMount() {
-    run(this.props, 'onStart')
+    // Defer onStart to break createRoot / React 19 synchronous Suspense loop:
+    // componentDidMount → setState → throw promise → fallback remount → max update depth
+    Promise.resolve().then(() => {
+      if (!this._unmounted) {
+        run(this.props, 'onStart')
+      }
+    })
   }
 
   componentWillUnmount() {
+    this._unmounted = true
     run(this.props, 'onEnd')
   }
 
